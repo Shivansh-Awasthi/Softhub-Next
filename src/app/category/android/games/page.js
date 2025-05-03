@@ -2,5 +2,5 @@
 
 
 export default function AndroidPage() {
-    return <div>Hi there</div>;
+    return <div>Hi there  </div>;
 }
