@@ -50,7 +50,7 @@ const HomeClient = ({
     };
 
     return (
-        <div className='container mx-auto p-2'>
+        <div>
             {/* Slider Logic */}
             <div id="default-carousel" className="relative w-full mb-10" data-carousel="slide">
                 {/* Carousel Container */}

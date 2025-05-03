@@ -171,19 +171,17 @@ export default async function HomePage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      <HomeClient
-        macGames={macGamesData.apps}
-        macSoftwares={macSoftwaresData.apps}
-        pcGames={pcGamesData.apps}
-        androidGames={androidGamesData.apps}
-        ps2Games={ps2GamesData.apps}
-        totalMacGames={macGamesData.total}
-        totalMacSoft={macSoftwaresData.total}
-        totalPcGames={pcGamesData.total}
-        totalAndroidGames={androidGamesData.total}
-        totalPs2Iso={ps2GamesData.total}
-      />
-    </main>
+    <HomeClient
+      macGames={macGamesData.apps}
+      macSoftwares={macSoftwaresData.apps}
+      pcGames={pcGamesData.apps}
+      androidGames={androidGamesData.apps}
+      ps2Games={ps2GamesData.apps}
+      totalMacGames={macGamesData.total}
+      totalMacSoft={macSoftwaresData.total}
+      totalPcGames={pcGamesData.total}
+      totalAndroidGames={androidGamesData.total}
+      totalPs2Iso={ps2GamesData.total}
+    />
   );
 }
