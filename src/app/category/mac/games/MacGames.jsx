@@ -87,56 +87,14 @@ export default function MacGames({ serverData }) {
     const [purchasedGames, setPurchasedGames] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
 
-    // Client-side data fetching for pagination
-    const fetchGames = async (page) => {
-        // Skip fetch if we already have data for page 1 and we're requesting page 1
-        // But always fetch if we're in a page transition (even for page 1)
-        if (page === 1 && data.length > 0 && !isPageTransitioning) {
-            setIsPageTransitioning(false); // Make sure to reset transition state
-            return;
-        }
+    // Client-side navigation handler for pagination
+    const handlePageNavigation = (page) => {
+        setIsPageTransitioning(true);
 
-        console.log(`Fetching data for page ${page}`); // Debug log
-
-        setIsLoading(true);
-        setError(null);
-
-        try {
-            // Get auth token from localStorage if available
-            const token = typeof window !== 'undefined' ? localStorage.getItem("token") || '' : '';
-
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/mac?page=${page}&limit=${ITEMS_PER_PAGE}`,
-                {
-                    headers: {
-                        'X-Auth-Token': 'my-secret-token-123',
-                        'Authorization': token ? `Bearer ${token}` : '',
-                    },
-                    // Disable cache to ensure fresh data
-                    cache: 'no-store',
-                }
-            );
-
-            if (!res.ok) {
-                throw new Error(`API error: ${res.status}`);
-            }
-
-            const responseData = await res.json();
-            console.log('API response:', responseData); // Debug log
-
-            const { gamesData, totalCount } = processApiResponse(responseData);
-
-            setData(gamesData);
-            setTotalApps(totalCount);
-            setError(null);
-        } catch (err) {
-            console.error("API Error:", err);
-            setError(err.message || 'Failed to load games');
-            toast.error(err.message || 'Failed to load games');
-        } finally {
-            setIsLoading(false);
-            setIsPageTransitioning(false);
-        }
+        // Update URL directly - the server will handle data fetching
+        const newParams = new URLSearchParams(searchParams.toString());
+        newParams.set('page', page.toString());
+        router.push(`${pathname}?${newParams.toString()}`);
     };
 
     // Load user data from localStorage on client side
@@ -151,32 +109,15 @@ export default function MacGames({ serverData }) {
         }
     }, []);
 
-    // Handle URL updates and data fetching - separated into two effects for clarity
+    // Effect to reset page transition state when component mounts or URL changes
     useEffect(() => {
-        // This effect only handles URL updates
-        const pageParam = searchParams.get('page');
-        const pageFromUrl = pageParam ? parseInt(pageParam, 10) : 1;
+        // Reset page transition state after a short delay to allow for page load
+        const timer = setTimeout(() => {
+            setIsPageTransitioning(false);
+        }, 500);
 
-        // Only update URL if the current page doesn't match the URL
-        if (pageFromUrl !== currentPage) {
-            const newParams = new URLSearchParams(searchParams.toString());
-            newParams.set('page', currentPage.toString());
-            // Use push instead of replace to ensure proper history
-            router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
-        }
-    }, [currentPage]); // Only depend on currentPage changes
-
-    // Separate effect for data fetching
-    useEffect(() => {
-        // Get the current page from URL
-        const pageParam = searchParams.get('page');
-        const pageFromUrl = pageParam ? parseInt(pageParam, 10) : 1;
-
-        // Fetch data when the URL page changes or during transitions
-        if (pageFromUrl !== 1 || isPageTransitioning) {
-            fetchGames(pageFromUrl);
-        }
-    }, [searchParams, isPageTransitioning]); // Depend on searchParams changes
+        return () => clearTimeout(timer);
+    }, [searchParams]); // Depend on searchParams changes
 
     // Listen for URL changes (browser back/forward)
     useEffect(() => {
@@ -376,10 +317,10 @@ export default function MacGames({ serverData }) {
                                     onClick={() => handlePageChange(pageNumber)}
                                     disabled={isPageTransitioning || currentPage === pageNumber}
                                     className={`px-4 py-2 mx-1 mb-2 rounded text-gray-300 transition-all duration-300 ${currentPage === pageNumber
-                                            ? 'bg-blue-600 cursor-default'
-                                            : isPageTransitioning
-                                                ? 'bg-[#2c2c2c] opacity-50 cursor-not-allowed'
-                                                : 'bg-[#2c2c2c] hover:bg-gray-800 hover:text-white'
+                                        ? 'bg-blue-600 cursor-default'
+                                        : isPageTransitioning
+                                            ? 'bg-[#2c2c2c] opacity-50 cursor-not-allowed'
+                                            : 'bg-[#2c2c2c] hover:bg-gray-800 hover:text-white'
                                         }`}
                                     aria-label={`Go to page ${pageNumber}`}
                                     aria-current={currentPage === pageNumber ? 'page' : undefined}
