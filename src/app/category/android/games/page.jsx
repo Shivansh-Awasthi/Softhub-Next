@@ -1,18 +1,34 @@
 // app/category/android/games/page.jsx
-export default async function Page({ searchParams }) {
-    const page = searchParams.page || 1;
 
-    const res = await fetch(`https://api.example.com/games?page=${page}`, {
-        cache: 'no-store',
-    });
-    const data = await res.json();
+import AndroidGames from "./AndroidGames";
 
-    return (
-        <div>
-            <h1>Games</h1>
-            {data.map(game => (
-                <div key={game.id}>{game.title}</div>
-            ))}
-        </div>
-    );
+export default async function AndroidGamesPage({ searchParams }) {
+    // Convert searchParams to a regular object and await it
+    const params = await Promise.resolve(searchParams);
+    const currentPage = params?.page || 1;
+    const itemsPerPage = 48;
+
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/android/games?page=${currentPage}&limit=${itemsPerPage}`,
+            {
+                headers: {
+                    'X-Auth-Token': 'my-secret-token-123',
+                },
+                cache: 'no-store',
+            }
+        );
+
+        if (!res.ok) {
+            console.error(`API error: ${res.status} ${res.statusText}`);
+            throw new Error(`API error: ${res.status}`);
+        }
+
+        const data = await res.json();
+        return <AndroidGames serverData={data} />;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        // Return component with error state
+        return <AndroidGames serverData={{ data: [], total: 0, error: error.message }} />;
+    }
 }
