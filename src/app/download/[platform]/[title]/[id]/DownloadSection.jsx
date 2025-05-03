@@ -63,7 +63,7 @@ const DownloadSection = ({ platform, downloadLinks }) => {
 
     return (
         <div className="mt-3">
-            <div className="h-0.5 bg-[#8E8E8E] opacity-20 w-full mb-2"></div>
+            <div className="h-0.5 bg-[#8E8E8E] opacity-10 w-full mb-2"></div>
             <h3 className="text-xl font-medium mb-4">Download Links</h3>
             {/* Colorful buttons for download options */}
             <div className="flex flex-wrap justify-center gap-4">

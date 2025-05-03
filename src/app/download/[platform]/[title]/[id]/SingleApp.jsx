@@ -78,13 +78,37 @@ const SingleApp = ({ appData }) => {
         setShowMore((prev) => !prev);
     };
 
+    // Function to handle body scroll locking
+    const lockScroll = () => {
+        if (typeof document !== 'undefined') {
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '15px'; // Prevent layout shift
+        }
+    };
+
+    const unlockScroll = () => {
+        if (typeof document !== 'undefined') {
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        }
+    };
+
     const handleDownloadClick = () => {
         setShowModal(true); // Show the modal when the button is clicked
+        lockScroll(); // Lock scrolling
     };
 
     const closeModal = () => {
         setShowModal(false); // Hide the modal
+        unlockScroll(); // Unlock scrolling
     };
+
+    // Clean up scroll lock when component unmounts
+    useEffect(() => {
+        return () => {
+            unlockScroll();
+        };
+    }, []);
 
     // If there's an error, show an error message
     if (error) {
@@ -250,8 +274,16 @@ const SingleApp = ({ appData }) => {
 
             {/* Modal for Download Instructions */}
             {showModal && (
-                <div className="fixed inset-1 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 z-50 overflow-y-auto">
-                    <div className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center relative my-auto">
+                <div
+                    className="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 z-50 overflow-hidden"
+                    onClick={(e) => {
+                        // Close modal when clicking outside of modal content
+                        if (e.target === e.currentTarget) {
+                            closeModal();
+                        }
+                    }}
+                >
+                    <div className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center relative my-auto max-h-[90vh] overflow-y-auto">
                         {/* Close Icon */}
                         <div className="absolute top-4 right-4 cursor-pointer" onClick={closeModal}>
                             <svg
