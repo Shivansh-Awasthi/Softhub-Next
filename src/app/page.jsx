@@ -1,7 +1,189 @@
 
+import HomeClient from './HomeClient';
 
-export default function Home() {
+export const metadata = {
+  title: 'ToxicGames - Download Free Games and Software',
+  description: 'Download free games and software for Mac, PC, Android, PS2, PS3, PS4, and more.',
+};
+
+// Function to fetch Mac games
+async function fetchMacGames() {
+  try {
+    const initialResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/mac?page=1&limit=48`,
+      {
+        headers: {
+          'X-Auth-Token': "my-secret-token-123"
+        },
+        cache: 'no-store'
+      }
+    );
+
+    const initialData = await initialResponse.json();
+
+    // Dynamic page logic
+    const limitPage = 48;
+    const totalPage = initialData.total;
+    const latestPage = Math.ceil(totalPage / limitPage);
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/mac?page=${latestPage}&limit=48`,
+      {
+        headers: {
+          'X-Auth-Token': "my-secret-token-123"
+        },
+        cache: 'no-store'
+      }
+    );
+
+    const responseData = await response.json();
+    return {
+      apps: responseData.apps || [],
+      total: responseData.total || 0
+    };
+  } catch (error) {
+    console.log("Error fetching mac games " + error);
+    return { apps: [], total: 0 };
+  }
+}
+
+// Function to fetch Mac softwares
+async function fetchMacSoftwares() {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/smac`,
+      {
+        headers: {
+          'X-Auth-Token': "my-secret-token-123"
+        },
+        cache: 'no-store'
+      }
+    );
+
+    const responseData = await response.json();
+    return {
+      apps: responseData.apps || [],
+      total: responseData.total || 0
+    };
+  } catch (error) {
+    console.log("Error fetching mac softwares " + error);
+    return { apps: [], total: 0 };
+  }
+}
+
+// Function to fetch PC games
+async function fetchPcGames() {
+  try {
+    const initialResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=1&limit=48`,
+      {
+        headers: {
+          'X-Auth-Token': "my-secret-token-123"
+        },
+        cache: 'no-store'
+      }
+    );
+
+    const initialData = await initialResponse.json();
+
+    // Dynamic page logic
+    const limitPage = 48;
+    const totalPage = initialData.total;
+    const latestPage = Math.ceil(totalPage / limitPage);
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=${latestPage}&limit=48`,
+      {
+        headers: {
+          'X-Auth-Token': "my-secret-token-123"
+        },
+        cache: 'no-store'
+      }
+    );
+
+    const responseData = await response.json();
+    return {
+      apps: responseData.apps || [],
+      total: responseData.total || 0
+    };
+  } catch (error) {
+    console.log("Error fetching PC games " + error);
+    return { apps: [], total: 0 };
+  }
+}
+
+// Function to fetch Android games
+async function fetchAndroidGames() {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/android`,
+      {
+        headers: {
+          'X-Auth-Token': "my-secret-token-123"
+        },
+        cache: 'no-store'
+      }
+    );
+
+    const responseData = await response.json();
+    return {
+      apps: responseData.apps || [],
+      total: responseData.total || 0
+    };
+  } catch (error) {
+    console.log("Error fetching Android games " + error);
+    return { apps: [], total: 0 };
+  }
+}
+
+// Function to fetch PS2 games
+async function fetchPS2Games() {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/ps2`,
+      {
+        headers: {
+          'X-Auth-Token': "my-secret-token-123"
+        },
+        cache: 'no-store'
+      }
+    );
+
+    const responseData = await response.json();
+    return {
+      apps: responseData.apps || [],
+      total: responseData.total || 0
+    };
+  } catch (error) {
+    console.log("Error fetching PS2 ISO's " + error);
+    return { apps: [], total: 0 };
+  }
+}
+
+export default async function HomePage() {
+  // Fetch all data in parallel
+  const [macGamesData, macSoftwaresData, pcGamesData, androidGamesData, ps2GamesData] = await Promise.all([
+    fetchMacGames(),
+    fetchMacSoftwares(),
+    fetchPcGames(),
+    fetchAndroidGames(),
+    fetchPS2Games()
+  ]);
+
   return (
-    <div>hello</div>
+    <main className="min-h-screen bg-black text-white">
+      <HomeClient
+        macGames={macGamesData.apps}
+        macSoftwares={macSoftwaresData.apps}
+        pcGames={pcGamesData.apps}
+        androidGames={androidGamesData.apps}
+        ps2Games={ps2GamesData.apps}
+        totalMacGames={macGamesData.total}
+        totalMacSoft={macSoftwaresData.total}
+        totalPcGames={pcGamesData.total}
+        totalAndroidGames={androidGamesData.total}
+        totalPs2Iso={ps2GamesData.total}
+      />
+    </main>
   );
 }
