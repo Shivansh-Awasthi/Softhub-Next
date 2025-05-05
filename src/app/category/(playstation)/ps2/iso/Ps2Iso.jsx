@@ -44,14 +44,14 @@ export default function Ps2Iso({ serverData }) {
                         headers: { 'X-Auth-Token': 'my-secret-token-123' },
                     }
                 );
-                
+
                 if (!res.ok) {
                     throw new Error(`API error: ${res.status}`);
                 }
-                
+
                 const json = await res.json();
                 console.log("Client fetch response:", json);
-                
+
                 // Handle API response structure
                 setData(json.apps || []);
                 setTotalItems(json.total || 0);
@@ -71,12 +71,14 @@ export default function Ps2Iso({ serverData }) {
         router.push(`/category/ps2/iso?page=${newPage}`);
     };
 
-    const createSlug = (title) => {
-        return title
-            .toLowerCase() // Convert to lowercase
-            .replace(/[^\w\s-]/g, '') // Remove non-alphanumeric characters
-            .replace(/\s+/g, '-') // Replace spaces with hyphens
-            .trim(); // Remove trailing spaces
+    const slugify = (text = '') => {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-');
     };
 
     return (
@@ -97,7 +99,7 @@ export default function Ps2Iso({ serverData }) {
                     {data.map((ele) => (
                         <Link
                             key={ele._id}
-                            href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
+                            href={`/download/${slugify(ele.platform)}/${slugify(ele.title)}/${ele._id}`}
                             className="flex flex-col rounded-2xl h-36 overflow-hidden transition duration-300 ease-in-out ring-1 ring-white/10 hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-75"
                         >
                             <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
