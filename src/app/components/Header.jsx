@@ -123,7 +123,7 @@ const Header = ({ showSearchBar = true }) => {
             {showSearchBar && (
                 <div
                     ref={searchRef}
-                    className="flex flex-wrap relative border border-white border-opacity-5 rounded-lg w-full max-w-[760px]"
+                    className="flex flex-wrap relative ring-1 ring-[#2E2E2E] rounded-lg w-full max-w-[760px]"
                 >
                     <form action="/search" method="get" className="w-full flex items-center">
                         <input
