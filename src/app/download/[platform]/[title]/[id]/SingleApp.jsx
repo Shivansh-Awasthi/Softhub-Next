@@ -283,7 +283,7 @@ const SingleApp = ({ appData }) => {
                         }
                     }}
                 >
-                    <div className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center relative my-auto max-h-[90vh] overflow-y-auto z-19">
+                    <div className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center relative my-auto max-h-[90vh] overflow-y-auto z-99">
                         {/* Close Icon */}
                         <div className="absolute top-4 right-4 cursor-pointer" onClick={closeModal}>
                             <svg

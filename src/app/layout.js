@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       >
         <div className="flex min-h-screen">
           <SidebarWrapper />
-          <div className="flex-1 md:ml-8 transition-all duration-300">
+          <div className="flex-1 md:mx-8 transition-all duration-300">
             <div className="container mx-auto p-2">
               <div className="mt-8 mb-4">
                 <HeaderWrapper />
