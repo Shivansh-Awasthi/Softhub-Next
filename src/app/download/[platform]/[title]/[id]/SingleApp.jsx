@@ -283,7 +283,7 @@ const SingleApp = ({ appData }) => {
                         }
                     }}
                 >
-                    <div className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center relative my-auto max-h-[90vh] overflow-y-auto">
+                    <div className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center relative my-auto max-h-[90vh] overflow-y-auto z-19">
                         {/* Close Icon */}
                         <div className="absolute top-4 right-4 cursor-pointer" onClick={closeModal}>
                             <svg
@@ -407,7 +407,7 @@ const SingleApp = ({ appData }) => {
             )}
 
             {/* Background gradient with game image */}
-            <div
+            {/* <div
                 className="absolute inset-0"
                 style={{
                     background: `linear-gradient(to top right, rgba(0, 0, 0, 1)50%, rgba(0, 0, 0, 0) 100%), url('${data.thumbnail?.[2] || ''})`,
@@ -418,7 +418,7 @@ const SingleApp = ({ appData }) => {
                     pointerEvents: 'none', // Allows interaction with elements above this
                 }}
             >
-            </div>
+            </div> */}
 
             {/* Comment box */}
             <div className='ring-2 ring-[#2E2E2E] rounded-lg flex flex-col items-center mt-8'>
