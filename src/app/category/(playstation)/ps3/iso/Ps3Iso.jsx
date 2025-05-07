@@ -21,7 +21,6 @@ export default function Ps3Iso({ serverData }) {
 
     // Debug log to see what data we're receiving
     useEffect(() => {
-        console.log("Client received serverData:", serverData);
     }, [serverData]);
 
     useEffect(() => {
@@ -50,7 +49,6 @@ export default function Ps3Iso({ serverData }) {
                 }
 
                 const json = await res.json();
-                console.log("Client fetch response:", json);
 
                 // Handle API response structure
                 setData(json.apps || []);

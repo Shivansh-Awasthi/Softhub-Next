@@ -25,7 +25,6 @@ export default async function Ps3IsoPage({ searchParams }) {
         }
 
         const data = await res.json();
-        console.log("Server data received:", data); // Debug log
         return <Ps3Iso serverData={data} />;
     } catch (error) {
         console.error("Error fetching data:", error);
