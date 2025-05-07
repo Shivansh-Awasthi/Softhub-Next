@@ -141,18 +141,18 @@ export async function GET() {
       throw fetchError;
     }
   }
-  } catch (error) {
-  console.error('Error fetching games for sitemap:', error);
-}
+  catch (error) {
+    console.error('Error fetching games for sitemap:', error);
+  }
 
-// Close XML
-xml += '</urlset>';
+  // Close XML
+  xml += '</urlset>';
 
-// Return XML with proper content type
-return new NextResponse(xml, {
-  headers: {
-    'Content-Type': 'application/xml',
-    'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-  },
-});
+  // Return XML with proper content type
+  return new NextResponse(xml, {
+    headers: {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+    },
+  });
 }
