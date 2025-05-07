@@ -68,17 +68,17 @@ const CreateApps = () => {
 
         try {
             // Log form data for debugging
-            console.log("Form data being submitted:");
+            // console.log("Form data being submitted:");
             for (let [key, value] of formData.entries()) {
                 if (value instanceof File) {
-                    console.log(`${key}: File - ${value.name} (${value.size} bytes)`);
+                    // console.log(`${key}: File - ${value.name} (${value.size} bytes)`);
                 } else {
-                    console.log(`${key}: ${value}`);
+                    // console.log(`${key}: ${value}`);
                 }
             }
 
             // For testing, simulate a successful response
-            console.log("SIMULATING SUCCESSFUL API RESPONSE FOR TESTING");
+            // console.log("SIMULATING SUCCESSFUL API RESPONSE FOR TESTING");
 
             // Show success message
             toast.success("App created successfully!", {
@@ -101,8 +101,8 @@ const CreateApps = () => {
 
             // Uncomment this to make a real API call
             const token = localStorage.getItem('token');
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-            console.log(`Making API call to: ${apiUrl}/api/apps/admin/create`);
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://toxicgames.in';
+            // console.log(`Making API call to: ${apiUrl}/api/apps/admin/create`);
 
             const response = await axios.post(`${apiUrl}/api/apps/admin/create`, formData, {
                 headers: {
