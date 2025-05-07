@@ -6,7 +6,6 @@ import GiscusComments from './GiscusComments';
 import GameAnnouncement from './GameAnnouncement';
 import DownloadSection from './DownloadSection';
 import DescriptionTabs from './DescriptionTabs';
-import AdsComponent from '../../../../../components/Ads/AdsComponent';
 
 const SingleApp = ({ appData }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -138,15 +137,14 @@ const SingleApp = ({ appData }) => {
     }
 
     return (
-        <div className='z-20 relative'>
+        <div style={{ position: 'relative', zIndex: 0 }}>
             <div>
-                <AdsComponent refreshKey={pathname} />
             </div>
             <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center items-center'>
                 {/* Left Content */}
                 <div className="flex-1">
                     {/* Card */}
-                    <div className="flex p-2 sm:p-4 flex-grow flex-col rounded-lg shadow-sm">
+                    <div className="flex pb-4 sm:pb-4 flex-grow flex-col rounded-lg shadow-sm">
                         <div className="flex items-center gap-4 text-slate-800 gap-3 sm:gap-5">
                             <img
                                 src={data.thumbnail && data.thumbnail[0] ? data.thumbnail[0] : "https://via.placeholder.com/58"}
@@ -275,7 +273,15 @@ const SingleApp = ({ appData }) => {
             {/* Modal for Download Instructions */}
             {showModal && (
                 <div
-                    className="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 z-50 overflow-hidden"
+                    className="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 overflow-hidden"
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        zIndex: 2000
+                    }}
                     onClick={(e) => {
                         // Close modal when clicking outside of modal content
                         if (e.target === e.currentTarget) {
@@ -283,7 +289,10 @@ const SingleApp = ({ appData }) => {
                         }
                     }}
                 >
-                    <div className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center relative my-auto max-h-[90vh] overflow-y-auto z-99">
+                    <div
+                        className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center my-auto max-h-[90vh] overflow-y-auto"
+                        style={{ position: 'relative', zIndex: 2001 }}
+                    >
                         {/* Close Icon */}
                         <div className="absolute top-4 right-4 cursor-pointer" onClick={closeModal}>
                             <svg
@@ -405,20 +414,6 @@ const SingleApp = ({ appData }) => {
                     </div>
                 </div>
             )}
-
-            {/* Background gradient with game image */}
-            {/* <div
-                className="absolute inset-0"
-                style={{
-                    background: `linear-gradient(to top right, rgba(0, 0, 0, 1)50%, rgba(0, 0, 0, 0) 100%), url('${data.thumbnail?.[2] || ''})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    opacity: 0.5,
-                    zIndex: -1,
-                    pointerEvents: 'none', // Allows interaction with elements above this
-                }}
-            >
-            </div> */}
 
             {/* Comment box */}
             <div className='ring-2 ring-[#2E2E2E] rounded-lg flex flex-col items-center mt-8'>
