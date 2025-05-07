@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
               <div className="mt-8 mb-4">
                 <HeaderWrapper />
               </div>
-              <div className="relative z-10">
+              <div className="relative ">
                 {children}
               </div>
             </div>
