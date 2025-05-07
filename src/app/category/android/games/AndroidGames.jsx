@@ -47,7 +47,6 @@ export default function AndroidGames({ serverData }) {
                 }
 
                 const json = await res.json();
-                console.log("Client fetch response:", json);
 
                 // Handle different API response structures
                 setData(json.data || json.apps || []);

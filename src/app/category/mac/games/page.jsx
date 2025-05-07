@@ -25,7 +25,6 @@ export default async function MacGamesPage({ searchParams }) {
         }
 
         const data = await res.json();
-        console.log("Server data received:", data); // Debug log
         return <MacGames serverData={data} />;
     } catch (error) {
         console.error("Error fetching data:", error);

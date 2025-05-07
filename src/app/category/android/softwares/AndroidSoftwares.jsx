@@ -21,7 +21,6 @@ export default function AndroidSoftwares({ serverData }) {
 
     // Debug log to see what data we're receiving
     useEffect(() => {
-        console.log("Client received serverData:", serverData);
     }, [serverData]);
 
     useEffect(() => {
@@ -44,14 +43,14 @@ export default function AndroidSoftwares({ serverData }) {
                         headers: { 'X-Auth-Token': 'my-secret-token-123' },
                     }
                 );
-                
+
                 if (!res.ok) {
                     throw new Error(`API error: ${res.status}`);
                 }
-                
+
                 const json = await res.json();
                 console.log("Client fetch response:", json);
-                
+
                 // Handle API response structure
                 setData(json.apps || []);
                 setTotalItems(json.total || 0);
