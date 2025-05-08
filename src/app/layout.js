@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SidebarWrapper from './components/Sidebar/SidebarWrapper';
+import GlobalHeader from './components/GlobalHeader/page';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,10 @@ export default function RootLayout({ children }) {
           <SidebarWrapper />
           <div className="flex-1 md:mx-6 transition-all duration-300">
             <div className="container mx-auto px-2">
-              <div className="relative ">
+              <div className="mt-8 mb-4">
+                <GlobalHeader />
+              </div>
+              <div className="relative">
                 {children}
               </div>
             </div>

@@ -3,30 +3,17 @@
 import React, { useState, useRef } from 'react';
 import { CiSearch } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const Header = ({ initialQuery = '' }) => {
     const router = useRouter();
-    const searchParams = useSearchParams();
     const [searchQuery, setSearchQuery] = useState(initialQuery);
     const searchRef = useRef(null);
 
-    // Handle search input change - this updates the URL which triggers server-side data fetching
+    // Handle search input change
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchQuery(value);
-        
-        // Update URL with search query (this will trigger a server fetch)
-        const params = new URLSearchParams(searchParams.toString());
-        
-        if (value.trim()) {
-            params.set('query', value);
-        } else {
-            params.delete('query');
-        }
-        
-        // Use router.replace to update URL without full navigation
-        router.replace(`/header-ssr${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
     };
 
     // Handle search form submission
@@ -41,20 +28,20 @@ const Header = ({ initialQuery = '' }) => {
     // Clear search
     const handleClear = () => {
         setSearchQuery('');
-        
-        // Remove query parameter
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete('query');
-        
-        // Use router.replace to update URL without full navigation
-        router.replace(`/header-ssr${params.toString() ? `?${params.toString()}` : ''}`, { scroll: false });
     };
 
     return (
         <header className="flex flex-wrap items-center justify-between px-1.5 pb-6">
+            {/* Logo */}
+            <div className="flex items-center">
+                <a href="/" className="flex items-center">
+                    <span className="self-center text-xl font-semibold whitespace-nowrap text-white">ToxicGames</span>
+                </a>
+            </div>
+
             <div
                 ref={searchRef}
-                className="flex flex-wrap relative border border-white border-opacity-5 rounded-lg w-full max-w-[760px] z-50"
+                className="flex flex-wrap relative border border-white border-opacity-5 rounded-lg w-full max-w-[760px] z-50 mt-4 md:mt-0"
             >
                 <form onSubmit={handleSearch} className="w-full flex items-center">
                     <input
