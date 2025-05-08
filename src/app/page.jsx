@@ -1,6 +1,9 @@
 
 import HomeClient from './HomeClient';
 
+// Set revalidation time to 1 hour (3600 seconds)
+export const revalidate = 3600;
+
 export const metadata = {
   title: 'ToxicGames - Download Free Games and Software',
   description: 'Download free games and software for Mac, PC, Android, PS2, PS3, PS4, and more.',
@@ -15,7 +18,7 @@ async function fetchMacGames() {
         headers: {
           'X-Auth-Token': "my-secret-token-123"
         },
-        cache: 'no-store'
+        next: { revalidate: 3600 }
       }
     );
 
@@ -32,7 +35,7 @@ async function fetchMacGames() {
         headers: {
           'X-Auth-Token': "my-secret-token-123"
         },
-        cache: 'no-store'
+        next: { revalidate: 3600 }
       }
     );
 
@@ -56,7 +59,7 @@ async function fetchMacSoftwares() {
         headers: {
           'X-Auth-Token': "my-secret-token-123"
         },
-        cache: 'no-store'
+        next: { revalidate: 3600 }
       }
     );
 
@@ -80,7 +83,7 @@ async function fetchPcGames() {
         headers: {
           'X-Auth-Token': "my-secret-token-123"
         },
-        cache: 'no-store'
+        next: { revalidate: 3600 }
       }
     );
 
@@ -97,7 +100,7 @@ async function fetchPcGames() {
         headers: {
           'X-Auth-Token': "my-secret-token-123"
         },
-        cache: 'no-store'
+        next: { revalidate: 3600 }
       }
     );
 
@@ -121,7 +124,7 @@ async function fetchAndroidGames() {
         headers: {
           'X-Auth-Token': "my-secret-token-123"
         },
-        cache: 'no-store'
+        next: { revalidate: 3600 }
       }
     );
 
@@ -145,7 +148,7 @@ async function fetchPS2Games() {
         headers: {
           'X-Auth-Token': "my-secret-token-123"
         },
-        cache: 'no-store'
+        next: { revalidate: 3600 }
       }
     );
 
