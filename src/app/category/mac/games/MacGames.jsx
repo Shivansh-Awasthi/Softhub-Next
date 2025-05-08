@@ -4,11 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
-// Placeholder for toast - you'll need to install a toast library
-const toast = {
-    error: (msg) => console.error(msg)
-};
-
 // Slugify function (simplified version)
 const slugify = (text = '') => {
     return text
@@ -20,7 +15,7 @@ const slugify = (text = '') => {
         .replace(/\-\-+/g, '-');
 };
 
-export default function MacGames({ serverData }) {
+export default function MacGames({ serverData, initialPage = 1 }) {
     // Configuration
     const ITEMS_PER_PAGE = 48;
 
@@ -29,73 +24,60 @@ export default function MacGames({ serverData }) {
     const router = useRouter();
     const pathname = usePathname();
 
-    // Get page from URL or default to 1
-    const getInitialPage = () => {
-        const pageParam = searchParams.get('page');
-        return pageParam ? parseInt(pageParam, 10) : 1;
+    // Get the current page from URL or initialPage prop
+    const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
+
+    // Extract data from server response
+    const extractData = (data) => {
+        if (data?.apps && Array.isArray(data.apps)) {
+            return {
+                games: data.apps,
+                total: data.total || 0
+            };
+        }
+        if (data?.data && Array.isArray(data.data)) {
+            return {
+                games: data.data,
+                total: data.total || 0
+            };
+        }
+        return {
+            games: [],
+            total: 0
+        };
     };
 
-    // Process server data
-    const processApiResponse = (responseData) => {
-        let gamesData = [];
-        let totalCount = 0;
-
-        if (Array.isArray(responseData)) {
-            // Case 1: Response is directly an array
-            gamesData = responseData;
-            totalCount = responseData.length;
-        } else if (responseData?.apps && Array.isArray(responseData.apps)) {
-            // Case 2: Standard { apps: [], total: number } structure
-            gamesData = responseData.apps;
-            totalCount = responseData.total || responseData.apps.length;
-        } else if (responseData?.games && Array.isArray(responseData.games)) {
-            // Case 3: Alternative { games: [], total: number } structure
-            gamesData = responseData.games;
-            totalCount = responseData.total || responseData.games.length;
-        } else if (responseData?.data && Array.isArray(responseData.data)) {
-            // Case 4: Common { data: [], total: number } structure
-            gamesData = responseData.data;
-            totalCount = responseData.total || responseData.data.length;
-        } else if (responseData?.error) {
-            // Error case
-            throw new Error(responseData.error);
-        } else {
-            // Unknown structure
-            throw new Error(`Unexpected API structure`);
-        }
-
-        return { gamesData, totalCount };
-    };
-
-    // Initialize state with server data
-    const initialData = (() => {
-        try {
-            return processApiResponse(serverData);
-        } catch (error) {
-            console.error("Error processing server data:", error);
-            return { gamesData: [], totalCount: 0 };
-        }
-    })();
+    const { games, total } = extractData(serverData);
 
     // State
-    const [data, setData] = useState(initialData.gamesData || []);
-    const [totalApps, setTotalApps] = useState(initialData.totalCount || 0);
-    const [currentPage, setCurrentPage] = useState(getInitialPage);
-    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState(games);
+    const [totalApps, setTotalApps] = useState(total);
+    const [currentPage, setCurrentPage] = useState(initialPage);
     const [isPageTransitioning, setIsPageTransitioning] = useState(false);
     const [error, setError] = useState(serverData?.error || null);
     const [purchasedGames, setPurchasedGames] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
 
-    // Client-side navigation handler for pagination
-    const handlePageNavigation = (page) => {
-        setIsPageTransitioning(true);
+    // Update state when props or URL changes
+    useEffect(() => {
+        // Update data and total from server data
+        const { games, total } = extractData(serverData);
+        setData(games);
+        setTotalApps(total);
 
-        // Update URL directly - the server will handle data fetching
-        const newParams = new URLSearchParams(searchParams.toString());
-        newParams.set('page', page.toString());
-        router.push(`${pathname}?${newParams.toString()}`);
-    };
+        // Update current page from URL
+        const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
+        if (pageFromUrl !== currentPage) {
+            setCurrentPage(pageFromUrl);
+        }
+
+        // Reset page transition state
+        const timer = setTimeout(() => {
+            setIsPageTransitioning(false);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [serverData, searchParams]);
 
     // Load user data from localStorage on client side
     useEffect(() => {
@@ -109,32 +91,23 @@ export default function MacGames({ serverData }) {
         }
     }, []);
 
-    // Effect to reset page transition state when component mounts or URL changes
-    useEffect(() => {
-        // Reset page transition state after a short delay to allow for page load
-        const timer = setTimeout(() => {
-            setIsPageTransitioning(false);
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [searchParams]); // Depend on searchParams changes
-
-    // Listen for URL changes (browser back/forward)
-    useEffect(() => {
-        const pageParam = searchParams.get('page');
-        if (pageParam) {
-            const newPage = parseInt(pageParam, 10);
-            // Only update state if different to avoid loops
-            if (newPage !== currentPage) {
-                setCurrentPage(newPage);
-            }
-        } else {
-            // If no page in URL, set to page 1
-            if (currentPage !== 1) {
-                setCurrentPage(1);
-            }
+    // Handle page change
+    const handlePageChange = (newPage) => {
+        if (newPage === currentPage || newPage < 1 || newPage > totalPages || isPageTransitioning) {
+            return; // Don't do anything if invalid page or already transitioning
         }
-    }, [searchParams]); // Only depend on searchParams changes
+
+        // Set transition state
+        setIsPageTransitioning(true);
+
+        // Update URL - this will trigger a new server-side render
+        router.push(`${pathname}?page=${newPage}`);
+
+        // Scroll to top
+        if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
 
     // Pagination calculations
     const totalPages = Math.max(1, Math.ceil(totalApps / ITEMS_PER_PAGE));
@@ -160,27 +133,6 @@ export default function MacGames({ serverData }) {
     // Safe slug generation
     const createSlug = (text = '') => {
         return slugify(text) || 'untitled';
-    };
-
-    // Handle page change
-    const handlePageChange = (newPage) => {
-        if (newPage === currentPage || newPage < 1 || newPage > totalPages || isPageTransitioning) {
-            return; // Don't do anything if invalid page or already transitioning
-        }
-
-        // Set transition state first
-        setIsPageTransitioning(true);
-
-        // Update URL directly instead of changing state
-        // This will trigger the URL change effect which will then update the page state
-        const newParams = new URLSearchParams(searchParams.toString());
-        newParams.set('page', newPage.toString());
-        router.push(`${pathname}?${newParams.toString()}`);
-
-        // Scroll to top of the games section
-        if (typeof window !== 'undefined') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
     };
 
     // Game card component
@@ -243,15 +195,7 @@ export default function MacGames({ serverData }) {
         );
     };
 
-    // Loading state
-    if (isLoading && !data.length) {
-        return (
-            <div className="container mx-auto p-auto flex justify-center items-center h-[500px]">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                <span className="ml-4">Loading games...</span>
-            </div>
-        );
-    }
+    // We don't need a separate loading state since we're using SSG
 
     // Error state
     if (error && !data.length) {
@@ -259,7 +203,7 @@ export default function MacGames({ serverData }) {
             <div className="container mx-auto p-2 text-center">
                 <p className="text-red-500 mb-4">{error}</p>
                 <button
-                    onClick={() => fetchGames(currentPage)}
+                    onClick={() => router.refresh()}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 >
                     Retry Loading Games
