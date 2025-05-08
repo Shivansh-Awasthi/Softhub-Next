@@ -3,10 +3,8 @@
 import React, { useState, useRef } from 'react';
 import { CiSearch } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
-import { useRouter } from 'next/navigation';
 
 const Header = ({ initialQuery = '' }) => {
-    const router = useRouter();
     const [searchQuery, setSearchQuery] = useState(initialQuery);
     const searchRef = useRef(null);
 
@@ -20,8 +18,9 @@ const Header = ({ initialQuery = '' }) => {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim() !== '') {
-            // Navigate to search page
-            router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+            // Force a full navigation to the search page with the new query
+            // This ensures it works even when already on the search page
+            window.location.href = `/search?query=${encodeURIComponent(searchQuery.trim())}`;
         }
     };
 
