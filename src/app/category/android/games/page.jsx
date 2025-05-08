@@ -3,8 +3,8 @@
 import Android from "./Android";
 
 export const metadata = {
-  title: 'Android Games - ToxicGames',
-  description: 'Download free Android games and apps',
+    title: 'Android Games - ToxicGames',
+    description: 'Download free Android games and apps',
 };
 
 export default async function AndroidGamesPage({ searchParams }) {
@@ -25,18 +25,13 @@ export default async function AndroidGamesPage({ searchParams }) {
         );
 
         if (!response.ok) {
-            console.error(`API error: ${response.status} ${response.statusText}`);
-            throw new Error(`API error: ${response.status}`);
+            console.error(`API error: `);
+            throw new Error(`API error: `);
         }
 
         const responseData = await response.json();
-        
-        // Log the response data for debugging
-        console.log("Android games API response:", {
-            responseDataKeys: Object.keys(responseData),
-            appsLength: responseData.apps ? responseData.apps.length : 0,
-            total: responseData.total || 0
-        });
+
+
 
         // Format the data to match what the component expects
         const formattedData = {
@@ -47,7 +42,7 @@ export default async function AndroidGamesPage({ searchParams }) {
         // Pass the data and current page to the client component
         return <Android initialData={formattedData} initialPage={currentPage} />;
     } catch (error) {
-        console.error("Error fetching Android games data:", error);
+        console.error("Error fetching Android games data:");
         // Return component with error state
         return <Android initialData={{ apps: [], total: 0 }} initialPage={currentPage} />;
     }

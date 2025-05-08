@@ -20,14 +20,14 @@ export default async function AndroidSoftwaresPage({ searchParams }) {
         );
 
         if (!res.ok) {
-            console.error(`API error: ${res.status} ${res.statusText}`);
-            throw new Error(`API error: ${res.status}`);
+            console.error(`API error:`);
+            throw new Error(`API error:`);
         }
 
         const data = await res.json();
         return <AndroidSoftwares serverData={data} />;
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:");
         // Return component with error state
         return <AndroidSoftwares serverData={{ apps: [], total: 0, error: error.message }} />;
     }
