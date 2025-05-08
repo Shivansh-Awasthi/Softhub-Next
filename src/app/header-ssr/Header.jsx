@@ -1,12 +1,28 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { CiSearch } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const Header = ({ initialQuery = '' }) => {
-    const [searchQuery, setSearchQuery] = useState(initialQuery);
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const [searchQuery, setSearchQuery] = useState('');
     const searchRef = useRef(null);
+
+    // Update search query when initialQuery or URL changes
+    useEffect(() => {
+        // If we're on the search page, use the query from URL
+        if (pathname === '/search') {
+            const queryFromUrl = searchParams.get('query') || initialQuery;
+            setSearchQuery(queryFromUrl);
+            console.log('Setting search query from URL:', queryFromUrl);
+        } else {
+            // Clear search query on other pages
+            setSearchQuery('');
+        }
+    }, [pathname, searchParams, initialQuery]);
 
     // Handle search input change
     const handleSearchChange = (e) => {
