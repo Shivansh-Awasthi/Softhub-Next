@@ -2,20 +2,42 @@
 
 import MacGames from "./MacGames";
 
-export default async function MacGamesPage({ searchParams }) {
-    // Convert searchParams to a regular object and await it
-    const params = await Promise.resolve(searchParams);
-    const currentPage = params?.page || 1;
+// Set revalidation time to 1 hour (3600 seconds)
+export const revalidate = 3600;
+
+// Generate static pages for the first 5 pages
+export async function generateStaticParams() {
+    return [
+        { page: '1' },
+        { page: '2' },
+        { page: '3' },
+        { page: '4' },
+        { page: '5' },
+    ];
+}
+
+export const metadata = {
+    title: 'Mac Games - ToxicGames',
+    description: 'Download free Mac games and apps',
+};
+
+export default async function MacGamesPage({ params, searchParams }) {
+    // Get page from params (for static generation) or searchParams (for client navigation)
+    const pageFromParams = params?.page;
+    const pageFromSearch = searchParams?.page;
+    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
     const itemsPerPage = 48;
 
     try {
+        // This fetch happens at build time and during revalidation
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/mac?page=${currentPage}&limit=${itemsPerPage}`,
             {
                 headers: {
                     'X-Auth-Token': 'my-secret-token-123',
                 },
-                cache: 'no-store',
+                // Use next.js cache with revalidation
+                next: { revalidate: 3600 }
             }
         );
 
@@ -25,10 +47,10 @@ export default async function MacGamesPage({ searchParams }) {
         }
 
         const data = await res.json();
-        return <MacGames serverData={data} />;
+        return <MacGames serverData={data} initialPage={currentPage} />;
     } catch (error) {
         console.error("Error fetching data:", error);
         // Return component with error state
-        return <MacGames serverData={{ error: error.message }} />;
+        return <MacGames serverData={{ apps: [], total: 0, error: error.message }} initialPage={currentPage} />;
     }
 }

@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-export default function PcGames({ serverData }) {
+export default function PcGames({ serverData, initialPage = 1 }) {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const initialPage = parseInt(searchParams.get('page') || '1', 10);
+
+    // Get current page from URL or props
+    const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
 
     // Initialize with server data or handle error from server
     const [data, setData] = useState(serverData.apps || []);
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(serverData.error || null);
     const [currentPage, setCurrentPage] = useState(initialPage);
     const [totalItems, setTotalItems] = useState(serverData.total || 0);
@@ -19,51 +20,19 @@ export default function PcGames({ serverData }) {
     const itemsPerPage = 48;
     const totalPages = Math.max(Math.ceil(totalItems / itemsPerPage), 1); // Ensure at least 1 page
 
-    // Debug log to see what data we're receiving
+    // Update state when props change (for static site generation)
     useEffect(() => {
+        setData(serverData.apps || []);
+        setTotalItems(serverData.total || 0);
+        setError(serverData.error || null);
     }, [serverData]);
 
+    // Update current page when URL changes
     useEffect(() => {
-        // Update current page when URL changes
-        const page = parseInt(searchParams.get('page') || '1', 10);
-        if (page !== currentPage) {
-            setCurrentPage(page);
+        if (pageFromUrl !== currentPage) {
+            setCurrentPage(pageFromUrl);
         }
-    }, [searchParams, currentPage]);
-
-    useEffect(() => {
-        if (currentPage === 1) return; // already have page 1 data from server
-
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=${currentPage}&limit=${itemsPerPage}`,
-                    {
-                        headers: { 'X-Auth-Token': 'my-secret-token-123' },
-                    }
-                );
-
-                if (!res.ok) {
-                    throw new Error(`API error: ${res.status}`);
-                }
-
-                const json = await res.json();
-
-                // Handle API response structure
-                setData(json.apps || []);
-                setTotalItems(json.total || 0);
-                setError(null);
-            } catch (err) {
-                setError('Failed to load data: ' + err.message);
-                console.error("Client fetch failed:", err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [currentPage]);
+    }, [pageFromUrl, currentPage]);
 
     const handlePageChange = (newPage) => {
         router.push(`/category/pc/games?page=${newPage}`);
@@ -86,10 +55,10 @@ export default function PcGames({ serverData }) {
                 </h1>
             </div>
 
-            {loading ? (
-                <p className="text-center">Loading...</p>
-            ) : error ? (
+            {error ? (
                 <p className="text-red-500 text-center">{error}</p>
+            ) : data.length === 0 ? (
+                <p className="text-center">No PC games found.</p>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
                     {data.map((ele) => (
@@ -122,7 +91,7 @@ export default function PcGames({ serverData }) {
             <div className="flex justify-center mt-6">
                 <button
                     onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-                    disabled={currentPage === 1 || loading}
+                    disabled={currentPage === 1}
                     className="px-4 py-2 mx-2 bg-gray-700 text-white rounded disabled:opacity-50"
                 >
                     Previous
@@ -132,7 +101,7 @@ export default function PcGames({ serverData }) {
                 </span>
                 <button
                     onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
-                    disabled={currentPage === totalPages || loading}
+                    disabled={currentPage === totalPages}
                     className="px-4 py-2 mx-2 bg-gray-700 text-white rounded disabled:opacity-50"
                 >
                     Next
