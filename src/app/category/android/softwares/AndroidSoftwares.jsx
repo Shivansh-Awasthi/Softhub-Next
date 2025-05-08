@@ -49,15 +49,15 @@ export default function AndroidSoftwares({ serverData }) {
                 }
 
                 const json = await res.json();
-                console.log("Client fetch response:", json);
+
 
                 // Handle API response structure
                 setData(json.apps || []);
                 setTotalItems(json.total || 0);
                 setError(null);
             } catch (err) {
-                setError('Failed to load data: ' + err.message);
-                console.error("Client fetch failed:", err.message);
+                setError('Failed to load data: ');
+
             } finally {
                 setLoading(false);
             }
