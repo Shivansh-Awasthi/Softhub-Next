@@ -32,16 +32,9 @@ const Header = ({ initialQuery = '' }) => {
 
     return (
         <header className="flex flex-wrap items-center justify-between px-1.5 pb-6">
-            {/* Logo */}
-            <div className="flex items-center">
-                <a href="/" className="flex items-center">
-                    <span className="self-center text-xl font-semibold whitespace-nowrap text-white">ToxicGames</span>
-                </a>
-            </div>
-
             <div
                 ref={searchRef}
-                className="flex flex-wrap relative border border-white border-opacity-5 rounded-lg w-full max-w-[760px] z-50 mt-4 md:mt-0"
+                className="flex flex-wrap relative ring-1 ring-[#3E3E3E] rounded-lg w-full max-w-[760px] z-50 mt-4 md:mt-0"
             >
                 <form onSubmit={handleSearch} className="w-full flex items-center">
                     <input

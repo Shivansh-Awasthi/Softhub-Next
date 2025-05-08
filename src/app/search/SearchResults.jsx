@@ -10,7 +10,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
     const searchParams = useSearchParams();
     const router = useRouter();
     const query = searchParams.get('query') || initialQuery;
-    
+
     const [data, setData] = useState(initialData.apps || []);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(initialData.error || '');
@@ -32,7 +32,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
             const storedGames = localStorage.getItem("gData");
             const purchasedGames = storedGames ? JSON.parse(storedGames) : [];
             const isAdmin = localStorage.getItem("role") === 'ADMIN';
-            
+
             setUserData({
                 purchasedGames,
                 isAdmin
@@ -41,8 +41,9 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
     }, []);
 
     const handleData = async () => {
-        // Skip fetching if we're using initial data from server
-        if (currentPage === initialPage && initialData.apps.length > 0) {
+        // Skip fetching if we're on the initial page (server has already fetched the data)
+        // regardless of whether results were found or not
+        if (currentPage === initialPage) {
             return;
         }
 
@@ -51,7 +52,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
         try {
             // If query is empty, fetch all apps
             const trimmedQuery = query ? query.trim() : '';
-            
+
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/apps/all?page=${currentPage}&limit=${itemsPerPage}&q=${encodeURIComponent(trimmedQuery)}`,
                 {
@@ -121,7 +122,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
     // Handle Page Change
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
-        
+
         // Scroll to top
         if (typeof window !== 'undefined') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
