@@ -1,4 +1,9 @@
+import { Suspense } from 'react';
 import SingleApp from '@/app/download/[platform]/[title]/[id]/SingleApp';
+import LoadingSkeleton from './LoadingSkeleton';
+
+// Set a short revalidation time to keep data fresh but allow caching
+export const revalidate = 300; // 5 minutes
 
 export async function generateMetadata({ params }) {
     try {
@@ -37,7 +42,8 @@ async function fetchAppData(id) {
                 headers: {
                     'X-Auth-Token': 'my-secret-token-123',
                 },
-                cache: 'no-store',
+                // Use short cache time instead of no-store
+                next: { revalidate: 300 }
             }
         );
 
@@ -53,13 +59,21 @@ async function fetchAppData(id) {
     }
 }
 
-export default async function DownloadPage({ params }) {
-    const { id } = params;
+// This component fetches data and renders the SingleApp
+async function AppDataFetcher({ id }) {
     const appData = await fetchAppData(id);
+
+    return <SingleApp appData={appData} />;
+}
+
+export default function DownloadPage({ params }) {
+    const { id } = params;
 
     return (
         <div className="min-h-screen text-white">
-            <SingleApp appData={appData} />
+            <Suspense fallback={<LoadingSkeleton />}>
+                <AppDataFetcher id={id} />
+            </Suspense>
         </div>
     );
 }

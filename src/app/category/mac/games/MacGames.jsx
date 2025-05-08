@@ -135,7 +135,7 @@ export default function MacGames({ serverData, initialPage = 1 }) {
         return slugify(text) || 'untitled';
     };
 
-    // Game card component
+    // Game card component with prefetching
     const GameCard = ({ game = {} }) => {
         const isPurchased = purchasedGames.includes(game._id);
         const isUnlocked = isAdmin || !game.isPaid || isPurchased;
@@ -143,9 +143,20 @@ export default function MacGames({ serverData, initialPage = 1 }) {
             ? `/download/${createSlug(game.platform)}/${createSlug(game.title)}/${game._id}`
             : '#';
 
+        // Prefetch function to start loading the download page data when hovering
+        const prefetchDownloadPage = () => {
+            if (isUnlocked) {
+                // This triggers Next.js to prefetch the page
+                router.prefetch(downloadUrl);
+            }
+        };
+
         return (
-            <div className={`relative flex flex-col rounded-2xl h-52 overflow-hidden transition duration-300 ease-in-out ring-0 ${isUnlocked ? 'hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-95' : 'opacity-90 cursor-not-allowed'
-                }`}>
+            <div
+                className={`relative flex flex-col rounded-2xl h-52 overflow-hidden transition duration-300 ease-in-out ring-0 ${isUnlocked ? 'hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-95' : 'opacity-90 cursor-not-allowed'
+                    }`}
+                onMouseEnter={prefetchDownloadPage} // Start prefetching on hover
+            >
 
                 {!isUnlocked && (
                     <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center z-10">
@@ -170,6 +181,7 @@ export default function MacGames({ serverData, initialPage = 1 }) {
                 <Link
                     href={downloadUrl}
                     className={`flex flex-col rounded-2xl h-full overflow-hidden ${!isUnlocked ? 'pointer-events-none' : ''}`}
+                    prefetch={isUnlocked} // Enable Next.js prefetching
                 >
                     <figure className="flex justify-center items-center rounded-t-2xl overflow-hidden h-full">
                         <img

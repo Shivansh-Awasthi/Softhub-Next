@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import GiscusComments from './GiscusComments';
 import GameAnnouncement from './GameAnnouncement';
 import DownloadSection from './DownloadSection';
@@ -10,40 +9,15 @@ import DescriptionTabs from './DescriptionTabs';
 const SingleApp = ({ appData }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [data, setData] = useState(appData); // Use the provided data
-    const [showMore, setShowMore] = useState(false);
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
     const [error, setError] = useState(null); // State to handle errors
-    const [userData, setUserData] = useState(null); // Store user data
     const [hasAccess, setHasAccess] = useState(null); // Start with null instead of true
-    const [activeTab, setActiveTab] = useState('description');
-    const pathname = usePathname();
-
-    // Load user data from localStorage on client side
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            // Get purchased games from localStorage
-            const storedGames = localStorage.getItem("gData");
-            const purchasedGames = storedGames ? JSON.parse(storedGames) : [];
-
-            // Check if user is admin
-            const isAdmin = localStorage.getItem("role") === 'ADMIN';
-
-            setUserData({
-                purchasedGames,
-                isAdmin
-            });
-
-            // Check access
-            if (data) {
-                checkAccess(data, purchasedGames, isAdmin);
-            }
-        }
-    }, [data]);
 
     // Check if user has access to the app
     const checkAccess = (appData, purchasedGames, isAdmin) => {
         if (!appData) return;
 
+        // Simplified logic
         if (isAdmin) {
             setHasAccess(true);
         } else {
@@ -51,6 +25,28 @@ const SingleApp = ({ appData }) => {
             setHasAccess(!appData.isPaid || purchasedGames.includes(appData._id));
         }
     };
+
+    // Load user data from localStorage on client side
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                // Get purchased games from localStorage
+                const storedGames = localStorage.getItem("gData");
+                const purchasedGames = storedGames ? JSON.parse(storedGames) : [];
+
+                // Check if user is admin
+                const isAdmin = localStorage.getItem("role") === 'ADMIN';
+
+                // Check access
+                if (data) {
+                    checkAccess(data, purchasedGames, isAdmin);
+                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
+                setError("Failed to load user data. Please refresh the page.");
+            }
+        }
+    }, [data]);
 
     // Slide handling functions
     const nextSlide = () => {
@@ -73,9 +69,8 @@ const SingleApp = ({ appData }) => {
         return `${day}.${month}.${year}`;
     };
 
-    const toggleShowMore = () => {
-        setShowMore((prev) => !prev);
-    };
+    // This function is used in the description tabs component
+    // Keeping it here for future use if needed
 
     // Function to handle body scroll locking
     const lockScroll = () => {
