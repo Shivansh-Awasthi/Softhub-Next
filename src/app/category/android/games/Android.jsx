@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
 
 export default function Android({ initialData = { apps: [], total: 0 }, initialPage = 1 }) {
     const router = useRouter();
@@ -21,7 +22,7 @@ export default function Android({ initialData = { apps: [], total: 0 }, initialP
     useEffect(() => {
         setData(initialData.apps || []);
         setTotalItems(initialData.total || 0);
-        
+
         // Update current page from URL if it changes
         const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
         if (pageFromUrl !== currentPage) {
@@ -32,7 +33,7 @@ export default function Android({ initialData = { apps: [], total: 0 }, initialP
     // Handle page change
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
-        
+
         // Navigate to the new page
         router.push(`/category/android/games?page=${newPage}`);
     };
@@ -83,25 +84,14 @@ export default function Android({ initialData = { apps: [], total: 0 }, initialP
                 </div>
             )}
 
-            {/* Pagination Controls */}
+            {/* Enhanced Pagination Controls */}
             {totalPages > 1 && (
-                <div className="flex justify-center mt-6">
-                    <button
-                        onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-                        disabled={currentPage === 1}
-                        className="px-4 py-2 mx-2 bg-gray-700 text-white rounded disabled:opacity-50"
-                    >
-                        Previous
-                    </button>
-                    <span className="px-4 py-2">Page {currentPage} of {totalPages}</span>
-                    <button
-                        onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                        className="px-4 py-2 mx-2 bg-gray-700 text-white rounded disabled:opacity-50"
-                    >
-                        Next
-                    </button>
-                </div>
+                <EnhancedPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    isLoading={loading}
+                />
             )}
         </div>
     );

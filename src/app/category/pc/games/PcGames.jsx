@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
+import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
 
 export default function PcGames({ serverData, initialPage = 1 }) {
     const searchParams = useSearchParams();
@@ -87,26 +88,15 @@ export default function PcGames({ serverData, initialPage = 1 }) {
                 </div>
             )}
 
-            {/* Pagination Controls */}
-            <div className="flex justify-center mt-6">
-                <button
-                    onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 mx-2 bg-gray-700 text-white rounded disabled:opacity-50"
-                >
-                    Previous
-                </button>
-                <span className="px-4 py-2">
-                    Page {currentPage} of {totalPages}
-                </span>
-                <button
-                    onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 mx-2 bg-gray-700 text-white rounded disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
+            {/* Enhanced Pagination Controls */}
+            {totalPages > 1 && (
+                <EnhancedPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    isLoading={false}
+                />
+            )}
         </div>
     );
 }

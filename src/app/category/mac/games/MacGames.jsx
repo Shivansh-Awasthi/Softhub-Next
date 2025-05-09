@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useLoading } from '@/app/context/LoadingContext';
+import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
 
 // Slugify function (simplified version)
 const slugify = (text = '') => {
@@ -26,7 +27,6 @@ export default function MacGames({ serverData, initialPage = 1 }) {
     const pathname = usePathname();
 
     // Get the current page from URL or initialPage prop
-    const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
 
     // Extract data from server response
     const extractData = (data) => {
@@ -119,23 +119,8 @@ export default function MacGames({ serverData, initialPage = 1 }) {
     // Pagination calculations
     const totalPages = Math.max(1, Math.ceil(totalApps / ITEMS_PER_PAGE));
 
-    const generatePageNumbers = () => {
-        const pages = [];
-        let start = Math.max(1, currentPage - 3);
-        let end = Math.min(totalPages, start + 6);
-
-        if (end - start < 6) {
-            start = Math.max(1, end - 6);
-        }
-
-        for (let i = start; i <= end; i++) {
-            pages.push(i);
-        }
-
-        return pages;
-    };
-
-    const pageNumbers = generatePageNumbers();
+    // We no longer need to generate page numbers here
+    // The EnhancedPagination component handles this internally
 
     // Safe slug generation
     const createSlug = (text = '') => {
@@ -264,43 +249,12 @@ export default function MacGames({ serverData, initialPage = 1 }) {
                     </div>
 
                     {totalPages > 1 && (
-                        <div className="flex flex-wrap justify-center mt-10">
-                            <button
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1 || isPageTransitioning}
-                                className={`px-4 py-2 mx-2 mb-2 bg-gray-700 text-white rounded transition-all duration-300 ${isPageTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-600'}`}
-                                aria-label="Previous page"
-                            >
-                                {isPageTransitioning ? 'Loading...' : 'Previous'}
-                            </button>
-
-                            {pageNumbers.map((pageNumber) => (
-                                <button
-                                    key={pageNumber}
-                                    onClick={() => handlePageChange(pageNumber)}
-                                    disabled={isPageTransitioning || currentPage === pageNumber}
-                                    className={`px-4 py-2 mx-1 mb-2 rounded text-gray-300 transition-all duration-300 ${currentPage === pageNumber
-                                        ? 'bg-blue-600 cursor-default'
-                                        : isPageTransitioning
-                                            ? 'bg-[#2c2c2c] opacity-50 cursor-not-allowed'
-                                            : 'bg-[#2c2c2c] hover:bg-gray-800 hover:text-white'
-                                        }`}
-                                    aria-label={`Go to page ${pageNumber}`}
-                                    aria-current={currentPage === pageNumber ? 'page' : undefined}
-                                >
-                                    {pageNumber}
-                                </button>
-                            ))}
-
-                            <button
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages || isPageTransitioning}
-                                className={`px-4 py-2 mx-2 mb-2 bg-gray-700 text-white rounded transition-all duration-300 ${isPageTransitioning ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-600'}`}
-                                aria-label="Next page"
-                            >
-                                {isPageTransitioning ? 'Loading...' : 'Next'}
-                            </button>
-                        </div>
+                        <EnhancedPagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                            isLoading={isPageTransitioning}
+                        />
                     )}
                 </>
             ) : (

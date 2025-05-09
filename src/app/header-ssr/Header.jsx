@@ -49,7 +49,7 @@ const Header = ({ initialQuery = '' }) => {
         <header className="flex flex-wrap items-center justify-between px-1.5 pb-6">
             <div
                 ref={searchRef}
-                className="flex flex-wrap relative ring-1 ring-[#3E3E3E] rounded-lg w-full max-w-[760px] z-50 mt-4 md:mt-0"
+                className="flex flex-wrap relative ring-1 ring-[#3E3E3E] rounded-lg w-full max-w-[760px] z-50 mt-4 md:mt-1"
             >
                 <form onSubmit={handleSearch} className="w-full flex items-center">
                     <input
