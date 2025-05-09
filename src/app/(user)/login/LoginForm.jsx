@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { loginUser } from './actions';
+import { loginUser } from './action';
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');

@@ -8,7 +8,7 @@ export async function loginUser(formData) {
 
     try {
         // Use the server-side API URL
-        const response = await fetch(`${process.env.API_URL}/api/user/signin`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/signin`, {
             method: 'POST',
             headers: {
                 'X-Auth-Token': 'my-secret-token-123',

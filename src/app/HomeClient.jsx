@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LiveCounter } from './components/Counter/LiveCounter';
 import AdsComponent from './components/Ads/AdsComponent';
+import { LuAppWindowMac } from "react-icons/lu";
+import { FaAndroid } from "react-icons/fa";
+import { FaComputer } from "react-icons/fa6";
+import { FaPlaystation } from "react-icons/fa";
 
 const images = [
     'https://img.playbook.com/NzGgc9TjLeq_Ic9CZ4VLwiUBrK82Gigj4VqjhcTTlwE/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzIwYTYzOTJj/LWEyNWUtNDdjYy05/Y2E5LWFjMmQ2ZGQy/YmRkNw',
