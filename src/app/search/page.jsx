@@ -1,7 +1,7 @@
 // src/app/search/page.jsx
 import { Suspense } from 'react';
 import SearchResults from './SearchResults';
-import SearchSkeleton from '../components/SearchSkeleton';
+import SearchSkeleton from './SearchSkeleton';
 
 export const metadata = {
   title: 'Search Results - ToxicGames',

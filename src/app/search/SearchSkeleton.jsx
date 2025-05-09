@@ -27,18 +27,18 @@ const SearchSkeleton = ({ itemCount = 10 }) => {
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 rounded-xl bg-gray-700"></div>
                   </div>
-                  
+
                   {/* Title and platform */}
                   <div className="flex-1 min-w-0 ms-4">
                     <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
                     <div className="h-3 bg-gray-700 rounded w-1/2"></div>
                   </div>
-                  
+
                   {/* Size */}
                   <div className="flex-1 flex justify-center hidden sm:block">
                     <div className="h-4 bg-gray-700 rounded w-16"></div>
                   </div>
-                  
+
                   {/* Date */}
                   <div className="text-right hidden md:block">
                     <div className="h-4 bg-gray-700 rounded w-24"></div>
@@ -50,14 +50,28 @@ const SearchSkeleton = ({ itemCount = 10 }) => {
         </div>
       </div>
 
-      {/* Pagination skeleton */}
-      <div className="flex justify-center mt-6">
-        <div className="flex space-x-1">
-          <div className="h-10 w-16 bg-gray-700 rounded"></div>
-          <div className="h-10 w-10 bg-gray-700 rounded"></div>
-          <div className="h-10 w-10 bg-gray-700 rounded"></div>
-          <div className="h-10 w-10 bg-gray-700 rounded"></div>
-          <div className="h-10 w-16 bg-gray-700 rounded"></div>
+      {/* Pagination skeleton - Improved Design */}
+      <div className="flex justify-center mt-8">
+        <div className="inline-flex items-center">
+          {/* Previous Button Skeleton */}
+          <div className="h-10 w-10 bg-gray-700 rounded-l-md"></div>
+
+          {/* Page Numbers Skeleton - Desktop */}
+          <div className="hidden sm:flex">
+            <div className="h-10 w-10 bg-gray-700"></div>
+            <div className="h-10 w-10 bg-gray-700"></div>
+            <div className="h-10 w-10 bg-blue-600"></div>
+            <div className="h-10 w-10 bg-gray-700"></div>
+            <div className="h-10 w-10 bg-gray-700"></div>
+          </div>
+
+          {/* Mobile Pagination Skeleton */}
+          <div className="flex sm:hidden">
+            <div className="h-10 w-20 bg-blue-600"></div>
+          </div>
+
+          {/* Next Button Skeleton */}
+          <div className="h-10 w-10 bg-gray-700 rounded-r-md"></div>
         </div>
       </div>
     </div>
