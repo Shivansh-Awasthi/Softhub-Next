@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { CiLock } from 'react-icons/ci'; // Lock Icon
-import Loader from '../components/Loading/Loader';
+import SearchSkeleton from '../components/SearchSkeleton';
 
 const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = '', initialPage = 1 }) => {
     const searchParams = useSearchParams();
@@ -148,7 +148,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
             </div>
 
             {loading ? (
-                <Loader />
+                <SearchSkeleton itemCount={10} />
             ) : error ? (
                 <div>
                     <h1 className='font-medium text-3xl mb-6'>Oops! Something went wrong</h1>
@@ -164,7 +164,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                     </div>
                 </div>
             ) : (
-                <div className="w-full md:w-full pt-3 pb-3 border border-gray-200 border-opacity-5 bg-[#262626] rounded-lg shadow ">
+                <div className="w-full md:w-full pt-3 pb-3 ring-2 ring-[#3E3E3E] bg-[#262626] rounded-lg shadow ">
                     <div className="flow-root">
                         <ul role="list" className="divide-y divide-gray-700">
                             {data.map((ele) => {

@@ -1,19 +1,27 @@
 // src/app/search/page.jsx
+import { Suspense } from 'react';
 import SearchResults from './SearchResults';
+import SearchSkeleton from '../components/SearchSkeleton';
 
 export const metadata = {
   title: 'Search Results - ToxicGames',
   description: 'Search for games and software across multiple platforms',
 };
 
-// Server-side data fetching
+// Server-side data fetching with timeout
 async function fetchSearchResults(query, page = 1, limit = 48) {
   if (!query) {
     return { apps: [], total: 0 };
   }
 
   try {
-    const response = await fetch(
+    // Create a promise that rejects after 5 seconds
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Search request timed out')), 5000);
+    });
+
+    // Create the fetch promise
+    const fetchPromise = fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/all?page=${page}&limit=${limit}&q=${encodeURIComponent(query)}`,
       {
         headers: {
@@ -22,6 +30,9 @@ async function fetchSearchResults(query, page = 1, limit = 48) {
         cache: 'no-store' // Ensure fresh data
       }
     );
+
+    // Race the fetch against the timeout
+    const response = await Promise.race([fetchPromise, timeoutPromise]);
 
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
@@ -35,7 +46,8 @@ async function fetchSearchResults(query, page = 1, limit = 48) {
   }
 }
 
-export default async function SearchPage({ searchParams }) {
+// This component fetches data and renders the SearchResults
+async function SearchDataLoader({ searchParams }) {
   const query = searchParams.query || '';
   const page = parseInt(searchParams.page || '1', 10);
 
@@ -43,4 +55,12 @@ export default async function SearchPage({ searchParams }) {
   const initialData = await fetchSearchResults(query, page);
 
   return <SearchResults initialData={initialData} initialQuery={query} initialPage={page} />;
+}
+
+export default function SearchPage({ searchParams }) {
+  return (
+    <Suspense fallback={<SearchSkeleton itemCount={10} />}>
+      <SearchDataLoader searchParams={searchParams} />
+    </Suspense>
+  );
 }
