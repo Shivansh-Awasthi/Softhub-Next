@@ -38,106 +38,137 @@ const DescriptionTabs = ({ data }) => {
     }
 
     return (
-        <div className="mt-8 mb-8 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-14 bg-[#262626] z-20 ring-2 ring-[#2E2E2E] rounded-lg overflow-auto">
+        <div className="mt-8 mb-8 bg-gradient-to-br from-[#1E1E1E] to-[#121212] z-20 rounded-2xl overflow-hidden shadow-2xl border-b-4 border-purple-600">
             {/* Tabs Section - Only show for Mac */}
             {isMac && (
                 <div className="relative">
-                    <div className="flex justify-left space-x-12 mb-6 relative">
+                    <div className="flex bg-[#0F0F0F] p-1 rounded-t-2xl">
                         <button
                             ref={descriptionRef}
                             onClick={() => handleTabClick('description')}
-                            className={`text-xl sm:text-2xl font-normal ${activeTab === 'description' ? 'text-[#fff]' : 'text-[#8E8E8E] hover:text-[#fff]'
-                                } transition-colors relative pb-2`}
+                            className={`flex-1 text-lg sm:text-xl font-bold py-4 transition-all duration-300 ${activeTab === 'description'
+                                ? 'text-white bg-gradient-to-r from-purple-600 to-blue-500 rounded-xl shadow-lg'
+                                : 'text-gray-400 hover:text-gray-200'
+                                }`}
                         >
-                            Description
+                            DESCRIPTION
                         </button>
                         <button
                             ref={installationRef}
                             onClick={() => handleTabClick('installation')}
-                            className={`text-xl xl:text-2xl sm:text-2xl font-normal ${activeTab === 'installation' ? 'text-[#fff]' : 'text-[#8E8E8E] hover:text-[#fff]'
-                                } transition-colors relative pb-2`}
+                            className={`flex-1 text-lg sm:text-xl font-bold py-4 transition-all duration-300 ${activeTab === 'installation'
+                                ? 'text-white bg-gradient-to-r from-purple-600 to-blue-500 rounded-xl shadow-lg'
+                                : 'text-gray-400 hover:text-gray-200'
+                                }`}
                         >
-                            Fix: Installation Error
+                            FIX: INSTALLATION ERROR
                         </button>
 
-                        {/* Animated underline */}
+                        {/* Animated underline - hidden but kept for functionality */}
                         <div
-                            className="absolute top-16 h-1 bg-blue-500 transition-all duration-300"
+                            className="absolute -bottom-1 h-0.5 bg-blue-500 transition-all duration-300 opacity-0"
                             style={{
                                 left: linePosition,
                                 width: lineWidth
                             }}
                         />
                     </div>
-                    <div className="h-0.5 bg-[#8E8E8E] opacity-20 w-full mt-2 mb-10" />
                 </div>
             )}
 
             {/* Content Section */}
-            {isMac ? (
-                activeTab === 'description' ? (
-                    <>
-                        <p
-                            className="text-sm sm:text-base md:text-lg text-[#fff] p-1"
-                            dangerouslySetInnerHTML={{
-                                __html: showMore
-                                    ? (data.description ? data.description.replace(/\\n/g, '<br />') : "No description available.")
-                                    : (data.description ? data.description.replace(/\\n/g, '<br />').substring(0, 800) + '...' : "No description available.")
-                            }}
-                        />
-                        <button
-                            className="mt-4 text-blue-500 hover:underline"
-                            onClick={toggleShowMore}
-                        >
-                            {showMore ? "Collapse" : "Show More"}
-                        </button>
-                    </>
-                ) : (
-                    <div className="text-sm sm:text-base md:text-lg text-[#fff] p-1">
-                        <div dangerouslySetInnerHTML={{
-                            __html: `
-                                Enter the command in terminal: <span class="text-yellow-500">xattr -cr</span> 
-                                then after it space and then drop the application to the terminal and press Enter.<br/><br/>
-                                Or you can disable gatekeeper globally by entering 
-                                <span class="text-yellow-500">sudo spctl --master-disable</span> in terminal.<br/><br/>
-                                Below there I have analyzed the most common <span class="text-red-500">FIX</span> in this video.
-                            `
-                        }} />
-                        <div className="mt-4" style={{ padding: '62.5% 0 0 0', position: 'relative' }}>
-                            <iframe
-                                src="https://player.vimeo.com/video/1046166571?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
-                                frameBorder="0"
-                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                                title="Fix. The application is damaged and cannot be opened, you should move it to the bin."
-                            ></iframe>
-                        </div>
-                    </div>
-                )
-            ) : (
-                // Non-Mac content (always show description)
-                <>
-                    <div className="text-center ">
-                        <h2 className="text-2xl sm:text-3xl font-normal text-[#8E8E8E] hover:text-[#fff]">Description</h2>
-                        <div className="h-0.5 bg-[#8E8E8E] opacity-20 w-full mt-5 mb-6"></div>
-                    </div>
+            <div className="p-6 sm:p-8">
+                {isMac ? (
+                    activeTab === 'description' ? (
+                        <>
+                            <div className="relative">
+                                <div className="absolute -top-6 -left-6 w-20 h-20 bg-purple-600 opacity-20 rounded-full blur-xl"></div>
+                                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
 
-                    <p
-                        className="text-sm sm:text-base md:text-lg text-[#fff] p-2"
-                        dangerouslySetInnerHTML={{
-                            __html: showMore
-                                ? (data.description ? data.description.replace(/\\n/g, '<br />') : "No description available.")
-                                : (data.description ? data.description.replace(/\\n/g, '<br />').substring(0, 800) + '...' : "No description available.")
-                        }}
-                    />
-                    <button
-                        className="mt-4 text-blue-500 hover:underline"
-                        onClick={toggleShowMore}
-                    >
-                        {showMore ? "Collapse" : "Show More"}
-                    </button>
-                </>
-            )}
+                                <p
+                                    className="text-sm sm:text-base md:text-lg text-gray-200 leading-relaxed relative z-10"
+                                    dangerouslySetInnerHTML={{
+                                        __html: showMore
+                                            ? (data.description ? data.description.replace(/\\n/g, '<br />') : "No description available.")
+                                            : (data.description ? data.description.replace(/\\n/g, '<br />').substring(0, 800) + '...' : "No description available.")
+                                    }}
+                                />
+                            </div>
+                            <button
+                                className="mt-6 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-full font-bold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+                                onClick={toggleShowMore}
+                            >
+                                {showMore ? "Show Less" : "Show More"}
+                            </button>
+                        </>
+                    ) : (
+                        <div className="relative">
+                            <div className="absolute -top-6 -left-6 w-20 h-20 bg-purple-600 opacity-20 rounded-full blur-xl"></div>
+                            <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                            <div className="bg-[#0F0F0F] p-6 rounded-xl border border-purple-500/20 shadow-lg relative z-10">
+                                <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-4">Installation Fix Instructions</h3>
+
+                                <div
+                                    className="text-sm sm:text-base text-gray-200 leading-relaxed mb-6"
+                                    dangerouslySetInnerHTML={{
+                                        __html: `
+                                        <p class="mb-4">Enter the command in terminal: <code class="px-2 py-1 bg-black/50 rounded text-yellow-400 font-mono">xattr -cr</code>
+                                        then after it space and then drop the application to the terminal and press Enter.</p>
+
+                                        <p class="mb-4">Or you can disable gatekeeper globally by entering
+                                        <code class="px-2 py-1 bg-black/50 rounded text-yellow-400 font-mono">sudo spctl --master-disable</code> in terminal.</p>
+
+                                        <p class="mb-4">Below I have analyzed the most common <span class="text-red-400 font-bold">FIX</span> in this video.</p>
+                                    `
+                                    }}
+                                />
+
+                                <div className="rounded-xl overflow-hidden shadow-xl" style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
+                                    <iframe
+                                        src="https://player.vimeo.com/video/1046166571?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                        className="border-0"
+                                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                        title="Fix. The application is damaged and cannot be opened, you should move it to the bin."
+                                    ></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                ) : (
+                    // Non-Mac content (always show description)
+                    <>
+                        <div className="relative">
+                            <div className="absolute -top-6 -left-6 w-20 h-20 bg-purple-600 opacity-20 rounded-full blur-xl"></div>
+                            <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                            <div className="text-center mb-8">
+                                <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                                    Description
+                                </h2>
+                                <div className="h-1 w-24 mx-auto bg-gradient-to-r from-purple-600 to-blue-500 rounded-full mt-2"></div>
+                            </div>
+
+                            <p
+                                className="text-sm sm:text-base md:text-lg text-gray-200 leading-relaxed relative z-10"
+                                dangerouslySetInnerHTML={{
+                                    __html: showMore
+                                        ? (data.description ? data.description.replace(/\\n/g, '<br />') : "No description available.")
+                                        : (data.description ? data.description.replace(/\\n/g, '<br />').substring(0, 800) + '...' : "No description available.")
+                                }}
+                            />
+
+                            <button
+                                className="mt-6 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-full font-bold text-sm uppercase tracking-wider shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
+                                onClick={toggleShowMore}
+                            >
+                                {showMore ? "Show Less" : "Show More"}
+                            </button>
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     );
 };
