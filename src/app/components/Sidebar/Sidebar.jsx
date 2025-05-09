@@ -226,7 +226,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('ppsspp');
                   closeSidebar();
-                  showSkeleton('PlayStation');
+                  showSkeleton('PPSSPP');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -241,7 +241,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('ps2');
                   closeSidebar();
-                  showSkeleton('PlayStation');
+                  showSkeleton('PS2');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -256,7 +256,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('ps3');
                   closeSidebar();
-                  showSkeleton('PlayStation');
+                  showSkeleton('PS3');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -265,6 +265,21 @@ const Sidebar = () => {
                 </svg>
                 <span className="mx-2 text-sm font-medium">PS3</span>
               </Link>
+              {/* <Link
+                href="/category/ps4/iso"
+                className={`flex items-center px-3 py-2 transition-colors duration-300 transform rounded-lg ${selected === 'ps4' || pathname === '/category/ps4/iso' ? 'bg-gray-600 text-white' : 'text-gray-600 hover:bg-gray-500'} dark:text-gray-200`}
+                onClick={() => {
+                  handleClick('ps4');
+                  closeSidebar();
+                  showSkeleton('PS4');
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01M17.5 15h.01" />
+                  <rect width="20" height="12" x="2" y="6" rx="2" />
+                </svg>
+                <span className="mx-2 text-sm font-medium">PS4</span>
+              </Link> */}
             </div>
           </nav>
         </div>

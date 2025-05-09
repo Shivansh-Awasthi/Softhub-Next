@@ -60,7 +60,7 @@ export default function Ps3IsoPage({ params, searchParams }) {
     const itemsPerPage = 48;
 
     return (
-        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PlayStation" />}>
+        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PS3" />}>
             <Ps3IsoLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
         </Suspense>
     );

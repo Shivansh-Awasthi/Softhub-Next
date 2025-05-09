@@ -60,7 +60,7 @@ export default function Ps2IsoPage({ params, searchParams }) {
     const itemsPerPage = 48;
 
     return (
-        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PlayStation" />}>
+        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PS2" />}>
             <Ps2IsoLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
         </Suspense>
     );

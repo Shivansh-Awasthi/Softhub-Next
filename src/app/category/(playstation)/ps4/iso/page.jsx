@@ -1,6 +1,8 @@
 // app/category/ps4/iso/page.jsx
 
+import { Suspense } from 'react';
 import Ps4Iso from "./Ps4Iso";
+import CategorySkeleton from "@/app/components/CategorySkeleton";
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;
@@ -21,16 +23,16 @@ export const metadata = {
     description: 'Download free PlayStation 4 ISO games',
 };
 
-export default async function Ps4IsoPage({ params, searchParams }) {
-    // Get page from params (for static generation) or searchParams (for client navigation)
-    const pageFromParams = params?.page;
-    const pageFromSearch = searchParams?.page;
-    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
-    const itemsPerPage = 48;
-
+// This component fetches data with a timeout to prevent long waits
+async function Ps4IsoLoader({ currentPage, itemsPerPage }) {
     try {
-        // This fetch happens at build time and during revalidation
-        const res = await fetch(
+        // Create a promise that rejects after 5 seconds
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Request timed out')), 5000);
+        });
+
+        // Create the fetch promise
+        const fetchPromise = fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/ps4?page=${currentPage}&limit=${itemsPerPage}`,
             {
                 headers: {
@@ -40,6 +42,9 @@ export default async function Ps4IsoPage({ params, searchParams }) {
                 next: { revalidate: 3600 }
             }
         );
+
+        // Race the fetch against the timeout
+        const res = await Promise.race([fetchPromise, timeoutPromise]);
 
         if (!res.ok) {
             console.error(`API error: ${res.status} ${res.statusText}`);
@@ -53,4 +58,18 @@ export default async function Ps4IsoPage({ params, searchParams }) {
         // Return component with error state
         return <Ps4Iso serverData={{ apps: [], total: 0, error: error.message }} initialPage={currentPage} />;
     }
+}
+
+export default function Ps4IsoPage({ params, searchParams }) {
+    // Get page from params (for static generation) or searchParams (for client navigation)
+    const pageFromParams = params?.page;
+    const pageFromSearch = searchParams?.page;
+    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
+    const itemsPerPage = 48;
+
+    return (
+        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PS4" />}>
+            <Ps4IsoLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
+        </Suspense>
+    );
 }

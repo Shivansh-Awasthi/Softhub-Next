@@ -68,7 +68,7 @@ export default function PpssppIsoPage({ params, searchParams }) {
     const itemsPerPage = 48;
 
     return (
-        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PlayStation" />}>
+        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PPSSPP" />}>
             <PpssppIsoLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
         </Suspense>
     );
