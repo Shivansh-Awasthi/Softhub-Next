@@ -2,14 +2,14 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import CategorySkeleton from '@/app/components/CategorySkeleton';
+import CategorySkeleton from '@/app/category/CategorySkeleton';
 
 // Create the context
 const LoadingContext = createContext({
   isLoading: false,
-  setIsLoading: () => {},
-  showSkeleton: () => {},
-  hideSkeleton: () => {},
+  setIsLoading: () => { },
+  showSkeleton: () => { },
+  hideSkeleton: () => { },
 });
 
 // Custom hook to use the loading context
@@ -41,12 +41,12 @@ export function LoadingProvider({ children }) {
   useEffect(() => {
     if (pathname.includes('/category/')) {
       setIsLoading(true);
-      
+
       // Hide skeleton after a short delay to simulate loading
       const timer = setTimeout(() => {
         setIsLoading(false);
       }, 800); // Adjust timing as needed
-      
+
       return () => clearTimeout(timer);
     }
   }, [pathname, searchParams]);

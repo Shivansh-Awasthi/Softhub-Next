@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import Android from "./Android";
-import CategorySkeleton from "@/app/components/CategorySkeleton";
+import CategorySkeleton from "@/app/category/CategorySkeleton";
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;

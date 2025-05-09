@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import Ps4Iso from "./Ps4Iso";
-import CategorySkeleton from "@/app/components/CategorySkeleton";
+import CategorySkeleton from "@/app/category/CategorySkeleton";
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;
