@@ -268,14 +268,15 @@ const SingleApp = ({ appData }) => {
             {/* Modal for Download Instructions */}
             {showModal && (
                 <div
-                    className="fixed inset-0 flex items-center justify-center bg-black backdrop-blur-sm bg-opacity-50 overflow-hidden"
+                    className="fixed inset-0 flex items-center justify-center backdrop-blur-md overflow-hidden"
                     style={{
                         position: 'fixed',
                         top: 0,
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        zIndex: 2000
+                        zIndex: 2000,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)'
                     }}
                     onClick={(e) => {
                         // Close modal when clicking outside of modal content
@@ -285,43 +286,81 @@ const SingleApp = ({ appData }) => {
                     }}
                 >
                     <div
-                        className="bg-[#262626] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-lg w-full max-w-4xl mx-auto text-center my-auto max-h-[90vh] overflow-y-auto"
+                        className="bg-gradient-to-br from-[#1E1E1E] to-[#121212] px-6 sm:px-12 lg:px-24 py-6 sm:py-8 rounded-xl w-full max-w-4xl mx-auto text-center my-auto max-h-[90vh] overflow-y-auto border border-purple-600/20 shadow-2xl"
                         style={{ position: 'relative', zIndex: 2001 }}
                     >
                         {/* Close Icon */}
-                        <div className="absolute top-4 right-4 cursor-pointer" onClick={closeModal}>
+                        <div
+                            className="absolute top-4 right-4 cursor-pointer bg-black/30 hover:bg-black/50 p-2 rounded-full transition-all duration-300"
+                            onClick={closeModal}
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
+                                width="20"
+                                height="20"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                className="mr-2 sm:mr-4 text-xl text-[#8E8E8E] hover:text-[#fff]"
+                                className="text-white"
                             >
                                 <path d="M18 6 6 18" />
                                 <path d="m6 6 12 12" />
                             </svg>
                         </div>
-                        <h3 className="text-2xl sm:text-3xl font-normal">Installation Instructions</h3>
+                        <h3 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-3">Installation Instructions</h3>
 
                         {/* For MAC games*/}
                         {data.category?.name === 'mac' && (
                             <div>
-                                <div>
-                                    <h2 className="mt-3 text-[#8E8E8E] hover:underline text-lg sm:text-xl">MAC</h2>
-                                    <p className="mt-1 text-sm sm:text-base">Run the downloaded image and drag the application to the Applications folder shortcut.</p>
-                                    <p className="text-sm sm:text-base">Once copying is complete, the application can be launched via Launchpad.</p>
-                                    <p className='text-green-500 text-sm'>If the application shows <span className='text-yellow-500'>"The app is damaged and can't be opened. You should move it to the bin"</span> then visit our <a className='text-blue-500 text-base' href="https://toxicgames.in/faq">FAQ </a>page and refer that video.</p>
+                                <div className="bg-[#0F0F0F] p-6 rounded-xl border border-purple-500/20 shadow-lg mb-6">
+                                    <div className="flex items-center justify-center mb-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 mr-2">
+                                            <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"></path>
+                                            <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+                                            <path d="M12 2v2"></path>
+                                            <path d="M12 22v-2"></path>
+                                            <path d="m17 20.66-1-1.73"></path>
+                                            <path d="M11 10.27 7 3.34"></path>
+                                            <path d="m20.66 17-1.73-1"></path>
+                                            <path d="m3.34 7 1.73 1"></path>
+                                            <path d="M14 12h8"></path>
+                                            <path d="M2 12h2"></path>
+                                            <path d="m20.66 7-1.73 1"></path>
+                                            <path d="m3.34 17 1.73-1"></path>
+                                            <path d="m17 3.34-1 1.73"></path>
+                                            <path d="m7 20.66 1-1.73"></path>
+                                        </svg>
+                                        <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">MAC INSTALLATION</h2>
+                                    </div>
+                                    <div className="space-y-3 text-left">
+                                        <p className="text-sm sm:text-base text-gray-200">1. Run the downloaded image and drag the application to the Applications folder shortcut.</p>
+                                        <p className="text-sm sm:text-base text-gray-200">2. Once copying is complete, the application can be launched via Launchpad.</p>
+                                        <div className="bg-black/30 p-4 rounded-lg mt-4 border-l-2 border-yellow-500">
+                                            <p className='text-white text-sm'>If the application shows <span className='text-yellow-400 font-medium'>"The app is damaged and can't be opened. You should move it to the bin"</span> then visit our <a className='text-blue-400 hover:text-blue-300 transition-colors font-medium' href="https://toxicgames.in/faq">FAQ </a>page and refer that video.</p>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 {/* Check if announcement is not empty and has enough data */}
                                 {data?.announcement && <GameAnnouncement announcements={data.announcement} />}
 
-                                <div className='flex flex-wrap justify-center text-center mt-2 text-sm'> How To Download? How to Install?&nbsp; <a href="https://vimeo.com/1030290869?share=copy" target='_blank' className=' text-blue-600 hover:underline'> click here</a></div>
+                                <div className='flex flex-wrap justify-center items-center mt-6 p-3 bg-blue-900/10 rounded-lg border border-blue-800/20'>
+                                    <span className="text-gray-300 text-sm mr-2">Need help?</span>
+                                    <a
+                                        href="https://vimeo.com/1030290869?share=copy"
+                                        target='_blank'
+                                        className='flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full text-sm font-medium hover:shadow-lg transition-all duration-300'
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                                        </svg>
+                                        Watch Installation Video
+                                    </a>
+                                </div>
                             </div>
                         )}
 
