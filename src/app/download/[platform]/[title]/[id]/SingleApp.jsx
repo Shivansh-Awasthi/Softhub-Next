@@ -139,7 +139,7 @@ const SingleApp = ({ appData }) => {
                 {/* Left Content */}
                 <div className="flex-1">
                     {/* Card */}
-                    <div className="flex pb-4 sm:pb-4 flex-grow flex-col rounded-lg shadow-sm">
+                    <div className="flex pb-8 flex-grow flex-col rounded-lg shadow-sm">
                         <div className="flex items-center gap-4 text-slate-800 gap-3 sm:gap-5">
                             <img
                                 src={data.thumbnail && data.thumbnail[0] ? data.thumbnail[0] : "https://via.placeholder.com/58"}
