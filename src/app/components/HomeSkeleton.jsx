@@ -15,7 +15,7 @@ const HomeSkeleton = () => {
             <div className="h-10 bg-gray-600 rounded w-36"></div>
           </div>
         </div>
-        
+
         {/* Pagination Dots Skeleton */}
         <div className="absolute flex space-x-2 bottom-7 left-1/2 transform -translate-x-1/2">
           {[1, 2, 3, 4].map((_, index) => (
@@ -64,7 +64,7 @@ const HomeSkeleton = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
           {Array.from({ length: 8 }, (_, i) => (
-            <MacGameSkeleton key={i} />
+            <PcGameSkeleton key={i} />
           ))}
         </div>
       </div>
@@ -100,9 +100,9 @@ const HomeSkeleton = () => {
   );
 };
 
-// Mac/PC Game Card Skeleton
+// Mac Game Card Skeleton
 const MacGameSkeleton = () => (
-  <div className="flex flex-col rounded-2xl h-52 overflow-hidden">
+  <div className="flex flex-col rounded-2xl h-52 overflow-hidden ring-1 ring-blue-500/40">
     <div className="h-36 bg-gray-700 rounded-t-2xl"></div>
     <div className="flex flex-col p-3 bg-[#262626]">
       <div className="h-4 bg-gray-600 rounded w-3/4 mb-2"></div>
@@ -113,7 +113,7 @@ const MacGameSkeleton = () => (
 
 // Mac Software Card Skeleton
 const MacSoftwareSkeleton = () => (
-  <div className="flex flex-col rounded-2xl h-36 overflow-hidden ring-1 ring-white/10">
+  <div className="flex flex-col rounded-2xl h-36 overflow-hidden ring-1 ring-cyan-500/40">
     <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
       <div className="rounded-full w-14 h-14 bg-gray-700"></div>
     </div>
@@ -124,9 +124,20 @@ const MacSoftwareSkeleton = () => (
   </div>
 );
 
+// PC Game Card Skeleton
+const PcGameSkeleton = () => (
+  <div className="flex flex-col rounded-2xl h-52 overflow-hidden ring-1 ring-purple-500/40">
+    <div className="h-36 bg-gray-700 rounded-t-2xl"></div>
+    <div className="flex flex-col p-3 bg-[#262626]">
+      <div className="h-4 bg-gray-600 rounded w-3/4 mb-2"></div>
+      <div className="h-3 bg-gray-600 rounded w-1/2"></div>
+    </div>
+  </div>
+);
+
 // Android Game Card Skeleton
 const AndroidGameSkeleton = () => (
-  <div className="flex flex-col rounded-2xl h-36 overflow-hidden ring-1 ring-white/10">
+  <div className="flex flex-col rounded-2xl h-36 overflow-hidden ring-1 ring-green-500/40">
     <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
       <div className="rounded-full w-14 h-14 bg-gray-700"></div>
     </div>
@@ -139,7 +150,7 @@ const AndroidGameSkeleton = () => (
 
 // PS2 Game Card Skeleton
 const PS2GameSkeleton = () => (
-  <div className="flex flex-col rounded-2xl h-36 overflow-hidden ring-1 ring-blue-500/30">
+  <div className="flex flex-col rounded-2xl h-36 overflow-hidden ring-1 ring-yellow-500/40">
     <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
       <div className="rounded-full w-14 h-14 bg-gray-700"></div>
     </div>
