@@ -1,6 +1,8 @@
 // app/category/android/games/page.jsx
 
+import { Suspense } from 'react';
 import Android from "./Android";
+import CategorySkeleton from "@/app/components/CategorySkeleton";
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;
@@ -21,13 +23,8 @@ export const metadata = {
     description: 'Download free Android games and apps',
 };
 
-export default async function AndroidGamesPage({ params, searchParams }) {
-    // Get page from params (for static generation) or searchParams (for client navigation)
-    const pageFromParams = params?.page;
-    const pageFromSearch = searchParams?.page;
-    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
-    const itemsPerPage = 48;
-
+// This component fetches data and renders the Android component
+async function AndroidGamesLoader({ currentPage, itemsPerPage }) {
     try {
         // This fetch happens at build time and during revalidation
         const response = await fetch(
@@ -61,4 +58,18 @@ export default async function AndroidGamesPage({ params, searchParams }) {
         // Return component with error state
         return <Android initialData={{ apps: [], total: 0 }} initialPage={currentPage} />;
     }
+}
+
+export default function AndroidGamesPage({ params, searchParams }) {
+    // Get page from params (for static generation) or searchParams (for client navigation)
+    const pageFromParams = params?.page;
+    const pageFromSearch = searchParams?.page;
+    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
+    const itemsPerPage = 48;
+
+    return (
+        <Suspense fallback={<CategorySkeleton itemCount={16} platform="Android" />}>
+            <AndroidGamesLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
+        </Suspense>
+    );
 }

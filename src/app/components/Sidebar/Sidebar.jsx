@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLoading } from '@/app/context/LoadingContext';
 
 const Sidebar = () => {
   const [logo, setLogo] = useState("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.35_AM_cow9by.png");
@@ -10,13 +11,10 @@ const Sidebar = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const pathname = usePathname();
+  const { showSkeleton } = useLoading();
 
   const handleClick = (item) => {
     setSelected(item);
-  };
-
-  const handleLogoClick = () => {
-    setSelected('');
   };
 
   useEffect(() => {
@@ -89,8 +87,8 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`sidebar md:sticky top-0 z-20 flex flex-col w-full h-screen px-8 py-8 border-r border-white border-opacity-5 
-                ${isMobileView ? 'fixed w-full bg-[#1E1E1E] transition-transform duration-300' : 'w-60'} 
+        className={`sidebar md:sticky top-0 z-20 flex flex-col w-full h-screen px-8 py-8 border-r border-white border-opacity-5
+                ${isMobileView ? 'fixed w-full bg-[#1E1E1E] transition-transform duration-300' : 'w-60'}
                 ${isSidebarVisible || !isMobileView ? 'transform-none' : '-translate-x-full overflow-y-auto scrollbar-hide'}`}
         style={{ overflowY: isSidebarVisible ? 'auto' : 'hidden' }}
       >
@@ -100,6 +98,7 @@ const Sidebar = () => {
           onClick={() => {
             handleClick();
             closeSidebar();
+            // No need to show skeleton for home page
           }}
           onMouseEnter={() => setLogo("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.39_AM_gzfxsu.png")}
           onMouseLeave={() => setLogo("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.35_AM_cow9by.png")}
@@ -119,6 +118,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('pcGames');
                   closeSidebar();
+                  showSkeleton('PC');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -135,6 +135,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('macGames');
                   closeSidebar();
+                  showSkeleton('Mac');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -151,6 +152,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('androidGames');
                   closeSidebar();
+                  showSkeleton('Android');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -170,6 +172,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('pcSoftwares');
                   closeSidebar();
+                  showSkeleton('PC');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -186,6 +189,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('macSoftwares');
                   closeSidebar();
+                  showSkeleton('Mac');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -202,6 +206,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('androidSoftwares');
                   closeSidebar();
+                  showSkeleton('Android');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -221,6 +226,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('ppsspp');
                   closeSidebar();
+                  showSkeleton('PlayStation');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -235,6 +241,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('ps2');
                   closeSidebar();
+                  showSkeleton('PlayStation');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -249,6 +256,7 @@ const Sidebar = () => {
                 onClick={() => {
                   handleClick('ps3');
                   closeSidebar();
+                  showSkeleton('PlayStation');
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

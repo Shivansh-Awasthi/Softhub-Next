@@ -1,6 +1,8 @@
 // app/category/pc/games/page.jsx
 
+import { Suspense } from 'react';
 import PcGames from "./PcGames";
+import CategorySkeleton from "@/app/components/CategorySkeleton";
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;
@@ -16,13 +18,13 @@ export async function generateStaticParams() {
     ];
 }
 
-export default async function PcGamesPage({ params, searchParams }) {
-    // Get page from params (for static generation) or searchParams (for client navigation)
-    const pageFromParams = params?.page;
-    const pageFromSearch = searchParams?.page;
-    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
-    const itemsPerPage = 48;
+export const metadata = {
+    title: 'PC Games - ToxicGames',
+    description: 'Download free PC games and apps',
+};
 
+// This component fetches data and renders the PcGames component
+async function PcGamesLoader({ currentPage, itemsPerPage }) {
     try {
         // This fetch happens at build time and during revalidation
         const res = await fetch(
@@ -48,4 +50,18 @@ export default async function PcGamesPage({ params, searchParams }) {
         // Return component with error state
         return <PcGames serverData={{ apps: [], total: 0, error: error.message }} initialPage={currentPage} />;
     }
+}
+
+export default function PcGamesPage({ params, searchParams }) {
+    // Get page from params (for static generation) or searchParams (for client navigation)
+    const pageFromParams = params?.page;
+    const pageFromSearch = searchParams?.page;
+    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
+    const itemsPerPage = 48;
+
+    return (
+        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PC" />}>
+            <PcGamesLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
+        </Suspense>
+    );
 }

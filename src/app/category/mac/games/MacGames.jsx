@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useLoading } from '@/app/context/LoadingContext';
 
 // Slugify function (simplified version)
 const slugify = (text = '') => {
@@ -91,6 +92,9 @@ export default function MacGames({ serverData, initialPage = 1 }) {
         }
     }, []);
 
+    // Get loading context
+    const { showSkeleton } = useLoading();
+
     // Handle page change
     const handlePageChange = (newPage) => {
         if (newPage === currentPage || newPage < 1 || newPage > totalPages || isPageTransitioning) {
@@ -99,6 +103,9 @@ export default function MacGames({ serverData, initialPage = 1 }) {
 
         // Set transition state
         setIsPageTransitioning(true);
+
+        // Show skeleton while loading
+        showSkeleton('Mac');
 
         // Update URL - this will trigger a new server-side render
         router.push(`${pathname}?page=${newPage}`);

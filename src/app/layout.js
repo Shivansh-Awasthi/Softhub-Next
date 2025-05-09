@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SidebarWrapper from './components/Sidebar/SidebarWrapper';
 import GlobalHeader from './components/GlobalHeader/page';
+import { LoadingProvider } from './context/LoadingContext';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,9 @@ export default function RootLayout({ children }) {
                 <GlobalHeader />
               </div>
               <div className="relative">
-                {children}
+                <LoadingProvider>
+                  {children}
+                </LoadingProvider>
               </div>
             </div>
           </div>
