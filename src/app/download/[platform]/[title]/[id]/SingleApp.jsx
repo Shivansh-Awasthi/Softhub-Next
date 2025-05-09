@@ -135,24 +135,31 @@ const SingleApp = ({ appData }) => {
         <div style={{ position: 'relative', zIndex: 90 }}>
             <div>
             </div>
-            <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center items-center'>
+            <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center xl:items-start'>
                 {/* Left Content */}
                 <div className="flex-1">
                     {/* Card */}
-                    <div className="flex pb-8 flex-grow flex-col rounded-lg shadow-sm">
-                        <div className="flex items-center gap-4 text-slate-800 gap-3 sm:gap-5">
-                            <img
-                                src={data.thumbnail && data.thumbnail[0] ? data.thumbnail[0] : "https://via.placeholder.com/58"}
-                                alt={data.title}
-                                className="relative inline-block h-[48px] w-[48px] sm:h-[58px] sm:w-[58px] rounded-lg object-cover object-center"
-                            />
+                    <div className="flex pb-3 flex-grow flex-col rounded-lg ">
+                        <div className="flex items-center gap-4 text-slate-800 gap-3 sm:gap-5 bg-gradient-to-r from-[#1E1E1E] to-[#121212] p-4 rounded-xl border border-purple-600/20 ">
+                            <div className="relative">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25"></div>
+                                <img
+                                    src={data.thumbnail && data.thumbnail[0] ? data.thumbnail[0] : "https://via.placeholder.com/58"}
+                                    alt={data.title}
+                                    className="relative h-[48px] w-[48px] sm:h-[58px] sm:w-[58px] rounded-lg object-cover object-center border border-purple-500/20"
+                                />
+                            </div>
                             <div className="flex w-full flex-col overflow-hidden">
                                 <div className="w-full flex items-center justify-between overflow-hidden">
-                                    <h1 className="text-white text-base sm:text-xl md:text-xl lg:text-3xl font-medium overflow-hidden text-ellipsis truncate max-w-full whitespace-normal md:whitespace-nowrap">
+                                    <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 text-base sm:text-xl md:text-xl lg:text-3xl font-bold overflow-hidden text-ellipsis truncate max-w-full whitespace-normal md:whitespace-nowrap">
                                         {data.title}
                                     </h1>
                                 </div>
-                                <p className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] text-blue-500 uppercase font-light mt-0.5">
+                                <p className="text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] text-gray-300 uppercase font-medium mt-0.5 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                        <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                                        <path d="M12 18h.01" />
+                                    </svg>
                                     {data.platform}
                                 </p>
                             </div>
@@ -161,25 +168,33 @@ const SingleApp = ({ appData }) => {
 
                     {/* Slider Logic */}
                     {data.thumbnail && data.thumbnail.length > 1 && (
-                        <div id="default-carousel" className="flex relative w-full max-w-full">
-                            <div className="relative bg-[#262626] w-full h-[13rem] sm:h-[19rem] md:h-[20rem] lg:h-[26rem] overflow-hidden rounded-lg">
+                        <div id="default-carousel" className="flex relative w-full max-w-full mt-6">
+                            <div className="relative bg-gradient-to-br from-[#1E1E1E] to-[#121212] w-full h-[13rem] sm:h-[19rem] md:h-[20rem] lg:h-[26rem] xl:h-[30rem] overflow-hidden rounded-xl border border-purple-600/20 shadow-lg">
+                                {/* Ambient background elements */}
+                                <div className="absolute -top-10 -left-10 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
                                 {data.thumbnail.slice(1).map((image, index) => (
-                                    <div key={index} className={`transition-opacity duration-700 ease-in-out ${index === currentIndex ? 'block' : 'hidden'} h-full`}>
+                                    <div key={index} className={`transition-all duration-700 ease-in-out ${index === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-95 hidden'} h-full`}>
                                         <img
                                             src={image}
-                                            className="block w-full h-full object-cover"
+                                            className="block w-full h-full object-cover rounded-lg"
                                             alt={`Slide ${index + 2}`}
                                         />
                                     </div>
                                 ))}
                             </div>
+
                             {/* Slider indicators */}
-                            <div className="absolute flex -translate-x-1/2 bottom-2 sm:bottom-3 lg:bottom-5 left-1/2 space-x-1 sm:space-x-2 overflow-hidden max-w-full justify-center">
+                            <div className="absolute flex -translate-x-1/2 bottom-4 left-1/2 space-x-2 overflow-hidden max-w-full justify-center">
                                 {data.thumbnail.slice(1).map((_, index) => (
                                     <button
                                         key={index}
                                         type="button"
-                                        className={`w-4 h-1 sm:w-8 sm:h-1 rounded-full ${index === currentIndex ? 'bg-white' : 'bg-gray-500'}`}
+                                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${index === currentIndex
+                                            ? 'bg-gradient-to-r from-purple-500 to-blue-500 scale-125'
+                                            : 'bg-gray-600 hover:bg-gray-500'
+                                            }`}
                                         aria-current={index === currentIndex}
                                         aria-label={`Slide ${index + 2}`}
                                         onClick={() => setCurrentIndex(index)}
@@ -190,42 +205,42 @@ const SingleApp = ({ appData }) => {
                             {/* Slider controls */}
                             <button
                                 type="button"
-                                className="absolute top-0 left-0 flex items-center justify-center h-full px-2 sm:px-4 cursor-pointer group focus:outline-none"
+                                className="absolute top-1/2 -translate-y-1/2 left-2 sm:left-4 flex items-center justify-center w-10 h-10 rounded-full bg-black/30 hover:bg-black/50 cursor-pointer transition-all duration-300 focus:outline-none"
                                 onClick={prevSlide}
                                 aria-label="Previous slide"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
+                                    width="20"
+                                    height="20"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="2"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    className="text-lg sm:text-xl text-white"
+                                    className="text-white"
                                 >
                                     <path d="m15 18-6-6 6-6" />
                                 </svg>
                             </button>
                             <button
                                 type="button"
-                                className="absolute top-0 right-0 flex items-center justify-center h-full px-2 sm:px-4 cursor-pointer group focus:outline-none"
+                                className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-4 flex items-center justify-center w-10 h-10 rounded-full bg-black/30 hover:bg-black/50 cursor-pointer transition-all duration-300 focus:outline-none"
                                 onClick={nextSlide}
                                 aria-label="Next slide"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
+                                    width="20"
+                                    height="20"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="2"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    className="text-lg sm:text-xl text-white"
+                                    className="text-white"
                                 >
                                     <path d="m9 18 6-6-6-6" />
                                 </svg>
@@ -235,28 +250,88 @@ const SingleApp = ({ appData }) => {
                 </div>
 
                 {/* Right Card */}
-                <div className="w-full max-w-[22rem] md:ml-4 lg:ml-4 h-full p-8 bg-[#262626] rounded-lg shadow-md mt-6 xl:mt-[5.7rem] ring-1 ring-[#3E3E3E]">
-                    <h2 className="text-xs font-semibold text-[#8E8E8E] ">Platform</h2>
-                    <p className="text-sm text-[#fff] mb-6">{data.platform}</p>
-                    <h2 className="text-xs font-semibold text-[#8E8E8E]">Interface language</h2>
-                    <p className="text-sm text-[#fff] mb-6">English , Russian , German , Chinese...</p>
-                    <h2 className="text-xs font-semibold text-[#8E8E8E]">Tested</h2>
-                    <p className="text-sm text-[#fff] mb-6">
-                        {data.platform === "Mac" && "Mac Air M1"}
-                        {data.platform === "PC" && "PC"}
-                        {data.platform === "Android" && "Android device"}
-                        {data.platform === "Playstation" && "PC (Emulator)"}
-                    </p>
-                    <h2 className="text-xs font-semibold text-[#8E8E8E]">Size</h2>
-                    <p className="text-sm text-[#fff] mb-6">{data.size}</p>
-                    <h2 className="text-xs font-semibold text-[#8E8E8E]">Updated at</h2>
-                    <p className="text-sm text-[#fff] mb-6">{formatDate(data.updatedAt)}</p>
-                    <div className='py-[2px]'>
+                <div className="w-full max-w-[22rem] md:ml-4 lg:ml-4 p-8 bg-gradient-to-br from-[#1E1E1E] to-[#121212] rounded-xl shadow-lg mt-37  border border-purple-600/20 relative overflow-hidden flex flex-col justify-between xl:h-[26rem]">
+                    {/* Ambient background elements */}
+                    <div className="absolute -top-10 -left-10 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+                    <div className="relative z-10 flex-1 overflow-auto">
+                        <div className="grid grid-cols-1 gap-4">
+                            <div>
+                                <div className="flex items-center mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 mr-2">
+                                        <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                                        <path d="M12 18h.01" />
+                                    </svg>
+                                    <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Platform</h2>
+                                </div>
+                                <p className="text-sm text-gray-200 ml-6">{data.platform}</p>
+                            </div>
+
+                            <div>
+                                <div className="flex items-center mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 mr-2">
+                                        <path d="m5 8 6 6" />
+                                        <path d="m4 14 6-6 2 2 6-6" />
+                                        <path d="M2 5h12" />
+                                        <path d="M7 2h1" />
+                                    </svg>
+                                    <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Interface language</h2>
+                                </div>
+                                <p className="text-sm text-gray-200 ml-6">English, Russian, German, Chinese...</p>
+                            </div>
+
+                            <div>
+                                <div className="flex items-center mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 mr-2">
+                                        <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z" />
+                                        <path d="m15 9-6 6" />
+                                        <path d="m9 9 6 6" />
+                                    </svg>
+                                    <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Tested</h2>
+                                </div>
+                                <p className="text-sm text-gray-200 ml-6">
+                                    {data.platform === "Mac" && "Mac Air M1"}
+                                    {data.platform === "PC" && "PC"}
+                                    {data.platform === "Android" && "Android device"}
+                                    {data.platform === "Playstation" && "PC (Emulator)"}
+                                </p>
+                            </div>
+
+                            <div>
+                                <div className="flex items-center mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 mr-2">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                    </svg>
+                                    <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Size</h2>
+                                </div>
+                                <p className="text-sm text-gray-200 ml-6">{data.size}</p>
+                            </div>
+
+                            <div>
+                                <div className="flex items-center mb-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 mr-2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                    <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Updated at</h2>
+                                </div>
+                                <p className="text-sm text-gray-200 ml-6">{formatDate(data.updatedAt)}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='py-[2px] relative z-10'>
                         <button
-                            className='bg-[#00AA01] hover:bg-[#28C328] text-white h-12 w-full text-center py-2 rounded-lg text-s'
+                            className='bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white h-12 w-full text-center py-2 rounded-lg text-sm font-bold uppercase tracking-wider shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5'
                             onClick={handleDownloadClick} // Handle click to show modal
                         >
-                            Free Download ({data.size})
+                            <div className="flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Free Download ({data.size})
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -450,9 +525,13 @@ const SingleApp = ({ appData }) => {
             )}
 
             {/* Comment box */}
-            <div className='ring-2 ring-[#2E2E2E] rounded-lg flex flex-col items-center mt-8 mb-4'>
-                <h2 className='pt-4 mb-8 text-2xl sm:text-3xl font-normal text-[#8E8E8E] hover:text-[#fff]'>Comments</h2>
-                <div className='flex justify-center w-full'>
+            <div className='bg-gradient-to-br from-[#1E1E1E] to-[#121212] border border-purple-600/20 rounded-xl shadow-lg flex flex-col items-center mt-8 mb-4 relative overflow-hidden'>
+                {/* Ambient background elements */}
+                <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                <h2 className='pt-6 mb-8 text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 relative z-10'>Comments</h2>
+                <div className='flex justify-center w-full relative z-10'>
                     <GiscusComments objectId={data._id} />
                 </div>
             </div>
