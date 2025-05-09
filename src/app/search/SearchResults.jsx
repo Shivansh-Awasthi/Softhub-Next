@@ -194,7 +194,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                                                     {ele.title}
                                                 </p>
 
-                                                <p className={`text-sm text-blue-500 truncate ${ele.platform === 'Mac' ? 'text-gray-500' : ele.platform === 'PC' ? 'text-red-500' : ele.platform === 'Android' ? 'text-green-500' : ele.platform === 'Playstation' ? 'text-purple-500' : ''}`}>
+                                                <p className={`text-sm text-blue-500 truncate ${ele.platform === 'Mac' ? 'text-blue-500' : ele.platform === 'PC' ? 'text-red-500' : ele.platform === 'Android' ? 'text-green-500' : ele.platform === 'Playstation' ? 'text-purple-500' : ''}`}>
                                                     {ele.platform}
                                                 </p>
                                             </div>
