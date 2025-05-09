@@ -135,7 +135,7 @@ const SingleApp = ({ appData }) => {
         <div style={{ position: 'relative', zIndex: 90 }}>
             <div>
             </div>
-            <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center xl:items-start'>
+            <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center xl:items-start items-center'>
                 {/* Left Content */}
                 <div className="flex-1">
                     {/* Card */}
@@ -250,7 +250,7 @@ const SingleApp = ({ appData }) => {
                 </div>
 
                 {/* Right Card */}
-                <div className="w-full max-w-[22rem] md:ml-4 lg:ml-4 p-8 bg-gradient-to-br from-[#1E1E1E] to-[#121212] rounded-xl shadow-lg mt-6 xl:mt-[8.1rem] border border-purple-600/20 relative overflow-hidden flex flex-col justify-between xl:h-[26rem] lg:h-[26rem]">
+                <div className="w-full max-w-[22rem] mx-auto xl:ml-4 p-8 bg-gradient-to-br from-[#1E1E1E] to-[#121212] rounded-xl shadow-lg mt-6 xl:mt-[8.1rem] border border-purple-600/20 relative overflow-hidden flex flex-col justify-between xl:h-[26rem] lg:h-[26rem]">
                     {/* Ambient background elements */}
                     <div className="absolute -top-10 -left-10 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
