@@ -1,5 +1,7 @@
 
+import { Suspense } from 'react';
 import HomeClient from './HomeClient';
+import HomeSkeleton from './components/HomeSkeleton';
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;
@@ -163,7 +165,8 @@ async function fetchPS2Games() {
   }
 }
 
-export default async function HomePage() {
+// This component fetches data and renders the HomeClient
+async function HomeDataLoader() {
   // Fetch all data in parallel
   const [macGamesData, macSoftwaresData, pcGamesData, androidGamesData, ps2GamesData] = await Promise.all([
     fetchMacGames(),
@@ -186,5 +189,13 @@ export default async function HomePage() {
       totalAndroidGames={androidGamesData.total}
       totalPs2Iso={ps2GamesData.total}
     />
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<HomeSkeleton />}>
+      <HomeDataLoader />
+    </Suspense>
   );
 }

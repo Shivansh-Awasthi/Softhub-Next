@@ -98,7 +98,7 @@ const Sidebar = () => {
           onClick={() => {
             handleClick();
             closeSidebar();
-            // No need to show skeleton for home page
+            showSkeleton('Home');
           }}
           onMouseEnter={() => setLogo("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.39_AM_gzfxsu.png")}
           onMouseLeave={() => setLogo("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.35_AM_cow9by.png")}

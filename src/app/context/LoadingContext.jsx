@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import CategorySkeleton from '@/app/category/CategorySkeleton';
+import HomeSkeleton from '@/app/components/HomeSkeleton';
 
 // Create the context
 const LoadingContext = createContext({
@@ -39,7 +40,7 @@ export function LoadingProvider({ children }) {
 
   // Show loading state when route changes
   useEffect(() => {
-    if (pathname.includes('/category/')) {
+    if (pathname.includes('/category/') || pathname === '/') {
       setIsLoading(true);
 
       // Hide skeleton after a short delay to simulate loading
@@ -63,8 +64,14 @@ export function LoadingProvider({ children }) {
 
   return (
     <LoadingContext.Provider value={{ isLoading, setIsLoading, showSkeleton, hideSkeleton }}>
-      {isLoading && pathname.includes('/category/') ? (
-        <CategorySkeleton itemCount={16} platform={platform} />
+      {isLoading ? (
+        pathname === '/' ? (
+          <HomeSkeleton />
+        ) : pathname.includes('/category/') ? (
+          <CategorySkeleton itemCount={16} platform={platform} />
+        ) : (
+          children
+        )
       ) : (
         children
       )}
