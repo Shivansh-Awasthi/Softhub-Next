@@ -41,20 +41,35 @@ const HomeClient = ({
         }
     }, []);
 
-    const createSlug = (title) => {
-        return title
+    const createSlug = (text = '') => {
+        // First ensure we have a string
+        const str = String(text || '');
+
+        return str
             .toLowerCase() // Convert to lowercase
-            .replace(/[^\w\s-]/g, '') // Remove non-alphanumeric characters
+            .trim() // Remove whitespace from both ends
             .replace(/\s+/g, '-') // Replace spaces with hyphens
-            .trim(); // Remove trailing spaces
+            .replace(/[^\w\-]+/g, '') // Remove all non-word chars (except hyphens)
+            .replace(/\-\-+/g, '-') // Replace multiple hyphens with single hyphen
+            .replace(/^-+/, '') // Remove leading hyphens
+            .replace(/-+$/, '') // Remove trailing hyphens
+            || 'untitled'; // Fallback if empty
     };
 
     return (
-        <div>
+        <div className="relative">
+            {/* Background decorative elements */}
+            <div className="fixed top-0 right-0 w-96 h-96 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10"></div>
+            <div className="fixed bottom-0 left-0 w-[40rem] h-[40rem] bg-blue-600 opacity-5 rounded-full blur-3xl -z-10"></div>
+            <div className="fixed top-1/3 left-1/4 w-64 h-64 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10"></div>
+
+            {/* Decorative grid lines */}
+            <div className="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTMwIDMwaDMwVjBoLTMwdjMwek0wIDMwaDMwdjMwSDB2LTMweiIgZmlsbD0iIzJkMmQyZCIgZmlsbC1vcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] bg-center opacity-40 -z-10"></div>
+
             {/* Slider Logic */}
-            <div id="default-carousel" className="relative w-full mb-10" data-carousel="slide">
+            <div id="default-carousel" className="relative w-full mb-16" data-carousel="slide">
                 {/* Carousel Container */}
-                <div className="relative h-56 sm:h-72 md:h-88 lg:h-[25rem] overflow-hidden rounded-lg">
+                <div className="relative h-56 sm:h-72 md:h-88 lg:h-[25rem] overflow-hidden rounded-xl shadow-lg border border-purple-600/20 bg-gradient-to-br from-[#1E1E1E]/50 to-[#121212]/50">
                     {images.map((image, index) => (
                         <div
                             key={index}
@@ -126,12 +141,15 @@ const HomeClient = ({
                 </div>
 
                 {/* Pagination Dots */}
-                <div className="absolute flex space-x-2 bottom-7 left-1/2 transform -translate-x-1/2">
+                <div className="absolute flex space-x-3 bottom-7 left-1/2 transform -translate-x-1/2 z-20">
                     {images.map((_, index) => (
                         <button
                             key={index}
                             type="button"
-                            className={`w-8 h-1 rounded-full ${index === currentIndex ? 'bg-white' : 'bg-gray-500'}`}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                                ? 'bg-gradient-to-r from-purple-500 to-blue-500 w-6 shadow-lg'
+                                : 'bg-white/50 hover:bg-white/80'
+                                }`}
                             onClick={() => setCurrentIndex(index)}
                         />
                     ))}
@@ -140,21 +158,21 @@ const HomeClient = ({
                 {/* Previous Button */}
                 <button
                     type="button"
-                    className="absolute top-0 left-0 flex items-center justify-center h-full px-4 z-10"
+                    className="absolute top-1/2 -translate-y-1/2 left-4 z-20"
                     onClick={() => setCurrentIndex((currentIndex - 1 + images.length) % images.length)}
                 >
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 hover:bg-white/50 focus:ring-4 focus:ring-white focus:outline-none">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm hover:bg-gradient-to-l hover:from-purple-600/80 hover:to-blue-600/80 border border-purple-500/30 transition-all duration-300 shadow-lg">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
+                            width="20"
+                            height="20"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="text-lg sm:text-xl text-white"
+                            className="text-white"
                         >
                             <path d="m15 18-6-6 6-6" />
                         </svg>
@@ -164,21 +182,21 @@ const HomeClient = ({
                 {/* Next Button */}
                 <button
                     type="button"
-                    className="absolute top-0 right-0 flex items-center justify-center h-full px-4 z-10"
+                    className="absolute top-1/2 -translate-y-1/2 right-4 z-20"
                     onClick={() => setCurrentIndex((currentIndex + 1) % images.length)}
                 >
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 hover:bg-white/50 focus:ring-4 focus:ring-white focus:outline-none">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm hover:bg-gradient-to-r hover:from-purple-600/80 hover:to-blue-600/80 border border-purple-500/30 transition-all duration-300 shadow-lg">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
+                            width="20"
+                            height="20"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="text-lg sm:text-xl text-white"
+                            className="text-white"
                         >
                             <path d="m9 18 6-6-6-6" />
                         </svg>
@@ -199,11 +217,25 @@ const HomeClient = ({
 
             {/* Mac Games Category */}
             <div className="container mx-auto p-2 mb-6">
-                <div className='cover mb-5 flex justify-between items-center'>
-                    <h1 className='font-medium text-2xl md:text-3xl'>
-                        Mac Games <span className='font-medium ml-2 text-[#8E8E8E]'>{totalMacGames}</span>
-                    </h1>
-                    <Link href="/category/mac/games" className="text-blue-500 hover:underline text-xs">See All</Link>
+                <div className="cover mb-8 flex justify-between items-center relative">
+                    <div className="absolute top-1/2 left-0 w-24 h-24 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10 -translate-y-1/2"></div>
+                    <h2 className="text-2xl font-bold relative">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                            Mac Games{' '}
+                            <span className="font-medium text-blue-400">{totalMacGames}</span>
+                        </span>
+                        <span className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
+                    </h2>
+                    <Link
+                        href="/category/mac/games"
+                        className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center"
+                    >
+                        View All
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg>
+                    </Link>
                 </div>
 
                 {/* Conditional rendering based on data existence */}
@@ -213,18 +245,46 @@ const HomeClient = ({
                             <Link
                                 key={ele._id}
                                 href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
-                                className="flex flex-col rounded-2xl h-52 overflow-hidden transition duration-300 ease-in-out ring-0 hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-75"
+                                className="group flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 relative"
                             >
-                                <figure className="flex justify-center items-center rounded-t-2xl overflow-hidden h-full">
+                                {/* Ambient background elements - always visible */}
+                                <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                                {/* Subtle overlay gradient for better text readability */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+                                <figure className="flex justify-center items-center rounded-t-xl overflow-hidden h-full">
                                     <img
                                         src={ele.coverImg}
                                         alt={ele.title}
-                                        className="w-full h-full object-cover rounded-t-2xl transition-transform duration-700 ease-in-out transform hover:scale-110"
+                                        className="w-full h-full object-cover rounded-t-xl transition-transform duration-700 ease-in-out transform group-hover:scale-110"
                                     />
                                 </figure>
-                                <div className="flex flex-col p-3 bg-[#262626] flex-grow">
-                                    <div className="text-sm font-normal text-[#ffffff] pb-2 overflow-hidden whitespace-nowrap text-ellipsis bg-[#262626]">{ele.title}</div>
-                                    <div className="text-xs font-thin text-[#ffffff] bg-[#262626]">Size: {ele.size}</div>
+
+                                {/* Game platform badge */}
+                                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                                    <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                        </svg>
+                                        Mac
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                                    {/* Glowing separator line */}
+                                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                                    <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                                        {ele.title}
+                                    </div>
+                                    <div className="text-xs font-normal text-gray-400 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                        </svg>
+                                        {ele.size}
+                                    </div>
                                 </div>
                             </Link>
                         ))
@@ -236,11 +296,25 @@ const HomeClient = ({
 
             {/* Mac Softwares */}
             <div className='container mx-auto p-2 mb-6'>
-                <div className='cover mb-5 flex justify-between items-center'>
-                    <h1 className='font-medium text-2xl md:text-3xl'>
-                        Mac Softwares <span className='font-medium ml-2 text-[#8E8E8E]'>{totalMacSoft}</span>
-                    </h1>
-                    <Link href="/category/mac/softwares" className="text-blue-500 hover:underline text-xs">See All</Link>
+                <div className="cover mb-8 flex justify-between items-center relative">
+                    <div className="absolute top-1/2 left-0 w-24 h-24 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10 -translate-y-1/2"></div>
+                    <h2 className="text-2xl font-bold relative">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                            Mac Softwares{' '}
+                            <span className="font-medium text-blue-400">{totalMacSoft}</span>
+                        </span>
+                        <span className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
+                    </h2>
+                    <Link
+                        href="/category/mac/softwares"
+                        className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center"
+                    >
+                        View All
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg>
+                    </Link>
                 </div>
 
                 {/* Conditional rendering for Mac Softwares */}
@@ -250,18 +324,47 @@ const HomeClient = ({
                             <Link
                                 key={ele._id}
                                 href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
-                                className="flex flex-col rounded-2xl h-36 overflow-hidden transition duration-300 ease-in-out ring-1 ring-white/10 hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-75"
+                                className="group flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 relative"
                             >
-                                <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
-                                    <img
-                                        src={ele.thumbnail[0]}
-                                        alt={ele.title}
-                                        className="rounded-lg w-14 h-14 transition-transform duration-700 ease-in-out transform hover:scale-110 bg-[#262626]"
-                                    />
+                                {/* Ambient background elements - always visible */}
+                                <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                                <div className="flex flex-col justify-center items-center h-36 bg-gradient-to-br from-[#1E1E1E] to-[#121212] pt-4 relative">
+                                    {/* App icon with enhanced styling */}
+                                    <div className="relative">
+                                        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25"></div>
+                                        <img
+                                            src={ele.thumbnail[0]}
+                                            alt={ele.title}
+                                            className="relative rounded-lg w-16 h-16 transition-transform duration-700 ease-in-out transform group-hover:scale-110 border border-purple-500/20 z-10"
+                                        />
+                                    </div>
+
+                                    {/* Software platform badge */}
+                                    <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                                        <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                            </svg>
+                                            Mac App
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col p-4 bg-[#262626]">
-                                    <div className="text-sm text-center font-normal overflow-hidden whitespace-nowrap text-ellipsis text-[#ffffff] bg-[#262626] pb-2">{ele.title}</div>
-                                    <div className="text-xs text-center font-thin text-[#8E8E8E] bg-[#262626]">Size: {ele.size}</div>
+
+                                <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                                    {/* Glowing separator line */}
+                                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                                    <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white text-center pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                                        {ele.title}
+                                    </div>
+                                    <div className="text-xs font-normal text-gray-400 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                        </svg>
+                                        {ele.size}
+                                    </div>
                                 </div>
                             </Link>
                         ))
@@ -273,11 +376,25 @@ const HomeClient = ({
 
             {/* PC Games */}
             <div className='container mx-auto p-2 mb-6'>
-                <div className='cover mb-5 flex justify-between items-center'>
-                    <h1 className='font-medium text-2xl md:text-3xl'>
-                        Pc Games <span className='font-medium ml-2 text-[#8E8E8E]'>{totalPcGames}</span>
-                    </h1>
-                    <Link href="/category/pc/games" className="text-blue-500 hover:underline text-xs">See All</Link>
+                <div className="cover mb-8 flex justify-between items-center relative">
+                    <div className="absolute top-1/2 left-0 w-24 h-24 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10 -translate-y-1/2"></div>
+                    <h2 className="text-2xl font-bold relative">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                            PC Games{' '}
+                            <span className="font-medium text-blue-400">{totalPcGames}</span>
+                        </span>
+                        <span className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
+                    </h2>
+                    <Link
+                        href="/category/pc/games"
+                        className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center"
+                    >
+                        View All
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg>
+                    </Link>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
@@ -287,18 +404,49 @@ const HomeClient = ({
                             <Link
                                 key={ele._id}
                                 href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
-                                className="flex flex-col rounded-2xl h-52 overflow-hidden transition duration-300 ease-in-out ring-0 hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-75"
+                                className="group flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 relative"
                             >
-                                <figure className="flex justify-center items-center rounded-t-2xl overflow-hidden h-full">
+                                {/* Ambient background elements - always visible */}
+                                <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                                {/* Subtle overlay gradient for better text readability */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+                                <figure className="flex justify-center items-center rounded-t-xl overflow-hidden h-full">
                                     <img
                                         src={ele.coverImg}
                                         alt={ele.title}
-                                        className="w-full h-full object-cover rounded-t-2xl transition-transform duration-700 ease-in-out transform hover:scale-110"
+                                        className="w-full h-full object-cover rounded-t-xl transition-transform duration-700 ease-in-out transform group-hover:scale-110"
                                     />
                                 </figure>
-                                <div className="flex flex-col p-3 bg-[#262626] flex-grow">
-                                    <div className="text-sm font-normal text-[#ffffff] pb-2 overflow-hidden whitespace-nowrap text-ellipsis bg-[#262626]">{ele.title}</div>
-                                    <div className="text-xs font-thin text-[#ffffff] bg-[#262626]">Size: {ele.size}</div>
+
+                                {/* Game platform badge */}
+                                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                                    <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                                            <rect width="14" height="8" x="5" y="2" rx="2" />
+                                            <rect width="20" height="8" x="2" y="14" rx="2" />
+                                            <path d="M6 18h2" />
+                                            <path d="M12 18h6" />
+                                        </svg>
+                                        PC
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                                    {/* Glowing separator line */}
+                                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                                    <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                                        {ele.title}
+                                    </div>
+                                    <div className="text-xs font-normal text-gray-400 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                        </svg>
+                                        {ele.size}
+                                    </div>
                                 </div>
                             </Link>
                         ))
@@ -310,11 +458,25 @@ const HomeClient = ({
 
             {/* Android Games */}
             <div className='container mx-auto p-2 mb-6'>
-                <div className='cover mb-5 flex justify-between items-center'>
-                    <h1 className='font-medium text-2xl md:text-3xl'>
-                        Android Games <span className='font-medium ml-2 text-[#8E8E8E]'>{totalAndroidGames}</span>
-                    </h1>
-                    <Link href="/category/android/games" className="text-blue-500 hover:underline text-xs">See All</Link>
+                <div className="cover mb-8 flex justify-between items-center relative">
+                    <div className="absolute top-1/2 left-0 w-24 h-24 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10 -translate-y-1/2"></div>
+                    <h2 className="text-2xl font-bold relative">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                            Android Games{' '}
+                            <span className="font-medium text-blue-400">{totalAndroidGames}</span>
+                        </span>
+                        <span className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
+                    </h2>
+                    <Link
+                        href="/category/android/games"
+                        className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center"
+                    >
+                        View All
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg>
+                    </Link>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -324,18 +486,50 @@ const HomeClient = ({
                             <Link
                                 key={ele._id}
                                 href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
-                                className="flex flex-col rounded-2xl h-36 overflow-hidden transition duration-300 ease-in-out ring-1 ring-white/10 hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-75"
+                                className="group flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 relative"
                             >
-                                <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
-                                    <img
-                                        src={ele.thumbnail[0]}
-                                        alt={ele.title}
-                                        className="rounded-lg w-14 h-14 transition-transform duration-700 ease-in-out transform hover:scale-110 bg-[#262626]"
-                                    />
+                                {/* Ambient background elements - always visible */}
+                                <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                                <div className="flex flex-col justify-center items-center h-36 bg-gradient-to-br from-[#1E1E1E] to-[#121212] pt-4 relative">
+                                    {/* App icon with enhanced styling */}
+                                    <div className="relative">
+                                        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25"></div>
+                                        <img
+                                            src={ele.thumbnail[0]}
+                                            alt={ele.title}
+                                            className="relative rounded-lg w-16 h-16 transition-transform duration-700 ease-in-out transform group-hover:scale-110 border border-purple-500/20 z-10"
+                                        />
+                                    </div>
+
+                                    {/* Android platform badge */}
+                                    <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                                        <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                                                <path d="M5 17h14" />
+                                                <path d="M12 3v14" />
+                                                <path d="M7 13h10" />
+                                                <path d="M19 17a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2" />
+                                            </svg>
+                                            Android
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col p-4 bg-[#262626]">
-                                    <div className="text-sm text-center font-normal overflow-hidden whitespace-nowrap text-ellipsis text-[#ffffff] bg-[#262626] pb-2">{ele.title}</div>
-                                    <div className="text-xs text-center font-thin text-[#8E8E8E] bg-[#262626]">Size: {ele.size}</div>
+
+                                <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                                    {/* Glowing separator line */}
+                                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                                    <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white text-center pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                                        {ele.title}
+                                    </div>
+                                    <div className="text-xs font-normal text-gray-400 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                        </svg>
+                                        {ele.size}
+                                    </div>
                                 </div>
                             </Link>
                         ))
@@ -347,11 +541,25 @@ const HomeClient = ({
 
             {/* PS2 Roms */}
             <div className='container mx-auto p-2 mb-6'>
-                <div className='cover mb-5 flex justify-between items-center'>
-                    <h1 className='font-medium text-2xl md:text-3xl'>
-                        PS2 Roms <span className='font-medium ml-2 text-[#8E8E8E]'>{totalPs2Iso}</span>
-                    </h1>
-                    <Link href="/category/ps2/iso" className="text-blue-500 hover:underline text-xs">See All</Link>
+                <div className="cover mb-8 flex justify-between items-center relative">
+                    <div className="absolute top-1/2 left-0 w-24 h-24 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10 -translate-y-1/2"></div>
+                    <h2 className="text-2xl font-bold relative">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                            PS2 Roms{' '}
+                            <span className="font-medium text-blue-400">{totalPs2Iso}</span>
+                        </span>
+                        <span className="absolute -bottom-2 left-0 w-16 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
+                    </h2>
+                    <Link
+                        href="/category/ps2/iso"
+                        className="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center"
+                    >
+                        View All
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                            <path d="M5 12h14" />
+                            <path d="m12 5 7 7-7 7" />
+                        </svg>
+                    </Link>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -361,18 +569,48 @@ const HomeClient = ({
                             <Link
                                 key={ele._id}
                                 href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
-                                className="flex flex-col rounded-2xl h-36 overflow-hidden transition duration-300 ease-in-out ring-1 ring-white/10 hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-75"
+                                className="group flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 relative"
                             >
-                                <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
-                                    <img
-                                        src={ele.thumbnail[0]}
-                                        alt={ele.title}
-                                        className="rounded-lg w-14 h-14 transition-transform duration-700 ease-in-out transform hover:scale-110 bg-[#262626]"
-                                    />
+                                {/* Ambient background elements - always visible */}
+                                <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                                <div className="flex flex-col justify-center items-center h-36 bg-gradient-to-br from-[#1E1E1E] to-[#121212] pt-4 relative">
+                                    {/* App icon with enhanced styling */}
+                                    <div className="relative">
+                                        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25"></div>
+                                        <img
+                                            src={ele.thumbnail[0]}
+                                            alt={ele.title}
+                                            className="relative rounded-lg w-16 h-16 transition-transform duration-700 ease-in-out transform group-hover:scale-110 border border-purple-500/20 z-10"
+                                        />
+                                    </div>
+
+                                    {/* PS2 platform badge */}
+                                    <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                                        <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                                                <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
+                                                <polyline points="17 2 12 7 7 2" />
+                                            </svg>
+                                            PS2
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col p-4 bg-[#262626]">
-                                    <div className="text-sm text-center font-normal overflow-hidden whitespace-nowrap text-ellipsis text-[#ffffff] bg-[#262626] pb-2">{ele.title}</div>
-                                    <div className="text-xs text-center font-thin text-[#8E8E8E] bg-[#262626]">Size: {ele.size}</div>
+
+                                <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                                    {/* Glowing separator line */}
+                                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                                    <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white text-center pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                                        {ele.title}
+                                    </div>
+                                    <div className="text-xs font-normal text-gray-400 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                        </svg>
+                                        {ele.size}
+                                    </div>
                                 </div>
                             </Link>
                         ))
