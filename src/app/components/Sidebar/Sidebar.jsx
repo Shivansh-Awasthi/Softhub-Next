@@ -87,10 +87,13 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`sidebar md:sticky top-0 z-20 flex flex-col w-full h-screen px-8 py-8 border-r border-white border-opacity-5
+        className={`sidebar md:sticky top-0 z-20 flex flex-col w-full h-screen px-8 py-8
                 ${isMobileView ? 'fixed w-full bg-[#1E1E1E] transition-transform duration-300' : 'w-60'}
                 ${isSidebarVisible || !isMobileView ? 'transform-none' : '-translate-x-full overflow-y-auto scrollbar-hide'}`}
-        style={{ overflowY: isSidebarVisible ? 'auto' : 'hidden' }}
+        style={{
+          overflowY: isSidebarVisible ? 'auto' : 'hidden',
+          borderRight: '1px solid rgba(255, 255, 255, 0.1)'
+        }}
       >
         <Link
           href="/"
