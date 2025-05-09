@@ -132,7 +132,7 @@ const SingleApp = ({ appData }) => {
     }
 
     return (
-        <div style={{ position: 'relative', zIndex: 0 }}>
+        <div style={{ position: 'relative', zIndex: 90 }}>
             <div>
             </div>
             <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center items-center'>
@@ -411,7 +411,7 @@ const SingleApp = ({ appData }) => {
             )}
 
             {/* Comment box */}
-            <div className='ring-2 ring-[#2E2E2E] rounded-lg flex flex-col items-center mt-8'>
+            <div className='ring-2 ring-[#2E2E2E] rounded-lg flex flex-col items-center mt-8 mb-4'>
                 <h2 className='pt-4 mb-8 text-2xl sm:text-3xl font-normal text-[#8E8E8E] hover:text-[#fff]'>Comments</h2>
                 <div className='flex justify-center w-full'>
                     <GiscusComments objectId={data._id} />
