@@ -3,6 +3,7 @@ import "./globals.css";
 import SidebarWrapper from './components/Sidebar/SidebarWrapper';
 import GlobalHeader from './components/GlobalHeader/page';
 import { LoadingProvider } from './context/LoadingContext';
+import ClientScrollProgressBar from './components/ClientScrollProgressBar';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
       >
+        <ClientScrollProgressBar />
         <div className="flex min-h-screen">
           <SidebarWrapper />
           <div className="flex-1 md:mx-6 transition-all duration-300">
