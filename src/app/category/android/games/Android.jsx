@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
+import { FaAndroid } from "react-icons/fa6";
 
 export default function Android({ initialData = { apps: [], total: 0 }, initialPage = 1 }) {
     const router = useRouter();
@@ -47,11 +48,26 @@ export default function Android({ initialData = { apps: [], total: 0 }, initialP
     };
 
     return (
-        <div className='container mx-auto p-2'>
-            <div className='cover mb-6'>
-                <h1 className='font-medium text-3xl mb-4'>
-                    Android Games <span className='font-medium ml-2 text-[#8E8E8E]'>{totalItems}</span>
+        <div className="container mx-auto p-2 relative">
+            {/* Background decorative elements */}
+            <div className="absolute top-0 right-0 w-72 h-72 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 opacity-5 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute top-1/3 left-1/4 w-48 h-48 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10"></div>
+
+            {/* Decorative grid lines */}
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTMwIDMwaDMwVjBoLTMwdjMwek0wIDMwaDMwdjMwSDB2LTMweiIgZmlsbD0iIzJkMmQyZCIgZmlsbC1vcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] bg-center opacity-40 -z-10"></div>
+
+            {/* Header with enhanced styling */}
+            <div className="cover mb-12 text-center relative">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10"></div>
+                <h1 className="inline-block font-bold text-4xl mb-3 relative">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                        Android Games{' '}
+                        <span className="font-medium text-blue-400">{totalItems}</span>
+                    </span>
+                    <span className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
                 </h1>
+
             </div>
 
             {loading ? (
@@ -61,23 +77,54 @@ export default function Android({ initialData = { apps: [], total: 0 }, initialP
             ) : data.length === 0 ? (
                 <p className="text-center">No Android games found.</p>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 relative">
+                    {/* Grid accent elements */}
+                    <div className="absolute -top-6 -left-6 w-12 h-12 border-t-2 border-l-2 border-purple-500/30 rounded-tl-lg"></div>
+                    <div className="absolute -bottom-6 -right-6 w-12 h-12 border-b-2 border-r-2 border-blue-500/30 rounded-br-lg"></div>
+
                     {data.map((ele) => (
                         <Link
                             key={ele._id}
                             href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
-                            className="flex flex-col rounded-2xl h-36 overflow-hidden transition duration-300 ease-in-out ring-1 ring-white/10 hover:ring-2 hover:ring-[#8E8E8E] hover:ring-opacity-75"
+                            className="group flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 relative"
                         >
-                            <div className="flex justify-center items-center h-32 bg-[#262626] pt-4">
-                                <img
-                                    src={ele.thumbnail[0]}
-                                    alt={ele.title}
-                                    className="rounded-full w-14 h-14 transition-transform duration-700 ease-in-out transform hover:scale-110 bg-[#262626]"
-                                />
+                            {/* Ambient background elements - always visible */}
+                            <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                            <div className="flex flex-col justify-center items-center h-36 bg-gradient-to-br from-[#1E1E1E] to-[#121212] pt-4 relative">
+                                {/* App icon with enhanced styling */}
+                                <div className="relative">
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full blur opacity-25"></div>
+                                    <img
+                                        src={ele.thumbnail[0]}
+                                        alt={ele.title}
+                                        className="relative rounded-full w-16 h-16 transition-transform duration-700 ease-in-out transform group-hover:scale-110 border border-purple-500/20 z-10"
+                                    />
+                                </div>
+
+                                {/* Game platform badge */}
+                                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                                    <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                        <FaAndroid className='mr-1' />
+                                        Android
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex flex-col p-4 bg-[#262626]">
-                                <div className="text-sm text-center font-normal overflow-hidden whitespace-nowrap text-ellipsis text-[#ffffff] bg-[#262626] pb-2">{ele.title}</div>
-                                <div className="text-xs text-center font-thin text-[#8E8E8E] bg-[#262626]">Size: {ele.size}</div>
+
+                            <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                                {/* Glowing separator line */}
+                                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                                <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white text-center pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                                    {ele.title}
+                                </div>
+                                <div className="text-xs font-normal text-gray-400 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                    </svg>
+                                    {ele.size}
+                                </div>
                             </div>
                         </Link>
                     ))}
@@ -86,12 +133,23 @@ export default function Android({ initialData = { apps: [], total: 0 }, initialP
 
             {/* Enhanced Pagination Controls */}
             {totalPages > 1 && (
-                <EnhancedPagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                    isLoading={loading}
-                />
+                <div className="mt-12 relative">
+                    {/* Pagination decorative elements */}
+                    <div className="absolute left-1/4 -top-8 w-24 h-24 bg-purple-600 opacity-5 rounded-full blur-2xl -z-10"></div>
+                    <div className="absolute right-1/4 -top-8 w-24 h-24 bg-blue-600 opacity-5 rounded-full blur-2xl -z-10"></div>
+
+                    <div className="relative z-10">
+                        <EnhancedPagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                            isLoading={loading}
+                        />
+                    </div>
+
+                    {/* Decorative line */}
+                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent -z-10"></div>
+                </div>
             )}
         </div>
     );
