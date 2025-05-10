@@ -1,13 +1,13 @@
 import LoginForm from './LoginForm';
 
 export const metadata = {
-  title: 'Login - ToxicGames',
-  description: 'Sign in to your ToxicGames account',
+  title: 'Login - Toxic Games',
+  description: 'Sign in to your Toxic Games account to access your purchased games and more.',
 };
 
 export default function LoginPage() {
   return (
-    <div className="py-8">
+    <div className="container mx-auto py-10">
       <LoginForm />
     </div>
   );
