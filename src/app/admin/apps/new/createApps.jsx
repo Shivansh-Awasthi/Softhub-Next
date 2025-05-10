@@ -131,10 +131,10 @@ const CreateApps = () => {
             // console.log("SIMULATING SUCCESSFUL API RESPONSE FOR TESTING");
 
             // Show success message
-            toast.success("App created successfully!", {
-                position: "top-right",
-                autoClose: 5000
-            });
+            // toast.success("App created successfully!", {
+            //     position: "top-right",
+            //     autoClose: 5000
+            // });
 
             // Reset form
             setTitle("");
