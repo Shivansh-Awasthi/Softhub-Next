@@ -7,7 +7,9 @@ export const revalidate = 300; // 5 minutes
 
 export async function generateMetadata({ params }) {
     try {
-        const { platform, title, id } = params;
+        // Properly await params before accessing its properties
+        const paramsData = await params;
+        const { platform, title, id } = paramsData;
         const appData = await fetchAppData(id);
 
         return {
@@ -27,8 +29,9 @@ export async function generateMetadata({ params }) {
         };
     } catch (error) {
         console.error('Error generating metadata:', error);
+        // Use the awaited params here too
         return {
-            title: `Download ${params.title} for ${params.platform}`,
+            title: `Download ${paramsData.title} for ${paramsData.platform}`,
             description: 'Download games and software for various platforms',
         };
     }
@@ -66,8 +69,10 @@ async function AppDataFetcher({ id }) {
     return <SingleApp appData={appData} />;
 }
 
-export default function DownloadPage({ params }) {
-    const { id } = params;
+export default async function DownloadPage({ params }) {
+    // Properly await params before accessing its properties
+    const paramsData = await params;
+    const { id } = paramsData;
 
     return (
         <div className="min-h-screen text-white">

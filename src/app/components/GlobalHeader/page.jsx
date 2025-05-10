@@ -32,8 +32,8 @@ async function fetchSearchResults(query) {
 }
 
 export default async function GlobalHeader() {
-  // Get the current URL from headers
-  const headersList = headers();
+  // Get the current URL from headers - properly awaited
+  const headersList = await headers();
 
   // Get the current URL path and query parameters
   const currentUrl = headersList.get('x-url') || '';
