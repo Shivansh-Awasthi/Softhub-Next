@@ -148,7 +148,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
             </div>
 
             {loading ? (
-                <SearchSkeleton itemCount={10} />
+                <SearchSkeleton itemCount={12} />
             ) : error ? (
                 <div>
                     <h1 className='font-medium text-3xl mb-6'>Oops! Something went wrong</h1>

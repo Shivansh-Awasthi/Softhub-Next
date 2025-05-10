@@ -59,7 +59,7 @@ async function SearchDataLoader({ searchParams }) {
 
 export default function SearchPage({ searchParams }) {
   return (
-    <Suspense fallback={<SearchSkeleton itemCount={10} />}>
+    <Suspense fallback={<SearchSkeleton itemCount={12} />}>
       <SearchDataLoader searchParams={searchParams} />
     </Suspense>
   );
