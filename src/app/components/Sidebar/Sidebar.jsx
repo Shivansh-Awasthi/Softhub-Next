@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLoading } from '@/app/context/LoadingContext';
+import { FaPlaystation } from "react-icons/fa";
 
 const Sidebar = () => {
   const [logo, setLogo] = useState("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.35_AM_cow9by.png");
@@ -254,10 +255,7 @@ const Sidebar = () => {
                   showSkeleton('PPSSPP');
                 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01M17.5 15h.01" />
-                  <rect width="20" height="12" x="2" y="6" rx="2" />
-                </svg>
+                <FaPlaystation size={18} />
                 <span className="mx-2 text-sm font-medium">PPSSPP</span>
               </Link>
               <Link
@@ -272,10 +270,7 @@ const Sidebar = () => {
                   showSkeleton('PS2');
                 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01M17.5 15h.01" />
-                  <rect width="20" height="12" x="2" y="6" rx="2" />
-                </svg>
+                <FaPlaystation size={18} />
                 <span className="mx-2 text-sm font-medium">PS2</span>
               </Link>
               <Link
@@ -290,10 +285,7 @@ const Sidebar = () => {
                   showSkeleton('PS3');
                 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01M17.5 15h.01" />
-                  <rect width="20" height="12" x="2" y="6" rx="2" />
-                </svg>
+                <FaPlaystation size={18} />
                 <span className="mx-2 text-sm font-medium">PS3</span>
               </Link>
               {/* <Link
