@@ -17,7 +17,6 @@ const Header = ({ initialQuery = '' }) => {
         if (pathname === '/search') {
             const queryFromUrl = searchParams.get('query') || initialQuery;
             setSearchQuery(queryFromUrl);
-            console.log('Setting search query from URL:', queryFromUrl);
         } else {
             // Clear search query on other pages
             setSearchQuery('');
