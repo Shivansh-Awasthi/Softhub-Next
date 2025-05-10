@@ -42,7 +42,7 @@ export default function AndroidSoftwares({ serverData }) {
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/sandroid?page=${currentPage}&limit=${itemsPerPage}`,
                     {
-                        headers: { 'X-Auth-Token': 'my-secret-token-123' },
+                        headers: { 'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN },
                     }
                 );
 

@@ -36,7 +36,7 @@ async function PpssppIsoLoader({ currentPage, itemsPerPage }) {
             `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/ppsspp?page=${currentPage}&limit=${itemsPerPage}`,
             {
                 headers: {
-                    'X-Auth-Token': 'my-secret-token-123',
+                    'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN,
                 },
                 // Use next.js cache with revalidation
                 next: { revalidate: 3600 }
