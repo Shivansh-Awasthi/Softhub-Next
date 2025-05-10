@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LiveCounter } from './components/Counter/LiveCounter';
-import AdsComponent from './components/Ads/AdsComponent';
 import { LuAppWindowMac } from "react-icons/lu";
 import { FaAndroid } from "react-icons/fa";
 import { FaPlaystation } from "react-icons/fa";
@@ -214,9 +213,6 @@ const HomeClient = ({
                 </div>
             </div>
 
-            <div>
-                <AdsComponent refreshKey={pathname} />
-            </div>
 
             {/* Mac Games Category */}
             <div className="container mx-auto p-2 mb-6">
