@@ -18,7 +18,7 @@ async function fetchMacGames() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/mac?page=1&limit=48`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         next: { revalidate: 3600 }
       }
@@ -35,7 +35,7 @@ async function fetchMacGames() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/mac?page=${latestPage}&limit=48`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         next: { revalidate: 3600 }
       }
@@ -59,7 +59,7 @@ async function fetchMacSoftwares() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/smac`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         next: { revalidate: 3600 }
       }
@@ -83,7 +83,7 @@ async function fetchPcGames() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=1&limit=48`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         next: { revalidate: 3600 }
       }
@@ -100,7 +100,7 @@ async function fetchPcGames() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=${latestPage}&limit=48`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         next: { revalidate: 3600 }
       }
@@ -124,7 +124,7 @@ async function fetchAndroidGames() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/android`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         next: { revalidate: 3600 }
       }
@@ -148,7 +148,7 @@ async function fetchPS2Games() {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/ps2`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         next: { revalidate: 3600 }
       }

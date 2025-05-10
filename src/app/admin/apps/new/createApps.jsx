@@ -159,7 +159,7 @@ const CreateApps = () => {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`,
-                    'X-Auth-Token': 'my-secret-token-123',
+                    'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN,
                 },
             });
 

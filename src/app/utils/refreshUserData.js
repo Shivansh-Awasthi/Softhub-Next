@@ -18,7 +18,7 @@ const refreshUserData = async () => {
         const response = await axios.get(`${apiUrl}/api/user`, {
             headers: {
                 Authorization: `Bearer ${token}`,
-                'X-Auth-Token': "my-secret-token-123"
+                'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
             },
         });
 

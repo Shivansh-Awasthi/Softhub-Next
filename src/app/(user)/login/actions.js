@@ -14,7 +14,7 @@ export async function loginUser(formData) {
             { email, password },
             {
                 headers: {
-                    'X-Auth-Token': 'my-secret-token-123',
+                    'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN,
                     'Content-Type': 'application/json'
                 }
             }
@@ -76,14 +76,14 @@ export async function loginUser(formData) {
         };
     } catch (error) {
         console.error('Login error:', error);
-        
+
         // Handle axios specific errors
         if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            return { 
-                success: false, 
-                message: error.response.data?.message || `Login failed with status ${error.response.status}. Please check your credentials.` 
+            return {
+                success: false,
+                message: error.response.data?.message || `Login failed with status ${error.response.status}. Please check your credentials.`
             };
         } else if (error.request) {
             // The request was made but no response was received

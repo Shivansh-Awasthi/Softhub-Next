@@ -43,7 +43,7 @@ async function fetchAppData(id) {
             `${process.env.NEXT_PUBLIC_API_URL}/api/apps/get/${id}`,
             {
                 headers: {
-                    'X-Auth-Token': 'my-secret-token-123',
+                    'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN,
                 },
                 // Use short cache time instead of no-store
                 next: { revalidate: 300 }

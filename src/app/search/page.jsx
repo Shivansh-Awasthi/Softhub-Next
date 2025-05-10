@@ -25,7 +25,7 @@ async function fetchSearchResults(query, page = 1, limit = 48) {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/all?page=${page}&limit=${limit}&q=${encodeURIComponent(query)}`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         cache: 'no-store' // Ensure fresh data
       }

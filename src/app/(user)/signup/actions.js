@@ -43,7 +43,7 @@ export async function registerUser(formData) {
             },
             {
                 headers: {
-                    'X-Auth-Token': 'my-secret-token-123',
+                    'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN,
                     'Content-Type': 'application/json'
                 }
             }
@@ -58,35 +58,35 @@ export async function registerUser(formData) {
         };
     } catch (error) {
         console.error('Registration error:', error);
-        
+
         // Handle axios specific errors
         if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            
+
             // If the error status is 409 (Conflict), it means user already exists
             if (error.response.status === 409) {
-                return { 
-                    success: false, 
-                    message: 'User already exists!' 
+                return {
+                    success: false,
+                    message: 'User already exists!'
                 };
             }
-            
-            return { 
-                success: false, 
-                message: error.response.data?.message || `Registration failed with status ${error.response.status}.` 
+
+            return {
+                success: false,
+                message: error.response.data?.message || `Registration failed with status ${error.response.status}.`
             };
         } else if (error.request) {
             // The request was made but no response was received
-            return { 
-                success: false, 
-                message: 'No response received from server. Please try again later.' 
+            return {
+                success: false,
+                message: 'No response received from server. Please try again later.'
             };
         } else {
             // Something happened in setting up the request that triggered an Error
-            return { 
-                success: false, 
-                message: `Error: ${error.message}` 
+            return {
+                success: false,
+                message: `Error: ${error.message}`
             };
         }
     }

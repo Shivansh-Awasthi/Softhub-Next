@@ -13,7 +13,7 @@ async function fetchSearchResults(query) {
       `${process.env.NEXT_PUBLIC_API_URL}/api/apps/all?q=${encodeURIComponent(query.trim())}&page=1&limit=9`,
       {
         headers: {
-          'X-Auth-Token': "my-secret-token-123"
+          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
         },
         cache: 'no-store' // Ensure fresh data
       }

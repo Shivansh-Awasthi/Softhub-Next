@@ -65,7 +65,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                 `${process.env.NEXT_PUBLIC_API_URL}/api/apps/all?page=${currentPage}&limit=${itemsPerPage}&q=${encodeURIComponent(trimmedQuery)}`,
                 {
                     headers: {
-                        'X-Auth-Token': "my-secret-token-123"
+                        'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
                     }
                 }
             );
