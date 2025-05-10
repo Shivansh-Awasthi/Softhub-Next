@@ -6,6 +6,14 @@ import Link from 'next/link';
 import { CiLock } from 'react-icons/ci'; // Lock Icon
 import SearchSkeleton from './SearchSkeleton';
 
+// Function to format dates consistently between server and client
+const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    // Use YYYY-MM-DD format which is consistent across server and client
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+};
+
 const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = '', initialPage = 1 }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -202,7 +210,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                                                 {ele.size}
                                             </div>
                                             <div className="text-right text-sm text-gray-500 hidden md:block ">
-                                                {new Date(ele.updatedAt).toLocaleDateString()}
+                                                {formatDate(ele.updatedAt)}
                                             </div>
                                         </Link>
 
