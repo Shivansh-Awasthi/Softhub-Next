@@ -24,31 +24,32 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <Suspense fallback={<div>Loading page...</div>}>
-
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
-        >
-          <ClientScrollProgressBar />
-          <UserDataSynchronizer />
-          <div className="flex min-h-screen">
-            <SidebarWrapper />
-            <div className="flex-1 md:mx-6 transition-all duration-300">
-              <div className="container mx-auto px-2">
-                <div className="mt-8 mb-4">
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
+      >
+        <ClientScrollProgressBar />
+        <UserDataSynchronizer />
+        <div className="flex min-h-screen">
+          <SidebarWrapper />
+          <div className="flex-1 md:mx-6 transition-all duration-300">
+            <div className="container mx-auto px-2">
+              <div className="mt-8 mb-4">
+                <Suspense fallback={<div className="w-full h-12 bg-[#242424] rounded-lg animate-pulse"></div>}>
                   <GlobalHeader />
-                </div>
-                <div className="relative">
+                </Suspense>
+              </div>
+              <div className="relative">
+                <Suspense fallback={<div>Loading content...</div>}>
                   <LoadingProvider>
                     {children}
                   </LoadingProvider>
-                </div>
+                </Suspense>
               </div>
             </div>
           </div>
-        </body>
-      </html>
-    </Suspense>
+        </div>
+      </body>
+    </html>
   );
 }
