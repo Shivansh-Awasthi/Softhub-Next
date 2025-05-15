@@ -1,5 +1,6 @@
 // src/app/components/GlobalHeader/page.jsx
 import { headers } from 'next/headers';
+import { Suspense } from 'react';
 import Header from '../../header-ssr/Header';
 
 // Server-side data fetching for search results
@@ -56,5 +57,9 @@ export default async function GlobalHeader() {
   // Fetch search results on the server
   const searchResults = await fetchSearchResults(query);
 
-  return <Header initialQuery={query} initialResults={searchResults} />;
+  return (
+    <Suspense fallback={<div>Loading header...</div>}>
+      <Header initialQuery={query} initialResults={searchResults} />
+    </Suspense>
+  );
 }
