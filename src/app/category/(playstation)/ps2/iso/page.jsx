@@ -65,7 +65,7 @@ export default async function Ps2IsoPage({ params, searchParams }) {
 
     return (
         <Suspense fallback={<CategorySkeleton itemCount={16} platform="PS2" />}>
-            <Ps2IsoLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
+            <Ps2IsoLoader serverData={data} fallbackPage={currentPage} itemsPerPage={itemsPerPage} />
         </Suspense>
     );
 }
