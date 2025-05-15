@@ -60,15 +60,9 @@ async function AndroidGamesLoader({ currentPage, itemsPerPage }) {
     }
 }
 
-export default async function AndroidGamesPage({ params, searchParams }) {
-    // Properly await params and searchParams before accessing their properties
-    const paramsData = await params;
-    const searchParamsData = await searchParams;
 
-    // Get page from params (for static generation) or searchParams (for client navigation)
-    const pageFromParams = paramsData?.page;
-    const pageFromSearch = searchParamsData?.page;
-    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
+export default async function AndroidGamesPage({ params }) {
+    const currentPage = parseInt(params?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (
@@ -77,3 +71,4 @@ export default async function AndroidGamesPage({ params, searchParams }) {
         </Suspense>
     );
 }
+
