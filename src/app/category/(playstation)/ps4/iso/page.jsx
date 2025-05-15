@@ -60,11 +60,9 @@ async function Ps4IsoLoader({ currentPage, itemsPerPage }) {
     }
 }
 
-export default function Ps4IsoPage({ params, searchParams }) {
-    // Get page from params (for static generation) or searchParams (for client navigation)
-    const pageFromParams = params?.page;
-    const pageFromSearch = searchParams?.page;
-    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
+
+export default async function Ps4IsoPage({ params }) {
+    const currentPage = parseInt(params?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (

@@ -52,20 +52,13 @@ async function Ps2IsoLoader({ currentPage, itemsPerPage }) {
     }
 }
 
-export default async function Ps2IsoPage({ params, searchParams }) {
-    // Properly await params and searchParams before accessing their properties
-    const paramsData = await params;
-    const searchParamsData = await searchParams;
-
-    // Get page from params (for static generation) or searchParams (for client navigation)
-    const pageFromParams = paramsData?.page;
-    const pageFromSearch = searchParamsData?.page;
-    const currentPage = parseInt(pageFromParams || pageFromSearch || '1', 10);
+export default async function Ps2IsoPage({ params }) {
+    const currentPage = parseInt(params?.page || '1', 10); // only use params
     const itemsPerPage = 48;
 
     return (
         <Suspense fallback={<CategorySkeleton itemCount={16} platform="PS2" />}>
-            <Ps2IsoLoader serverData={data} fallbackPage={currentPage} itemsPerPage={itemsPerPage} />
+            <Ps2IsoLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
         </Suspense>
     );
 }
