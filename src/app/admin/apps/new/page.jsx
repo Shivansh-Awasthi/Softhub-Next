@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import CreateApps from './createApps';
 
 export const metadata = {
@@ -8,8 +9,10 @@ export const metadata = {
 // Simple page component that renders the CreateApps component
 export default function CreateAppsPage() {
   return (
-    <div className="py-8">
-      <CreateApps />
-    </div>
+    <Suspense fallback={<div>Loading page...</div>}>
+      <div className="py-8">
+        <CreateApps />
+      </div>
+    </Suspense>
   );
 }
