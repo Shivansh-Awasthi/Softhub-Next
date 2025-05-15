@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Link from 'next/link';
 
 // FAQ data with special markers for line breaks and colors
@@ -30,40 +30,46 @@ const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="border-b border-[#3c3c43] last:border-b-0">
-            <button
-                className="w-full py-4 px-6 flex items-center justify-between text-left transition-colors"
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                <span className="text-[15px] text-blue-600 font-medium">{question}</span>
-                <span className="text-[#86868b] text-xl font-medium">
-                    {isOpen ? '−' : '+'}
-                </span>
-            </button>
-            {isOpen && (
-                <div
-                    className="px-6 pb-4 text-[15px] text-[#fff] leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: answer }}
-                />
-            )}
-        </div>
+        <Suspense fallback={<div>Loading...</div>}>
+
+            <div className="border-b border-[#3c3c43] last:border-b-0">
+                <button
+                    className="w-full py-4 px-6 flex items-center justify-between text-left transition-colors"
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    <span className="text-[15px] text-blue-600 font-medium">{question}</span>
+                    <span className="text-[#86868b] text-xl font-medium">
+                        {isOpen ? '−' : '+'}
+                    </span>
+                </button>
+                {isOpen && (
+                    <div
+                        className="px-6 pb-4 text-[15px] text-[#fff] leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: answer }}
+                    />
+                )}
+            </div>
+        </Suspense>
     );
 };
 
 const Contacts = () => {
     return (
-        <div className="flex pt-4">
-            <div className="w-full max-w-[800px] bg-[#262626] rounded-lg overflow-hidden ring-2 ring-[#2E2E2E]">
-                <div className="px-6 py-4 border-b border-[#3c3c43]">
-                    <h1 className="text-3xl font-semibold text-white">Contacts</h1>
-                </div>
-                <div className="divide-y divide-[#3c3c43]">
-                    {faqData.map((item, index) => (
-                        <FAQItem key={index} {...item} />
-                    ))}
+        <Suspense fallback={<div>Loading...</div>}>
+
+            <div className="flex pt-4">
+                <div className="w-full max-w-[800px] bg-[#262626] rounded-lg overflow-hidden ring-2 ring-[#2E2E2E]">
+                    <div className="px-6 py-4 border-b border-[#3c3c43]">
+                        <h1 className="text-3xl font-semibold text-white">Contacts</h1>
+                    </div>
+                    <div className="divide-y divide-[#3c3c43]">
+                        {faqData.map((item, index) => (
+                            <FAQItem key={index} {...item} />
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
+        </Suspense>
     );
 };
 

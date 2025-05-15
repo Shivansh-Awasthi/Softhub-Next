@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Head from 'next/head';
 
 const faqData = [
@@ -38,60 +38,64 @@ const FAQItem = ({ question, answer, index }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="border-b border-[#3c3c43] last:border-b-0">
-            <button
-                className="w-full py-4 px-6 flex items-center justify-between text-left transition-colors"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-expanded={isOpen}
-                aria-controls={`faq-content-${index}`}
-            >
-                <span className="text-[15px] text-blue-600 font-medium">{question}</span>
-                <span className="text-[#86868b] text-xl font-medium">
-                    {isOpen ? '−' : '+'}
-                </span>
-            </button>
-            {isOpen && (
-                <div id={`faq-content-${index}`} className="px-6 pb-4 text-[15px] text-[#fff] leading-relaxed">
-                    <div dangerouslySetInnerHTML={{ __html: answer }} />
-                    {index === 0 && (
-                        <div className="mt-4 aspect-video w-full">
-                            <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
-                                <iframe
-                                    src="https://player.vimeo.com/video/1046166571?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
-                                    frameBorder="0"
-                                    allow="autoplay; fullscreen; picture-in-picture"
-                                    allowFullScreen
-                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                                    title="Fix. The application is damaged and cannot be opened, you should move it to the bin."
-                                ></iframe>
+        <Suspense fallback={<div>Loading...</div>}>
+            <div className="border-b border-[#3c3c43] last:border-b-0">
+                <button
+                    className="w-full py-4 px-6 flex items-center justify-between text-left transition-colors"
+                    onClick={() => setIsOpen(!isOpen)}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-content-${index}`}
+                >
+                    <span className="text-[15px] text-blue-600 font-medium">{question}</span>
+                    <span className="text-[#86868b] text-xl font-medium">
+                        {isOpen ? '−' : '+'}
+                    </span>
+                </button>
+                {isOpen && (
+                    <div id={`faq-content-${index}`} className="px-6 pb-4 text-[15px] text-[#fff] leading-relaxed">
+                        <div dangerouslySetInnerHTML={{ __html: answer }} />
+                        {index === 0 && (
+                            <div className="mt-4 aspect-video w-full">
+                                <div style={{ padding: '56.25% 0 0 0', position: 'relative' }}>
+                                    <iframe
+                                        src="https://player.vimeo.com/video/1046166571?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                                        frameBorder="0"
+                                        allow="autoplay; fullscreen; picture-in-picture"
+                                        allowFullScreen
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                        title="Fix. The application is damaged and cannot be opened, you should move it to the bin."
+                                    ></iframe>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-            )}
-        </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        </Suspense>
     );
 };
 
 const Faq = () => {
     return (
-        <>
-            <Head>
-                <script src="https://player.vimeo.com/api/player.js" async></script>
-            </Head>
-            <div className="flex pt-4">
-                <div className="w-full max-w-[800px] bg-[#262626] rounded-lg overflow-hidden ring-2 ring-[#2E2E2E]">
-                    <div className="px-6 py-4 border-b border-[#3c3c43]">
-                        <h1 className="text-3xl font-semibold text-white">FAQ</h1>
-                    </div>
-                    <div className="divide-y divide-[#3c3c43]">
-                        {faqData.map((item, index) => (
-                            <FAQItem key={index} index={index} {...item} />
-                        ))}
+        <Suspense fallback={<div>Loading...</div>}>
+            <>
+                <Head>
+                    <script src="https://player.vimeo.com/api/player.js" async></script>
+                </Head>
+                <div className="flex pt-4">
+                    <div className="w-full max-w-[800px] bg-[#262626] rounded-lg overflow-hidden ring-2 ring-[#2E2E2E]">
+                        <div className="px-6 py-4 border-b border-[#3c3c43]">
+                            <h1 className="text-3xl font-semibold text-white">FAQ</h1>
+                        </div>
+                        <div className="divide-y divide-[#3c3c43]">
+                            {faqData.map((item, index) => (
+                                <FAQItem key={index} index={index} {...item} />
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </>
+            </>
+        </Suspense>
     );
 };
 
