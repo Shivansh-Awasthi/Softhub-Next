@@ -133,8 +133,6 @@ const SingleApp = ({ appData }) => {
 
     return (
         <div style={{ position: 'relative', zIndex: 90 }}>
-            <div>
-            </div>
             <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center xl:items-start items-center'>
                 {/* Left Content */}
                 <div className="flex-1">
@@ -523,6 +521,27 @@ const SingleApp = ({ appData }) => {
                     </div>
                 </div>
             )}
+
+
+
+            {/* Background image that adapts to different screen sizes */}
+            <div
+                className="fixed top-0 bottom-0 right-0 left-0 md:left-[264px]"
+                style={{
+                    background: `linear-gradient(to top right, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%), url('${data.thumbnail[2]}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundAttachment: 'fixed',
+                    opacity: 0.4, // Slightly reduced opacity to make content more visible
+                    zIndex: -10,
+                    pointerEvents: 'none', // Allows interaction with elements above this
+                    height: '100vh', // Only cover the viewport height
+                    maxHeight: '100vh', // Ensure it doesn't extend beyond viewport
+                }}
+            >
+            </div>
+
+
 
             {/* Comment box */}
             <div className='bg-gradient-to-br from-[#1E1E1E] to-[#121212] border border-purple-600/20 rounded-xl shadow-lg flex flex-col items-center mt-8 mb-4 relative overflow-hidden'>
