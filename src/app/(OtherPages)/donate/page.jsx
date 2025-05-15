@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Donate from './Donate';
 
 export const metadata = {
@@ -7,8 +8,10 @@ export const metadata = {
 
 export default function DonatePage() {
   return (
-    <div className="container mx-auto">
-      <Donate />
-    </div>
+    <Suspense fallback={<div>Loading page...</div>}>
+      <div className="container mx-auto">
+        <Donate />
+      </div>
+    </Suspense>
   );
 }
