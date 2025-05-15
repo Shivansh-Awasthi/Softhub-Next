@@ -26,6 +26,21 @@ export const metadata = {
 // This component fetches data with a timeout to prevent long waits
 async function PcSoftwaresLoader({ currentPage, itemsPerPage }) {
     try {
+        // Check if we're in a build environment (no actual API call needed)
+        if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
+            console.log('Building PC Softwares page with mock data');
+            // Return mock data during build to prevent 404 errors
+            return <PcSoftwares
+                serverData={{
+                    apps: [],
+                    total: 0,
+                    success: true,
+                    message: "Mock data for build"
+                }}
+                initialPage={currentPage}
+            />;
+        }
+
         // Create a promise that rejects after 5 seconds
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => reject(new Error('Request timed out')), 5000);
@@ -48,7 +63,16 @@ async function PcSoftwaresLoader({ currentPage, itemsPerPage }) {
 
         if (!res.ok) {
             console.error(`API error: ${res.status} ${res.statusText}`);
-            throw new Error(`API error: ${res.status}`);
+            // Instead of throwing, return empty data
+            return <PcSoftwares
+                serverData={{
+                    apps: [],
+                    total: 0,
+                    error: `API error: ${res.status}`,
+                    success: false
+                }}
+                initialPage={currentPage}
+            />;
         }
 
         const data = await res.json();
@@ -56,7 +80,15 @@ async function PcSoftwaresLoader({ currentPage, itemsPerPage }) {
     } catch (error) {
         console.error("Error fetching data:", error);
         // Return component with error state
-        return <PcSoftwares serverData={{ apps: [], total: 0, error: error.message }} initialPage={currentPage} />;
+        return <PcSoftwares
+            serverData={{
+                apps: [],
+                total: 0,
+                error: error.message,
+                success: false
+            }}
+            initialPage={currentPage}
+        />;
     }
 }
 
