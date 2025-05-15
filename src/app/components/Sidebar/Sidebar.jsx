@@ -56,7 +56,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className='bg-[#1E1E1E] z-99'>
+    <div className='bg-[#1E1E1E] z-90'>
       {/* Hamburger / Close menu icon */}
       {isMobileView && (
         <button
