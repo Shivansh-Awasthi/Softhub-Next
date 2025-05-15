@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import LoginForm from './LoginForm';
 
 export const metadata = {
@@ -7,8 +8,11 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="container mx-auto py-10">
-      <LoginForm />
-    </div>
+    <Suspense fallback={<div>Loading page...</div>}>
+
+      <div className="container mx-auto py-10">
+        <LoginForm />
+      </div>
+    </Suspense>
   );
 }

@@ -5,6 +5,7 @@ import GlobalHeader from './components/GlobalHeader/page';
 import { LoadingProvider } from './context/LoadingContext';
 import ClientScrollProgressBar from './components/ClientScrollProgressBar';
 import UserDataSynchronizer from './components/UserDataSynchronizer';
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,28 +24,31 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
-      >
-        <ClientScrollProgressBar />
-        <UserDataSynchronizer />
-        <div className="flex min-h-screen">
-          <SidebarWrapper />
-          <div className="flex-1 md:mx-6 transition-all duration-300">
-            <div className="container mx-auto px-2">
-              <div className="mt-8 mb-4">
-                <GlobalHeader />
-              </div>
-              <div className="relative">
-                <LoadingProvider>
-                  {children}
-                </LoadingProvider>
+    <Suspense fallback={<div>Loading page...</div>}>
+
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
+        >
+          <ClientScrollProgressBar />
+          <UserDataSynchronizer />
+          <div className="flex min-h-screen">
+            <SidebarWrapper />
+            <div className="flex-1 md:mx-6 transition-all duration-300">
+              <div className="container mx-auto px-2">
+                <div className="mt-8 mb-4">
+                  <GlobalHeader />
+                </div>
+                <div className="relative">
+                  <LoadingProvider>
+                    {children}
+                  </LoadingProvider>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </body>
-    </html>
+        </body>
+      </html>
+    </Suspense>
   );
 }
