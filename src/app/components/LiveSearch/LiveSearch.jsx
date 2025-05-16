@@ -79,7 +79,9 @@ const LiveSearch = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim() !== '') {
-      router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+      // Add a timestamp to force a refresh when already on the search page
+      const timestamp = Date.now();
+      window.location.href = `/search?query=${encodeURIComponent(searchQuery.trim())}&t=${timestamp}`;
       setShowResults(false);
     }
   };
@@ -148,7 +150,10 @@ const LiveSearch = () => {
                       <Link
                         href={isLocked ? '#' : `/download/${createSlug(app.platform)}/${createSlug(app.title)}/${app._id}`}
                         className="flex items-center"
-                        onClick={() => setShowResults(false)}
+                        onClick={(e) => {
+                          setShowResults(false);
+                          // Don't force navigation for download links, only for search results
+                        }}
                       >
                         <div className="relative flex-shrink-0">
                           <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25"></div>
@@ -178,13 +183,17 @@ const LiveSearch = () => {
 
                 {/* View all results link */}
                 <li className="py-2 px-4 bg-black/30">
-                  <Link
-                    href={`/search?query=${encodeURIComponent(searchQuery.trim())}`}
+                  <button
                     className="text-center block w-full text-sm text-purple-400 hover:text-purple-300 font-medium"
-                    onClick={() => setShowResults(false)}
+                    onClick={() => {
+                      setShowResults(false);
+                      // Force a full page navigation with timestamp to ensure fresh results
+                      const timestamp = Date.now();
+                      window.location.href = `/search?query=${encodeURIComponent(searchQuery.trim())}&t=${timestamp}`;
+                    }}
                   >
                     View all {searchResults.total} results
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>

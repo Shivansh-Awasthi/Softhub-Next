@@ -14,10 +14,13 @@ const formatDate = (dateString) => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 };
 
-const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = '', initialPage = 1 }) => {
+const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = '', initialPage = 1, timestamp = Date.now() }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const query = searchParams.get('query') || initialQuery;
+
+    // Store the timestamp for cache busting
+    const [searchTimestamp, setSearchTimestamp] = useState(timestamp);
 
     const [data, setData] = useState(initialData.apps || []);
     const [loading, setLoading] = useState(false);
@@ -98,24 +101,31 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                 const params = new URLSearchParams(searchParams.toString());
                 params.set('page', currentPage.toString());
 
+                // Keep the timestamp parameter to ensure cache busting
+                if (!params.has('t')) {
+                    params.set('t', searchTimestamp.toString());
+                }
+
                 // Update URL without full navigation
                 router.replace(`/search?${params.toString()}`, { scroll: false });
             } catch (error) {
                 console.error("Error updating URL:", error);
                 // Fallback to simpler URL update if there's an error
-                router.replace(`/search?query=${encodeURIComponent(query)}&page=${currentPage}`, { scroll: false });
+                router.replace(`/search?query=${encodeURIComponent(query)}&page=${currentPage}&t=${searchTimestamp}`, { scroll: false });
             }
         }
-    }, [currentPage, query, router, searchParams]);
+    }, [currentPage, query, router, searchParams, searchTimestamp]);
 
-    // Reset currentPage to 1 whenever the query changes
+    // Reset currentPage to 1 and update timestamp whenever the query changes
     useEffect(() => {
         if (query !== initialQuery) {
             setCurrentPage(1);
+            // Update timestamp to ensure fresh results
+            setSearchTimestamp(Date.now());
         }
     }, [query, initialQuery]);
 
-    // Fetch the data whenever the page or query changes
+    // Fetch the data whenever the page, query, or timestamp changes
     useEffect(() => {
         try {
             if (query) {
@@ -125,7 +135,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
             console.error("Error in data fetching effect:", error);
             setError('An error occurred while fetching data. Please try again.');
         }
-    }, [currentPage, query]);
+    }, [currentPage, query, searchTimestamp]);
 
     // Handle empty search query state
     useEffect(() => {

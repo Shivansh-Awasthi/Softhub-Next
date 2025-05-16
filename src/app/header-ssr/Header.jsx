@@ -35,7 +35,9 @@ const Header = ({ initialQuery = '' }) => {
         if (searchQuery.trim() !== '') {
             // Force a full navigation to the search page with the new query
             // This ensures it works even when already on the search page
-            window.location.href = `/search?query=${encodeURIComponent(searchQuery.trim())}`;
+            // Add a timestamp to force a refresh when already on the search page
+            const timestamp = Date.now();
+            window.location.href = `/search?query=${encodeURIComponent(searchQuery.trim())}&t=${timestamp}`;
         }
     };
 

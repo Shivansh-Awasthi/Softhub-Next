@@ -51,11 +51,18 @@ async function SearchDataLoader({ searchParams }) {
   // Handle searchParams safely
   const query = searchParams?.query || '';
   const page = parseInt(searchParams?.page || '1', 10);
+  // Get timestamp to ensure cache busting (ignored in actual data fetching)
+  const timestamp = searchParams?.t || Date.now();
 
   // Fetch initial data on the server
   const initialData = await fetchSearchResults(query, page);
 
-  return <SearchResults initialData={initialData} initialQuery={query} initialPage={page} />;
+  return <SearchResults
+    initialData={initialData}
+    initialQuery={query}
+    initialPage={page}
+    timestamp={timestamp}
+  />;
 }
 
 export default function SearchPage({ searchParams }) {
