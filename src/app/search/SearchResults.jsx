@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { CiLock } from 'react-icons/ci'; // Lock Icon
 import SearchSkeleton from './SearchSkeleton';
@@ -15,9 +15,22 @@ const formatDate = (dateString) => {
 };
 
 const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = '', initialPage = 1, timestamp = Date.now() }) => {
-    const searchParams = useSearchParams();
     const router = useRouter();
-    const query = searchParams.get('query') || initialQuery;
+
+    // Initialize with initialQuery
+    const [query, setQuery] = useState(initialQuery);
+
+    // Update query from URL when component mounts on client
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Get query from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlQuery = urlParams.get('query');
+            if (urlQuery) {
+                setQuery(urlQuery);
+            }
+        }
+    }, []);
 
     // Store the timestamp for cache busting
     const [searchTimestamp, setSearchTimestamp] = useState(timestamp);
@@ -96,15 +109,13 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
 
     // Update URL when page changes
     useEffect(() => {
-        if (typeof window !== 'undefined' && query && searchParams) {
+        if (typeof window !== 'undefined' && query) {
             try {
-                const params = new URLSearchParams(searchParams.toString());
+                // Create a new URLSearchParams object
+                const params = new URLSearchParams();
+                params.set('query', query);
                 params.set('page', currentPage.toString());
-
-                // Keep the timestamp parameter to ensure cache busting
-                if (!params.has('t')) {
-                    params.set('t', searchTimestamp.toString());
-                }
+                params.set('t', searchTimestamp.toString());
 
                 // Update URL without full navigation
                 router.replace(`/search?${params.toString()}`, { scroll: false });
@@ -114,7 +125,7 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                 router.replace(`/search?query=${encodeURIComponent(query)}&page=${currentPage}&t=${searchTimestamp}`, { scroll: false });
             }
         }
-    }, [currentPage, query, router, searchParams, searchTimestamp]);
+    }, [currentPage, query, router, searchTimestamp]);
 
     // Reset currentPage to 1 and update timestamp whenever the query changes
     useEffect(() => {

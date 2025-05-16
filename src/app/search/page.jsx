@@ -48,11 +48,14 @@ async function fetchSearchResults(query, page = 1, limit = 48) {
 
 // This component fetches data and renders the SearchResults
 async function SearchDataLoader({ searchParams }) {
+  // Await searchParams to properly access its properties
+  const params = await searchParams;
+
   // Handle searchParams safely
-  const query = searchParams?.query || '';
-  const page = parseInt(searchParams?.page || '1', 10);
+  const query = params?.query || '';
+  const page = parseInt(params?.page || '1', 10);
   // Get timestamp to ensure cache busting (ignored in actual data fetching)
-  const timestamp = searchParams?.t || Date.now();
+  const timestamp = params?.t || Date.now();
 
   // Fetch initial data on the server
   const initialData = await fetchSearchResults(query, page);
