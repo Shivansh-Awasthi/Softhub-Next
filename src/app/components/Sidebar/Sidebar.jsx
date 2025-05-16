@@ -29,11 +29,21 @@ const Sidebar = () => {
       }
     };
 
+    // Initial check
     handleResize();
-    window.addEventListener('resize', handleResize);
+
+    // Add debounced resize listener for better performance
+    let resizeTimer;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener('resize', debouncedResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', debouncedResize);
+      clearTimeout(resizeTimer);
     };
   }, []);
 
@@ -55,13 +65,30 @@ const Sidebar = () => {
     }
   };
 
+  // Add CSS to hide scrollbar for WebKit browsers
+  useEffect(() => {
+    // Add a style tag to hide scrollbar in WebKit browsers
+    const style = document.createElement('style');
+    style.textContent = `
+      .sidebar::-webkit-scrollbar {
+        display: none;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
     <div className='bg-[#1E1E1E] z-90'>
       {/* Hamburger / Close menu icon */}
       {isMobileView && (
         <button
           onClick={toggleSidebar}
-          className="p-3 fixed bottom-4 left-4 z-30 text-white rounded-lg bg-blue-500 shadow-md"
+          className="p-3 fixed bottom-6 left-6 z-30 text-white rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:scale-105"
+          aria-label={isSidebarVisible ? "Close menu" : "Open menu"}
         >
           {isSidebarVisible ? (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -79,20 +106,25 @@ const Sidebar = () => {
       )}
 
       {/* Overlay */}
-      {isMobileView && isSidebarVisible && (
+      {isMobileView && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20"
+          className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out z-20 ${isSidebarVisible ? 'opacity-50 backdrop-blur-sm' : 'opacity-0 pointer-events-none'
+            }`}
           onClick={toggleSidebar}
+          aria-hidden="true"
         ></div>
       )}
 
       {/* Sidebar */}
       <aside
-        className={`sidebar md:sticky top-0 z-20 flex flex-col w-full h-screen px-6 py-6
-                ${isMobileView ? 'fixed w-full bg-[#121212] transition-transform duration-300' : 'w-64'}
-                ${isSidebarVisible || !isMobileView ? 'transform-none' : '-translate-x-full overflow-y-auto scrollbar-hide'}`}
+        className={`sidebar top-0 z-20 flex flex-col h-screen px-6 py-6
+                ${isMobileView ? 'fixed left-0 w-[280px] max-w-[80vw] bg-[#121212] shadow-xl' : 'md:sticky w-64'}
+                transition-transform duration-300 ease-in-out
+                ${isSidebarVisible || !isMobileView ? 'transform-none' : '-translate-x-full'}`}
         style={{
-          overflowY: isSidebarVisible ? 'auto' : 'hidden',
+          overflowY: 'auto',
+          scrollbarWidth: 'none', /* Firefox */
+          msOverflowStyle: 'none', /* IE and Edge */
           borderRight: '1px solid rgba(255, 255, 255, 0.08)',
           background: 'linear-gradient(180deg, rgba(30,30,30,1) 0%, rgba(18,18,18,1) 100%)'
         }}

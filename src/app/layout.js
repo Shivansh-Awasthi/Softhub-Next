@@ -32,8 +32,8 @@ export default function RootLayout({ children }) {
         <UserDataSynchronizer />
         <div className="flex min-h-screen">
           <SidebarWrapper />
-          <div className="flex-1 md:mx-6 transition-all duration-300">
-            <div className="container mx-auto px-2">
+          <div className="flex-1 w-full transition-all duration-300">
+            <div className="container mx-auto px-4">
               <div className="mt-8 mb-4">
                 <Suspense fallback={<div className="w-full h-12 bg-[#242424] rounded-lg animate-pulse"></div>}>
                   <GlobalHeader />
