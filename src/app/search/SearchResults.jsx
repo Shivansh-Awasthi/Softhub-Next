@@ -93,12 +93,18 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
 
     // Update URL when page changes
     useEffect(() => {
-        if (typeof window !== 'undefined' && query) {
-            const params = new URLSearchParams(searchParams.toString());
-            params.set('page', currentPage.toString());
+        if (typeof window !== 'undefined' && query && searchParams) {
+            try {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set('page', currentPage.toString());
 
-            // Update URL without full navigation
-            router.replace(`/search?${params.toString()}`, { scroll: false });
+                // Update URL without full navigation
+                router.replace(`/search?${params.toString()}`, { scroll: false });
+            } catch (error) {
+                console.error("Error updating URL:", error);
+                // Fallback to simpler URL update if there's an error
+                router.replace(`/search?query=${encodeURIComponent(query)}&page=${currentPage}`, { scroll: false });
+            }
         }
     }, [currentPage, query, router, searchParams]);
 
@@ -111,8 +117,13 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
 
     // Fetch the data whenever the page or query changes
     useEffect(() => {
-        if (query) {
-            handleData();
+        try {
+            if (query) {
+                handleData();
+            }
+        } catch (error) {
+            console.error("Error in data fetching effect:", error);
+            setError('An error occurred while fetching data. Please try again.');
         }
     }, [currentPage, query]);
 
@@ -210,11 +221,11 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                                             </div>
                                             <div className="flex-1 min-w-0 ms-4">
                                                 <p className={`font-medium truncate ${ele.platform === 'Mac' ? 'text-blue-400' :
-                                                        ele.platform === 'PC' ? 'text-red-400' :
-                                                            ele.platform === 'Android' ? 'text-green-400' :
-                                                                ele.platform === 'Playstation' ? 'text-purple-400' :
-                                                                    ele.platform === 'iOS' ? 'text-yellow-400' :
-                                                                        'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400'
+                                                    ele.platform === 'PC' ? 'text-red-400' :
+                                                        ele.platform === 'Android' ? 'text-green-400' :
+                                                            ele.platform === 'Playstation' ? 'text-purple-400' :
+                                                                ele.platform === 'iOS' ? 'text-yellow-400' :
+                                                                    'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400'
                                                     }`}>
                                                     {ele.title}
                                                 </p>
