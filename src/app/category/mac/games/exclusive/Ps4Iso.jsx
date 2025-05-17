@@ -352,7 +352,7 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
 
     // Main render
     return (
-        <div className="container mx-auto p-2 relative">
+        <div className="container mx-auto p-2 pb-24 relative">
             {/* Add CSS for animations */}
             <style jsx global>{`
                 @keyframes gradient-x {
@@ -566,7 +566,7 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
 
             {/* Premium Pagination Controls */}
             {totalPages > 1 && (
-                <div className="mt-16 relative animate-fadeInUp">
+                <div className="mt-16 mb-16 relative animate-fadeInUp">
                     {/* Premium pagination decorative elements */}
                     <div className="absolute left-1/4 -top-8 w-32 h-32 bg-purple-600 opacity-5 rounded-full blur-2xl -z-10 animate-pulse"></div>
                     <div className="absolute right-1/4 -top-8 w-32 h-32 bg-blue-600 opacity-5 rounded-full blur-2xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
