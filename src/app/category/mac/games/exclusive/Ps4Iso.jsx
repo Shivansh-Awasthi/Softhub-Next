@@ -473,9 +473,24 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                 </div>
 
                 {/* Description text - responsive for small screens */}
-                <p className="text-gray-400 max-w-2xl mx-auto mb-8 text-sm sm:text-base md:text-lg px-4 sm:px-0">
+                <p className="text-gray-400 max-w-2xl mx-auto mb-6 text-sm sm:text-base md:text-lg px-4 sm:px-0">
                     Exclusive premium Mac games available only to our members. Experience the best gaming titles with enhanced graphics and performance.
                 </p>
+
+                {/* Telegram contact button */}
+                <div className="mb-8 flex justify-center">
+                    <a
+                        href="https://t.me/n0t_ur_type"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 animate-pulse-glow"
+                    >
+                        <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm2.8 14.4c.12 0 .234-.05.318-.134.084-.084.134-.198.134-.318 0-.12-.05-.234-.134-.318-.084-.084-.198-.134-.318-.134H9.2c-.12 0-.234.05-.318.134-.084.084-.134.198-.134.318 0 .12.05.234.134.318.084.084.198.134.318.134h5.6zm-2.8-8.4c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 4.8c-.993 0-1.8-.807-1.8-1.8s.807-1.8 1.8-1.8 1.8.807 1.8 1.8-.807 1.8-1.8 1.8z" />
+                        </svg>
+                        Buy via Telegram
+                    </a>
+                </div>
 
                 {/* Feature badges - responsive for small screens */}
                 <div className="flex flex-wrap justify-center gap-3">
