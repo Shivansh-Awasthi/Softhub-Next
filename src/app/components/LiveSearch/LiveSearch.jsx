@@ -98,7 +98,7 @@ const LiveSearch = () => {
   return (
     <div
       ref={searchRef}
-      className="flex flex-wrap relative ring-1 ring-[#3E3E3E] rounded-lg w-full max-w-[760px] z-50"
+      className="flex flex-wrap relative ring-1 ring-[#3E3E3E] rounded-lg w-full max-w-[760px] z-550"
     >
       <form onSubmit={handleSearch} className="w-full flex items-center">
         <input

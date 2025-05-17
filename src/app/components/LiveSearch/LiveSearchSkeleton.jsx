@@ -7,7 +7,7 @@ const LiveSearchSkeleton = ({ itemCount = 7 }) => {
   const items = Array.from({ length: itemCount }, (_, i) => i);
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-2 bg-gradient-to-br from-[#1E1E1E] to-[#121212] rounded-lg border border-purple-600/20 shadow-lg z-50">
+    <div className="absolute top-full left-0 right-0 mt-2 bg-gradient-to-br from-[#1E1E1E] to-[#121212] rounded-lg border border-purple-600/20 shadow-lg z-500">
       {/* Ambient background elements for the skeleton */}
       <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-5 rounded-full blur-xl"></div>
       <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-5 rounded-full blur-xl"></div>
