@@ -186,14 +186,14 @@ const CreateApps = () => {
         { value: "ppsspp", label: "PPSSPP Iso" },
         { value: "ps2", label: "PS2 Iso" },
         { value: "ps3", label: "PS3 Iso" },
-        { value: "ps4", label: "PS4 Iso" },
+        { value: "ps4", label: "Mac Exclusive Games" },
     ];
 
     const downloadLinkLabelsAndPlaceholders = [
-        { label: "Direct Link (Mac) // Torrent (PC)", placeholder: "Enter the Direct link" },
+        { label: "Viking File (Mac) // Torrent (PC)", placeholder: "Enter the Direct link" },
         { label: "OneDrive (Mac) // Buzzheavier (PC)", placeholder: "Enter the oneDrive link" },
         { label: "Torrent (Mac) // DataNodes (PC)", placeholder: "Enter the Torrent link" },
-        { label: "Other Links (Mac) // GoFile (PC)", placeholder: "Enter other download link" },
+        { label: "BuzzHeavier (Mac) // GoFile (PC)", placeholder: "Enter other download link" },
         { label: "MediaFire Link (Mac) // Pixeldrain (PC)", placeholder: "Enter Mrdiafire link" },
         { label: "Akira Box Link (Mac, PC)", placeholder: "Enter AkiraBox link" }
     ];
