@@ -62,6 +62,7 @@ async function Ps4IsoLoader({ currentPage, itemsPerPage }) {
 
 
 export default async function Ps4IsoPage({ params }) {
+    // Only use params, not searchParams (which requires await)
     const currentPage = parseInt(params?.page || '1', 10);
     const itemsPerPage = 48;
 

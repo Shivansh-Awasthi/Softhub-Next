@@ -2,44 +2,110 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { FaPlaystation } from "react-icons/fa";
+import { useLoading } from '@/app/context/LoadingContext';
 import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
 
-export default function Ps4Iso({ serverData }) {
+// Utility function to create URL-friendly slugs
+function createSlug(text) {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')        // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')    // Remove all non-word chars
+        .replace(/\-\-+/g, '-')      // Replace multiple - with single -
+        .replace(/^-+/, '')          // Trim - from start of text
+        .replace(/-+$/, '');         // Trim - from end of text
+}
+
+export default function Ps4Iso({ serverData, initialPage = 1 }) {
+    // Configuration
+    const ITEMS_PER_PAGE = 48;
+
+    // Hooks for URL and navigation
     const searchParams = useSearchParams();
     const router = useRouter();
-    const initialPage = parseInt(searchParams.get('page') || '1', 10);
+    const pathname = usePathname();
+    const { showSkeleton } = useLoading();
 
-    // Initialize with server data or handle error from server
-    const [data, setData] = useState(serverData.apps || []);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(serverData.error || null);
-    const [currentPage, setCurrentPage] = useState(initialPage);
-    const [totalItems, setTotalItems] = useState(serverData.total || 0);
-
-    const itemsPerPage = 48;
-    const totalPages = Math.max(Math.ceil(totalItems / itemsPerPage), 1); // Ensure at least 1 page
-
-    // Debug log to see what data we're receiving
-    useEffect(() => {
-    }, [serverData]);
-
-    useEffect(() => {
-        // Update current page when URL changes
-        const page = parseInt(searchParams.get('page') || '1', 10);
-        if (page !== currentPage) {
-            setCurrentPage(page);
+    // Extract data from server response
+    const extractData = (data) => {
+        if (data?.apps && Array.isArray(data.apps)) {
+            return {
+                games: data.apps,
+                total: data.total || 0
+            };
         }
-    }, [searchParams, currentPage]);
+        if (data?.data && Array.isArray(data.data)) {
+            return {
+                games: data.data,
+                total: data.total || 0
+            };
+        }
+        return {
+            games: [],
+            total: 0
+        };
+    };
 
+    const { games, total } = extractData(serverData);
+
+    // State
+    const [data, setData] = useState(games);
+    const [totalApps, setTotalApps] = useState(total);
+    const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || initialPage.toString(), 10));
+    const [isPageTransitioning, setIsPageTransitioning] = useState(false);
+    const [error, setError] = useState(serverData?.error || null);
+    const [purchasedGames, setPurchasedGames] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    // Calculate total pages
+    const totalPages = Math.max(1, Math.ceil(totalApps / ITEMS_PER_PAGE));
+
+    // Update state when props or URL changes
+    useEffect(() => {
+        // Update data and total from server data
+        const { games, total } = extractData(serverData);
+        setData(games);
+        setTotalApps(total);
+
+        // Update current page from URL
+        const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
+        if (pageFromUrl !== currentPage) {
+            setCurrentPage(pageFromUrl);
+        }
+
+        // Reset page transition state
+        const timer = setTimeout(() => {
+            setIsPageTransitioning(false);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [serverData, searchParams]);
+
+    // Load user data from localStorage on client side
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Get purchased games from localStorage
+            const storedGames = localStorage.getItem("gData");
+            setPurchasedGames(storedGames ? JSON.parse(storedGames) : []);
+
+            // Check if user is admin
+            setIsAdmin(localStorage.getItem("role") === 'ADMIN');
+        }
+    }, []);
+
+    // Fetch data when page changes (client-side)
     useEffect(() => {
         if (currentPage === 1) return; // already have page 1 data from server
 
         const fetchData = async () => {
-            setLoading(true);
+            setIsPageTransitioning(true);
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/ps4?page=${currentPage}&limit=${itemsPerPage}`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/ps4?page=${currentPage}&limit=${ITEMS_PER_PAGE}`,
                     {
                         headers: { 'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN },
                     }
@@ -52,34 +118,205 @@ export default function Ps4Iso({ serverData }) {
                 const json = await res.json();
 
                 // Handle API response structure
-                setData(json.apps || []);
-                setTotalItems(json.total || 0);
+                const { games, total } = extractData(json);
+                setData(games);
+                setTotalApps(total);
                 setError(null);
             } catch (err) {
                 setError('Failed to load data: ' + err.message);
                 console.error("Client fetch failed:", err.message);
             } finally {
-                setLoading(false);
+                setIsPageTransitioning(false);
             }
         };
 
         fetchData();
-    }, [currentPage]);
+    }, [currentPage, ITEMS_PER_PAGE]);
 
+    // Handle page change with improved UX
     const handlePageChange = (newPage) => {
-        router.push(`/category/ps4/iso?page=${newPage}`);
+        if (newPage === currentPage || newPage < 1 || newPage > totalPages || isPageTransitioning) {
+            return; // Don't do anything if invalid page or already transitioning
+        }
+
+        // Set transition state
+        setIsPageTransitioning(true);
+
+        // Show skeleton while loading
+        showSkeleton('PS4');
+
+        // Update URL - this will trigger a new server-side render
+        router.push(`${pathname}?page=${newPage}`);
+
+        // Scroll to top
+        if (typeof window !== 'undefined') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
-    const slugify = (text = '') => {
-        return text
-            .toString()
-            .toLowerCase()
-            .trim()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w\-]+/g, '')
-            .replace(/\-\-+/g, '-');
+    // Game card component with prefetching
+    const GameCard = ({ game = {} }) => {
+        const isPurchased = purchasedGames.includes(game._id);
+        const isUnlocked = isAdmin || !game.isPaid || isPurchased;
+
+        // Always create a valid download URL
+        const downloadUrl = `/download/${createSlug(game.platform)}/${createSlug(game.title)}/${game._id}`;
+
+        // Prefetch function to start loading the download page data when hovering
+        const prefetchDownloadPage = () => {
+            if (isUnlocked) {
+                // This triggers Next.js to prefetch the page
+                router.prefetch(downloadUrl);
+            }
+        };
+
+        // For locked games, we'll render a div with the lock icon
+        // For unlocked games, we'll render a Link to the download page
+        if (!isUnlocked) {
+            // Locked game - render div with lock icon
+            return (
+                <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg border border-purple-600/20 opacity-90 cursor-not-allowed">
+                    {/* Ambient background elements - always visible */}
+                    <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                    <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                    {/* Subtle overlay gradient for better text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+                    {/* Lock overlay */}
+                    <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center z-20 bg-black/50">
+                        <div className="bg-black/70 p-3 rounded-full border border-purple-600/30">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="34"
+                                height="34"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-white"
+                            >
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col rounded-xl h-full overflow-hidden">
+                        <figure className="flex justify-center items-center rounded-t-xl overflow-hidden h-full">
+                            <img
+                                src={game.thumbnail?.[0] || '/default-game.png'}
+                                alt={game.title || 'Game'}
+                                className="w-full h-full object-cover rounded-t-xl transition-transform duration-700 ease-in-out transform hover:scale-110"
+                                onError={(e) => {
+                                    e.target.src = '/default-game.png';
+                                    e.target.alt = 'Default game image';
+                                }}
+                            />
+                        </figure>
+
+                        {/* Game platform badge */}
+                        <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                            <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                <FaPlaystation className="mr-1" />
+                                PS4
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                            {/* Glowing separator line */}
+                            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                            <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis">
+                                {game.title || 'Untitled Game'}
+                            </div>
+                            <div className="text-xs font-normal text-gray-400 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                </svg>
+                                {game.size || 'N/A'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            // Unlocked game - render Link to download page
+            return (
+                <Link
+                    href={downloadUrl}
+                    className="block"
+                    prefetch={true}
+                    onMouseEnter={prefetchDownloadPage}
+                >
+                    <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20">
+                        {/* Ambient background elements - always visible */}
+                        <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
+                        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
+
+                        {/* Subtle overlay gradient for better text readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+                        <div className="flex flex-col rounded-xl h-full overflow-hidden">
+                            <figure className="flex justify-center items-center rounded-t-xl overflow-hidden h-full">
+                                <img
+                                    src={game.thumbnail?.[0] || '/default-game.png'}
+                                    alt={game.title || 'Game'}
+                                    className="w-full h-full object-cover rounded-t-xl transition-transform duration-700 ease-in-out transform group-hover:scale-110"
+                                    onError={(e) => {
+                                        e.target.src = '/default-game.png';
+                                        e.target.alt = 'Default game image';
+                                    }}
+                                />
+                            </figure>
+
+                            {/* Game platform badge */}
+                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                                <div className="text-[10px] font-medium text-blue-400 flex items-center">
+                                    <FaPlaystation className="mr-1" />
+                                    PS4
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
+                                {/* Glowing separator line */}
+                                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
+
+                                <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                                    {game.title || 'Untitled Game'}
+                                </div>
+                                <div className="text-xs font-normal text-gray-400 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                    </svg>
+                                    {game.size || 'N/A'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Link>
+            );
+        }
     };
 
+    // Error state
+    if (error && !data.length) {
+        return (
+            <div className="container mx-auto p-2 text-center">
+                <p className="text-red-500 mb-4">{error}</p>
+                <button
+                    onClick={() => router.refresh()}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Retry Loading Games
+                </button>
+            </div>
+        );
+    }
+
+    // Main render
     return (
         <div className="container mx-auto p-2 relative">
             {/* Background decorative elements */}
@@ -95,77 +332,43 @@ export default function Ps4Iso({ serverData }) {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10"></div>
                 <h1 className="inline-block font-bold text-4xl mb-3 relative">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-                        PS4 ISO{' '}
-                        <span className="font-medium text-blue-400">{totalItems}</span>
+                        Exclusive Games{' '}
+                        <span className="font-medium text-blue-400">{totalApps}</span>
                     </span>
                     <span className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
                 </h1>
-                <p className="text-gray-400 max-w-md mx-auto">Discover and download PlayStation 4 games with our curated collection</p>
             </div>
 
-            {loading ? (
-                <p className="text-center">Loading...</p>
-            ) : error ? (
-                <p className="text-red-500 text-center">{error}</p>
+            {data.length > 0 ? (
+                <>
+                    <div className="relative">
+                        {/* Loading overlay during page transitions */}
+                        {isPageTransitioning && (
+                            <div className="absolute inset-0 bg-[#1a1a1a] bg-opacity-70 z-10 flex items-center justify-center rounded-lg">
+                                <div className="flex flex-col items-center">
+                                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+                                    <p className="text-white text-lg">Loading page {currentPage}...</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 transition-opacity duration-300 ease-in-out relative">
+                            {/* Grid accent elements */}
+                            <div className="absolute -top-6 -left-6 w-12 h-12 border-t-2 border-l-2 border-purple-500/30 rounded-tl-lg"></div>
+                            <div className="absolute -bottom-6 -right-6 w-12 h-12 border-b-2 border-r-2 border-blue-500/30 rounded-br-lg"></div>
+
+                            {data.map((game) => (
+                                <GameCard
+                                    key={game?._id || `game-${Math.random().toString(36).substring(2, 9)}`}
+                                    game={game}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 relative">
-                    {/* Grid accent elements */}
-                    <div className="absolute -top-6 -left-6 w-12 h-12 border-t-2 border-l-2 border-purple-500/30 rounded-tl-lg"></div>
-                    <div className="absolute -bottom-6 -right-6 w-12 h-12 border-b-2 border-r-2 border-blue-500/30 rounded-br-lg"></div>
-
-                    {data.map((ele) => (
-                        <Link
-                            key={ele._id}
-                            href={`/download/${slugify(ele.platform)}/${slugify(ele.title)}/${ele._id}`}
-                            className="group flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 relative"
-                        >
-                            {/* Ambient background elements - always visible */}
-                            <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
-                            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
-
-                            <div className="flex flex-col justify-center items-center h-36 bg-gradient-to-br from-[#1E1E1E] to-[#121212] pt-4 relative">
-                                {/* App icon with enhanced styling */}
-                                <div className="relative">
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25"></div>
-                                    <img
-                                        src={ele.thumbnail[0]}
-                                        alt={ele.title}
-                                        className="relative rounded-lg w-16 h-16 transition-transform duration-700 ease-in-out transform group-hover:scale-110 border border-purple-500/20 z-10"
-                                    />
-                                </div>
-
-                                {/* Game platform badge */}
-                                <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
-                                    <div className="text-[10px] font-medium text-blue-400 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                                            <path d="M6.5 6.5h11v11h-11z" />
-                                            <path d="m14 6-3-3-3 3" />
-                                            <path d="M10 18v3" />
-                                            <path d="m14 17.5 4 4" />
-                                            <path d="m18 13.5 2.5 2.5" />
-                                            <path d="M18 6v4" />
-                                        </svg>
-                                        PS4
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
-                                {/* Glowing separator line */}
-                                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
-
-                                <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white text-center pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
-                                    {ele.title}
-                                </div>
-                                <div className="text-xs font-normal text-gray-400 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
-                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                                    </svg>
-                                    {ele.size}
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
+                <div className="text-center py-10 text-gray-400">
+                    No games available at the moment
                 </div>
             )}
 
@@ -181,7 +384,7 @@ export default function Ps4Iso({ serverData }) {
                             currentPage={currentPage}
                             totalPages={totalPages}
                             onPageChange={handlePageChange}
-                            isLoading={loading}
+                            isLoading={isPageTransitioning}
                         />
                     </div>
 
@@ -189,6 +392,8 @@ export default function Ps4Iso({ serverData }) {
                     <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent -z-10"></div>
                 </div>
             )}
+
+
         </div>
     );
 }
