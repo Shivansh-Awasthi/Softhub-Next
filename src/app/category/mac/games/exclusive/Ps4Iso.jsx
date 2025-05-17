@@ -215,11 +215,12 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     </div>
 
                     <div className="flex flex-col h-full overflow-hidden relative z-10">
-                        <figure className="flex justify-center items-center overflow-hidden h-full">
+                        <figure className="flex justify-center items-center overflow-hidden h-full w-full">
                             <img
-                                src={game.thumbnail?.[0] || '/default-game.png'}
+                                src={game.coverImg || '/default-game.png'}
                                 alt={game.title || 'Game'}
-                                className="w-full h-full object-cover transition-transform duration-700 ease-in-out transform group-hover:scale-110 filter brightness-[0.85]"
+                                className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 filter brightness-[0.85]"
+                                style={{ objectPosition: 'center' }}
                                 onError={(e) => {
                                     e.target.src = '/default-game.png';
                                     e.target.alt = 'Default game image';
@@ -293,11 +294,12 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                         </div>
 
                         <div className="flex flex-col h-full overflow-hidden relative z-10">
-                            <figure className="flex justify-center items-center overflow-hidden h-full">
+                            <figure className="flex justify-center items-center overflow-hidden h-full w-full">
                                 <img
-                                    src={game.thumbnail?.[0] || '/default-game.png'}
+                                    src={game.thumbnail?.[0] || game.coverImg || '/default-game.png'}
                                     alt={game.title || 'Game'}
-                                    className="w-full h-full object-cover transition-transform duration-700 ease-in-out transform group-hover:scale-110 group-hover:brightness-[0.8]"
+                                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 group-hover:brightness-[0.8]"
+                                    style={{ objectPosition: 'center' }}
                                     onError={(e) => {
                                         e.target.src = '/default-game.png';
                                         e.target.alt = 'Default game image';
