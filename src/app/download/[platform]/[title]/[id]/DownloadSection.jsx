@@ -6,12 +6,12 @@ import React from 'react';
 // Platform-specific configuration for download links
 const platformConfig = {
     Mac: [
-        { label: "Direct" },
+        { label: "Viking File" },
         { label: "OneDrive" },
         { label: "Torrent" },
-        { label: "Mirror" },
+        { label: "Buzzheavier" },
         { label: "Mediafire" },
-        { label: "AkiraBox", custom: (<span className='text-[#55ff00]'>(Fastest 🔥)</span>) }
+        { label: "AkiraBox" }
     ],
     PC: [
         { label: "Torrent", custom: (<span className='text-[#55ff00] text-xs'> Note: <span className='text-red-600'> Requires Installation</span></span>) },
