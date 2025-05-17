@@ -217,7 +217,7 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     <div className="flex flex-col h-full overflow-hidden relative z-10">
                         <figure className="flex justify-center items-center overflow-hidden h-full w-full">
                             <img
-                                src={game.coverImg || '/default-game.png'}
+                                src={game.coverImg}
                                 alt={game.title || 'Game'}
                                 className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 filter brightness-[0.85]"
                                 style={{ objectPosition: 'center' }}
@@ -296,7 +296,7 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                         <div className="flex flex-col h-full overflow-hidden relative z-10">
                             <figure className="flex justify-center items-center overflow-hidden h-full w-full">
                                 <img
-                                    src={game.thumbnail?.[0] || game.coverImg || '/default-game.png'}
+                                    src={game.coverImg}
                                     alt={game.title || 'Game'}
                                     className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 group-hover:brightness-[0.8]"
                                     style={{ objectPosition: 'center' }}
