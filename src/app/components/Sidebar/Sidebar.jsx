@@ -120,7 +120,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`sidebar top-0 z-20 flex flex-col h-screen px-4 py-5
+        className={`sidebar top-0 z-20 flex flex-col h-screen px-3 py-4
                 ${isMobileView ? 'fixed left-0 w-[280px] max-w-[80vw] bg-[#121212] shadow-xl' : 'md:sticky w-60'}
                 transition-transform duration-300 ease-in-out
                 ${isSidebarVisible || !isMobileView ? 'transform-none' : '-translate-x-full'}`}
@@ -148,7 +148,7 @@ const Sidebar = () => {
         </Link>
 
         <div className="flex flex-col justify-between flex-1">
-          <nav className="space-y-6">
+          <nav className="space-y-5">
 
 
             {/* Exclusive Section */}
@@ -156,7 +156,7 @@ const Sidebar = () => {
               <label className="px-3 text-xs font-medium text-purple-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Exclusive Content</label>
               <Link
                 href="/category/mac/games/exclusive"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'macExclusive' || pathname === '/category/mac/games/exclusive' || pathname.startsWith('/category/mac/games/exclusive')
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'macExclusive' || pathname === '/category/mac/games/exclusive' || pathname.startsWith('/category/mac/games/exclusive')
                   ? 'bg-purple-600/20 text-purple-400 border-l-2 border-purple-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -176,7 +176,7 @@ const Sidebar = () => {
               <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Games</label>
               <Link
                 href="/category/mac/games"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'macGames' || pathname === '/category/mac/games'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'macGames' || pathname === '/category/mac/games'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -196,7 +196,7 @@ const Sidebar = () => {
               </Link>
               <Link
                 href="/category/pc/games"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'pcGames' || pathname === '/category/pc/games'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'pcGames' || pathname === '/category/pc/games'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -216,7 +216,7 @@ const Sidebar = () => {
               </Link>
               <Link
                 href="/category/android/games"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'androidGames' || pathname === '/category/android/games'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'androidGames' || pathname === '/category/android/games'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -239,7 +239,7 @@ const Sidebar = () => {
               <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Softwares</label>
               <Link
                 href="/category/pc/softwares"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'pcSoftwares' || pathname === '/category/pc/softwares'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'pcSoftwares' || pathname === '/category/pc/softwares'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -259,7 +259,7 @@ const Sidebar = () => {
               </Link>
               <Link
                 href="/category/mac/softwares"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'macSoftwares' || pathname === '/category/mac/softwares'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'macSoftwares' || pathname === '/category/mac/softwares'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -279,7 +279,7 @@ const Sidebar = () => {
               </Link>
               <Link
                 href="/category/android/softwares"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'androidSoftwares' || pathname === '/category/android/softwares'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'androidSoftwares' || pathname === '/category/android/softwares'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -302,7 +302,7 @@ const Sidebar = () => {
               <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Playstation ISO's</label>
               <Link
                 href="/category/ppsspp/iso"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'ppsspp' || pathname === '/category/ppsspp/iso'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'ppsspp' || pathname === '/category/ppsspp/iso'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -317,7 +317,7 @@ const Sidebar = () => {
               </Link>
               <Link
                 href="/category/ps2/iso"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'ps2' || pathname === '/category/ps2/iso'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'ps2' || pathname === '/category/ps2/iso'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
@@ -332,7 +332,7 @@ const Sidebar = () => {
               </Link>
               <Link
                 href="/category/ps3/iso"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'ps3' || pathname === '/category/ps3/iso'
+                className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'ps3' || pathname === '/category/ps3/iso'
                   ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
