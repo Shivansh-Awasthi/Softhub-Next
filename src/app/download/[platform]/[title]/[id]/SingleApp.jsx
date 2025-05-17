@@ -526,7 +526,7 @@ const SingleApp = ({ appData }) => {
 
             {/* Background image that adapts to different screen sizes */}
             <div
-                className="fixed top-0 bottom-0 right-0 left-0 md:left-[255px]"
+                className="fixed top-0 bottom-0 right-0 left-0"
                 style={{
                     background: `linear-gradient(to top right, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%), url('${data.thumbnail[2]}')`,
                     backgroundSize: 'cover',
