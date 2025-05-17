@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLoading } from '@/app/context/LoadingContext';
 import { FaPlaystation } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
+
+
 
 const Sidebar = () => {
   const [logo, setLogo] = useState("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.35_AM_cow9by.png");
@@ -117,8 +120,8 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`sidebar top-0 z-20 flex flex-col h-screen px-6 py-6
-                ${isMobileView ? 'fixed left-0 w-[280px] max-w-[80vw] bg-[#121212] shadow-xl' : 'md:sticky w-64'}
+        className={`sidebar top-0 z-20 flex flex-col h-screen px-4 py-5
+                ${isMobileView ? 'fixed left-0 w-[280px] max-w-[80vw] bg-[#121212] shadow-xl' : 'md:sticky w-60'}
                 transition-transform duration-300 ease-in-out
                 ${isSidebarVisible || !isMobileView ? 'transform-none' : '-translate-x-full'}`}
         style={{
@@ -146,29 +149,31 @@ const Sidebar = () => {
 
         <div className="flex flex-col justify-between flex-1">
           <nav className="space-y-6">
-            {/* Games */}
+
+
+            {/* Exclusive Section */}
             <div className="space-y-1">
-              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Games</label>
+              <label className="px-3 text-xs font-medium text-purple-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Exclusive Content</label>
               <Link
-                href="/category/pc/games"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'pcGames' || pathname === '/category/pc/games'
-                  ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
+                href="/category/mac/games/exclusive"
+                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'macExclusive' || pathname === '/category/mac/games/exclusive' || pathname.startsWith('/category/mac/games/exclusive')
+                  ? 'bg-purple-600/20 text-purple-400 border-l-2 border-purple-500'
                   : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
                   }`}
                 onClick={() => {
-                  handleClick('pcGames');
+                  handleClick('macExclusive');
                   closeSidebar();
-                  showSkeleton('PC');
+                  showSkeleton('Mac');
                 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect width="14" height="8" x="5" y="2" rx="2" />
-                  <rect width="20" height="8" x="2" y="14" rx="2" />
-                  <path d="M6 18h2" />
-                  <path d="M12 18h6" />
-                </svg>
-                <span className="mx-2 text-sm font-medium">PC</span>
+                <FaApple size={18} className="text-purple-400" />
+                <span className="mx-2 text-sm font-medium">Mac Exclusives</span>
+                <span className="ml-auto px-1.5 py-0.5 text-xs bg-purple-500/20 text-purple-300 rounded-md">New</span>
               </Link>
+            </div>
+            {/* Games */}
+            <div className="space-y-1">
+              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Games</label>
               <Link
                 href="/category/mac/games"
                 className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'macGames' || pathname === '/category/mac/games'
@@ -188,6 +193,26 @@ const Sidebar = () => {
                   <path d="M14 8h.01" />
                 </svg>
                 <span className="mx-2 text-sm font-medium">Mac</span>
+              </Link>
+              <Link
+                href="/category/pc/games"
+                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'pcGames' || pathname === '/category/pc/games'
+                  ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
+                  }`}
+                onClick={() => {
+                  handleClick('pcGames');
+                  closeSidebar();
+                  showSkeleton('PC');
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="14" height="8" x="5" y="2" rx="2" />
+                  <rect width="20" height="8" x="2" y="14" rx="2" />
+                  <path d="M6 18h2" />
+                  <path d="M12 18h6" />
+                </svg>
+                <span className="mx-2 text-sm font-medium">PC</span>
               </Link>
               <Link
                 href="/category/android/games"
@@ -320,24 +345,6 @@ const Sidebar = () => {
                 <FaPlaystation size={18} />
                 <span className="mx-2 text-sm font-medium">PS3</span>
               </Link>
-              {/* <Link
-                href="/category/ps4/iso"
-                className={`flex items-center px-3 py-2.5 transition-all duration-200 transform rounded-lg ${selected === 'ps4' || pathname === '/category/ps4/iso'
-                  ? 'bg-blue-600/10 text-blue-400 border-l-2 border-blue-500'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white border-l-2 border-transparent'
-                  }`}
-                onClick={() => {
-                  handleClick('ps4');
-                  closeSidebar();
-                  showSkeleton('PS4');
-                }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 11h4M8 9v4M15 12h.01M18 10h.01M17.5 15h.01" />
-                  <rect width="20" height="12" x="2" y="6" rx="2" />
-                </svg>
-                <span className="mx-2 text-sm font-medium">PS4</span>
-              </Link> */}
             </div>
           </nav>
         </div>
@@ -349,13 +356,13 @@ const Sidebar = () => {
             <Link href="/policy" className="hover:text-gray-200 transition-colors">Privacy</Link>
             <span className="text-gray-600">•</span>
             <Link href="/donate" className="hover:text-gray-200 transition-colors">Donate</Link>
-          </div>
-          <div className="flex flex-wrap gap-x-2">
-            <Link href="#" className="hover:text-gray-200 transition-colors">Reviews</Link>
-            <span className="text-gray-600">•</span>
-            <Link href="/faq" className="hover:text-gray-200 transition-colors">FAQ</Link>
-            <span className="text-gray-600">•</span>
-            <Link href="/contacts" className="hover:text-gray-200 transition-colors">Contacts</Link>
+            <div className="flex flex-wrap gap-x-2">
+              <Link href="#" className="hover:text-gray-200 transition-colors">Reviews</Link>
+              <span className="text-gray-600">•</span>
+              <Link href="/faq" className="hover:text-gray-200 transition-colors">FAQ</Link>
+              <span className="text-gray-600">•</span>
+              <Link href="/contacts" className="hover:text-gray-200 transition-colors">Contacts</Link>
+            </div>
           </div>
         </div>
       </aside>
