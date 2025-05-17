@@ -47,6 +47,32 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Mac Premium Games -->
+  <url>
+    <loc>https://toxicgames.in/category/mac/games/exclusive</loc>
+    <lastmod>2024-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://toxicgames.in/category/mac/games/exclusive?page=1</loc>
+    <lastmod>2024-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toxicgames.in/category/mac/games/exclusive?page=2</loc>
+    <lastmod>2024-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://toxicgames.in/category/mac/games/exclusive?page=3</loc>
+    <lastmod>2024-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Mac Software -->
   <url>
     <loc>https://toxicgames.in/category/mac/softwares</loc>

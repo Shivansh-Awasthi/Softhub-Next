@@ -39,6 +39,7 @@ export default function SitemapPage() {
             <h2 className="text-xl font-semibold mb-3">Main Categories</h2>
             <ul className="list-disc pl-6 space-y-2">
               <li><Link href="/category/mac/games" className="text-blue-400 hover:underline">Mac Games</Link></li>
+              <li><Link href="/category/mac/games/exclusive" className="text-blue-400 hover:underline">Mac Premium Games</Link></li>
               <li><Link href="/category/mac/softwares" className="text-blue-400 hover:underline">Mac Software</Link></li>
               <li><Link href="/category/pc/games" className="text-blue-400 hover:underline">PC Games</Link></li>
               <li><Link href="/category/pc/softwares" className="text-blue-400 hover:underline">PC Software</Link></li>
