@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 /**
  * Component that implements security restrictions for non-admin users:
@@ -8,21 +8,32 @@ import { useEffect, useState } from 'react';
  * - Prevents access to developer tools (inspect element)
  * - Blocks keyboard shortcuts for developer tools
  * - Detects if developer tools are open
+ *
+ * IMPORTANT: This component MUST only run on the client side.
+ * It uses browser APIs that are not available during server-side rendering.
  */
 const SecurityRestrictions = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
+  // Use a ref to track if the component is mounted
+  // This avoids React hydration issues with useState
+  const hasMounted = typeof window !== 'undefined' ? { current: false } : null;
 
-  // First useEffect: Monitor DevTools without blocking page functionality
+  // Initialize the component on the client side
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
+    // This effect only runs once on the client side
+    if (typeof window === 'undefined' || !hasMounted) return;
+    hasMounted.current = true;
 
     // Check if user is admin
-    const userRole = localStorage.getItem('role');
-    setIsAdmin(userRole === 'ADMIN');
+    try {
+      const userRole = localStorage.getItem('role');
 
-    // If user is admin, don't apply any restrictions
-    if (userRole === 'ADMIN') return;
+      // If user is admin, don't apply any restrictions
+      if (userRole === 'ADMIN') return;
+    } catch (e) {
+      // Handle any localStorage errors
+      console.error('Error accessing localStorage:', e);
+      return;
+    }
 
     // Function to detect if DevTools is open
     function isDevToolsOpen() {
@@ -51,14 +62,20 @@ const SecurityRestrictions = () => {
 
   // Second useEffect: Block console input and keyboard shortcuts
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
+    // Only run on client side after mounting
+    if (!hasMounted) return;
 
     // Check if user is admin
-    const userRole = localStorage.getItem('role');
+    try {
+      const userRole = localStorage.getItem('role');
 
-    // If user is admin, don't apply any restrictions
-    if (userRole === 'ADMIN') return;
+      // If user is admin, don't apply any restrictions
+      if (userRole === 'ADMIN') return;
+    } catch (e) {
+      // Handle any localStorage errors
+      console.error('Error accessing localStorage:', e);
+      return;
+    }
 
     const blockConsoleInput = () => {
       // Store original console methods
@@ -130,14 +147,20 @@ const SecurityRestrictions = () => {
 
   // Third useEffect: Additional protections that won't break the page
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
+    // Only run on client side after mounting
+    if (!hasMounted) return;
 
     // Check if user is admin
-    const userRole = localStorage.getItem('role');
+    try {
+      const userRole = localStorage.getItem('role');
 
-    // If user is admin, don't apply any restrictions
-    if (userRole === 'ADMIN') return;
+      // If user is admin, don't apply any restrictions
+      if (userRole === 'ADMIN') return;
+    } catch (e) {
+      // Handle any localStorage errors
+      console.error('Error accessing localStorage:', e);
+      return;
+    }
 
     // Disable source viewing
     const disableSourceViewing = () => {
@@ -182,6 +205,12 @@ const SecurityRestrictions = () => {
       if (cleanupSelectionDisable) cleanupSelectionDisable();
     };
   }, []);
+
+  // Special check to ensure this component only runs on the client side
+  // This prevents server-side rendering errors with useContext
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
   // This component doesn't render anything visible
   return null;
