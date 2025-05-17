@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { FaApple, FaDownload, FaLock, FaStar } from "react-icons/fa";
+import { FaCrown } from "react-icons/fa";
 import { FaRupeeSign } from "react-icons/fa";
 import { useLoading } from '@/app/context/LoadingContext';
 import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
@@ -366,41 +367,152 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     }
                 }
 
+                @keyframes float {
+                    0% {
+                        transform: translateY(0px);
+                    }
+                    50% {
+                        transform: translateY(-10px);
+                    }
+                    100% {
+                        transform: translateY(0px);
+                    }
+                }
+
+                @keyframes pulse-glow {
+                    0% {
+                        box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4);
+                    }
+                    70% {
+                        box-shadow: 0 0 0 10px rgba(147, 51, 234, 0);
+                    }
+                    100% {
+                        box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+                    }
+                }
+
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
                 .animate-gradient-x {
                     background-size: 200% 200%;
                     animation: gradient-x 3s ease infinite;
                 }
+
+                .animate-float {
+                    animation: float 6s ease-in-out infinite;
+                }
+
+                .animate-pulse-glow {
+                    animation: pulse-glow 2s infinite;
+                }
+
+                .animate-fadeInUp {
+                    animation: fadeInUp 0.5s ease-out forwards;
+                }
             `}</style>
 
-            {/* Background decorative elements */}
-            <div className="absolute top-0 right-0 w-72 h-72 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 opacity-5 rounded-full blur-3xl -z-10"></div>
-            <div className="absolute top-1/3 left-1/4 w-48 h-48 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10"></div>
+            {/* Premium background decorative elements */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-blue-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '3s' }}></div>
 
-            {/* Decorative grid lines */}
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTMwIDMwaDMwVjBoLTMwdjMwek0wIDMwaDMwdjMwSDB2LTMweiIgZmlsbD0iIzJkMmQyZCIgZmlsbC1vcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] bg-center opacity-40 -z-10"></div>
+            {/* Decorative particles */}
+            <div className="absolute top-20 left-20 w-2 h-2 bg-purple-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '3s' }}></div>
+            <div className="absolute top-40 right-40 w-2 h-2 bg-blue-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '4s' }}></div>
+            <div className="absolute bottom-60 left-60 w-2 h-2 bg-purple-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '5s' }}></div>
+            <div className="absolute bottom-20 right-20 w-2 h-2 bg-blue-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '6s' }}></div>
 
-            {/* Header with enhanced styling */}
-            <div className="cover mb-12 text-center relative">
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10"></div>
-                <h1 className="inline-block font-bold text-4xl mb-3 relative">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-                        Exclusive Games{' '}
-                        <span className="font-medium text-blue-400">{totalApps}</span>
-                    </span>
-                    <span className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></span>
-                </h1>
+            {/* Enhanced decorative grid lines */}
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTMwIDMwaDMwVjBoLTMwdjMwek0wIDMwaDMwdjMwSDB2LTMweiIgZmlsbD0iIzJkMmQyZCIgZmlsbC1vcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] bg-center opacity-30 -z-10"></div>
+
+            {/* Premium border frame */}
+            <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-purple-500/20 rounded-tl-lg -z-10"></div>
+            <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-blue-500/20 rounded-tr-lg -z-10"></div>
+            <div className="absolute bottom-0 left-0 w-20 h-20 border-b-2 border-l-2 border-blue-500/20 rounded-bl-lg -z-10"></div>
+            <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-purple-500/20 rounded-br-lg -z-10"></div>
+
+            {/* Premium Header with enhanced styling */}
+            <div className="cover mb-16 text-center relative">
+                {/* Background glow effects */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10"></div>
+                <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-purple-600/20 rounded-full blur-xl -z-10"></div>
+                <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-blue-600/20 rounded-full blur-xl -z-10"></div>
+
+                {/* Premium badge - responsive for small screens */}
+                <div className="inline-block mb-4 sm:mb-6">
+                    <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow-lg flex items-center">
+                        <FaStar className="mr-1" size={10} />
+                        PREMIUM COLLECTION
+                    </div>
+                </div>
+                <br />
+                {/* Main heading with glass effect - responsive for small screens */}
+                <div className="inline-block relative mb-6 max-w-full">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25 animate-gradient-x"></div>
+                    <div className="relative px-4 sm:px-7 py-4 bg-black/50 rounded-lg leading-none flex flex-col sm:flex-row items-center">
+                        <FaCrown className="text-amber-500 mb-2 sm:mb-0 sm:mr-3" size={24} />
+                        <div className="text-center sm:text-left">
+                            <div className="font-bold text-lg sm:text-2xl md:text-3xl lg:text-4xl">
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                                    Mac Exclusive Games{' '}
+                                    <span className="font-medium text-blue-400">{totalApps}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Description text - responsive for small screens */}
+                <p className="text-gray-400 max-w-2xl mx-auto mb-8 text-sm sm:text-base md:text-lg px-4 sm:px-0">
+                    Exclusive premium Mac games available only to our members. Experience the best gaming titles with enhanced graphics and performance.
+                </p>
+
+                {/* Feature badges - responsive for small screens */}
+                <div className="flex flex-wrap justify-center gap-3">
+                    <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-xs sm:text-sm text-gray-300 flex items-center">
+                        <FaStar className="text-amber-500 mr-1 sm:mr-2" size={14} />
+                        Premium Quality
+                    </div>
+                    <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-xs sm:text-sm text-gray-300 flex items-center">
+                        <FaApple className="text-blue-400 mr-1 sm:mr-2" size={14} />
+                        Mac Exclusive
+                    </div>
+                    <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-xs sm:text-sm text-gray-300 flex items-center">
+                        <FaDownload className="text-green-400 mr-1 sm:mr-2" size={14} />
+                        Easy Download
+                    </div>
+                </div>
+
+                {/* Decorative line */}
+                <div className="absolute -bottom-6 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
             </div>
 
             {data.length > 0 ? (
                 <>
                     <div className="relative">
-                        {/* Loading overlay during page transitions */}
+                        {/* Premium loading overlay during page transitions */}
                         {isPageTransitioning && (
-                            <div className="absolute inset-0 bg-[#1a1a1a] bg-opacity-70 z-10 flex items-center justify-center rounded-lg">
-                                <div className="flex flex-col items-center">
-                                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-                                    <p className="text-white text-lg">Loading page {currentPage}...</p>
+                            <div className="absolute inset-0 bg-[#1a1a1a] bg-opacity-80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+                                <div className="flex flex-col items-center bg-black/50 p-8 rounded-xl border border-purple-500/30">
+                                    <div className="relative mb-6">
+                                        {/* Pulsing glow effect */}
+                                        <div className="absolute inset-0 rounded-full bg-purple-600/20 blur-xl animate-pulse"></div>
+
+                                        {/* Spinner */}
+                                        <div className="relative animate-spin rounded-full h-16 w-16 border-4 border-t-purple-500 border-r-blue-500 border-b-purple-500 border-l-blue-500 border-t-transparent"></div>
+                                    </div>
+                                    <p className="text-white text-lg font-medium">Loading Premium Content</p>
+                                    <p className="text-gray-400 text-sm mt-2">Page {currentPage} of {totalPages}</p>
                                 </div>
                             </div>
                         )}
@@ -420,19 +532,43 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     </div>
                 </>
             ) : (
-                <div className="text-center py-10 text-gray-400">
-                    No games available at the moment
+                <div className="text-center py-16 bg-gradient-to-r from-purple-900/10 to-blue-900/10 rounded-xl border border-purple-500/20 animate-fadeInUp">
+                    <div className="inline-block p-6 rounded-full bg-gradient-to-r from-purple-900/20 to-blue-900/20 mb-6 animate-float">
+                        <FaApple className="text-purple-400" size={40} />
+                    </div>
+                    <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-3">Premium Collection Coming Soon</h3>
+                    <p className="text-gray-400 text-lg max-w-lg mx-auto mb-4">Our exclusive Mac games collection is being prepared for you.</p>
+                    <p className="text-gray-500 mt-2">Check back soon for premium exclusive content</p>
+
+                    <div className="mt-8 flex justify-center space-x-4">
+                        <div className="px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-sm text-gray-300 flex items-center animate-pulse-glow">
+                            <FaStar className="text-amber-500 mr-2" size={14} />
+                            Coming Soon
+                        </div>
+                    </div>
                 </div>
             )}
 
-            {/* Enhanced Pagination Controls */}
+            {/* Premium Pagination Controls */}
             {totalPages > 1 && (
-                <div className="mt-12 relative">
-                    {/* Pagination decorative elements */}
-                    <div className="absolute left-1/4 -top-8 w-24 h-24 bg-purple-600 opacity-5 rounded-full blur-2xl -z-10"></div>
-                    <div className="absolute right-1/4 -top-8 w-24 h-24 bg-blue-600 opacity-5 rounded-full blur-2xl -z-10"></div>
+                <div className="mt-16 relative animate-fadeInUp">
+                    {/* Premium pagination decorative elements */}
+                    <div className="absolute left-1/4 -top-8 w-32 h-32 bg-purple-600 opacity-5 rounded-full blur-2xl -z-10 animate-pulse"></div>
+                    <div className="absolute right-1/4 -top-8 w-32 h-32 bg-blue-600 opacity-5 rounded-full blur-2xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
 
-                    <div className="relative z-10">
+                    {/* Premium pagination frame */}
+                    <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/10 to-blue-600/10 rounded-xl -z-10"></div>
+                    <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600/20 via-blue-600/20 to-purple-600/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 animate-gradient-x"></div>
+
+                    {/* Premium pagination header */}
+                    <div className="text-center mb-6">
+                        <h3 className="text-lg font-medium text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                            Browse Premium Collection
+                        </h3>
+                        <p className="text-gray-400 text-sm">Page {currentPage} of {totalPages}</p>
+                    </div>
+
+                    <div className="relative z-10 bg-black/30 p-4 rounded-xl border border-purple-500/20">
                         <EnhancedPagination
                             currentPage={currentPage}
                             totalPages={totalPages}
@@ -442,7 +578,7 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     </div>
 
                     {/* Decorative line */}
-                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent -z-10"></div>
+                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent -z-10"></div>
                 </div>
             )}
 
