@@ -201,6 +201,19 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                         <span className="text-[10px] font-bold text-white">PREMIUM</span>
                     </div>
 
+                    {/* Main image container - similar to PcGames.jsx */}
+                    <figure className="flex justify-center items-center overflow-hidden h-full w-full">
+                        <img
+                            src={game.coverImg || game.thumbnail?.[0] || '/default-game.png'}
+                            alt={game.title || 'Game'}
+                            className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 filter brightness-[0.85]"
+                            onError={(e) => {
+                                e.target.src = '/default-game.png';
+                                e.target.alt = 'Default game image';
+                            }}
+                        />
+                    </figure>
+
                     {/* Lock overlay */}
                     <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center z-20 bg-black/40">
                         <div className="relative group-hover:scale-110 transition-all duration-500">
@@ -215,18 +228,6 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     </div>
 
                     <div className="flex flex-col h-full overflow-hidden relative z-10">
-                        <figure className="flex justify-center items-center overflow-hidden h-full w-full">
-                            <img
-                                src={game.coverImg}
-                                alt={game.title || 'Game'}
-                                className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 filter brightness-[0.85]"
-                                style={{ objectPosition: 'center' }}
-                                onError={(e) => {
-                                    e.target.src = '/default-game.png';
-                                    e.target.alt = 'Default game image';
-                                }}
-                            />
-                        </figure>
 
                         {/* Game platform badge */}
                         <div className="absolute bottom-[4.5rem] left-3 bg-black/70 px-3 py-1.5 rounded-full z-20 border border-blue-500/30">
@@ -280,6 +281,19 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                             <span className="text-[10px] font-bold text-white">PREMIUM</span>
                         </div>
 
+                        {/* Main image container - similar to PcGames.jsx */}
+                        <figure className="flex justify-center items-center overflow-hidden h-full w-full">
+                            <img
+                                src={game.coverImg || game.thumbnail?.[0] || '/default-game.png'}
+                                alt={game.title || 'Game'}
+                                className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 group-hover:brightness-[0.8]"
+                                onError={(e) => {
+                                    e.target.src = '/default-game.png';
+                                    e.target.alt = 'Default game image';
+                                }}
+                            />
+                        </figure>
+
                         {/* Download button - only visible on hover */}
                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100">
                             <div className="relative">
@@ -294,18 +308,6 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                         </div>
 
                         <div className="flex flex-col h-full overflow-hidden relative z-10">
-                            <figure className="flex justify-center items-center overflow-hidden h-full w-full">
-                                <img
-                                    src={game.coverImg}
-                                    alt={game.title || 'Game'}
-                                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-in-out transform group-hover:scale-110 group-hover:brightness-[0.8]"
-                                    style={{ objectPosition: 'center' }}
-                                    onError={(e) => {
-                                        e.target.src = '/default-game.png';
-                                        e.target.alt = 'Default game image';
-                                    }}
-                                />
-                            </figure>
 
                             {/* Game platform badge */}
                             <div className="absolute bottom-[4.5rem] left-3 bg-black/70 px-3 py-1.5 rounded-full z-20 border border-blue-500/30">
