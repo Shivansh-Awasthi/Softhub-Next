@@ -132,7 +132,7 @@ const SingleApp = ({ appData }) => {
     }
 
     return (
-        <div style={{ position: 'relative', zIndex: 90 }}>
+        <div style={{ position: 'relative' }}>
             <div className='flex flex-wrap flex-col xl:flex-row px-2 justify-center xl:items-start items-center'>
                 {/* Left Content */}
                 <div className="flex-1">
