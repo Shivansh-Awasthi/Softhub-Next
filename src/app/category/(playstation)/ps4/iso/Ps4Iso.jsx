@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { FaPlaystation } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
+import { FaRupeeSign } from "react-icons/fa";
 import { useLoading } from '@/app/context/LoadingContext';
 import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
 
@@ -175,13 +176,20 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
         if (!isUnlocked) {
             // Locked game - render div with lock icon
             return (
-                <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg border border-purple-600/20 opacity-90 cursor-not-allowed">
+                <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg border border-purple-600/20 opacity-90 cursor-not-allowed group">
                     {/* Ambient background elements - always visible */}
                     <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
                     <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
 
                     {/* Subtle overlay gradient for better text readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+                    {/* Price tag - only visible on hover for locked games */}
+                    <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-3 py-1.5 rounded-md z-30 border border-green-500/50 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <div className="text-sm font-bold text-green-400 flex items-center">
+                            <FaRupeeSign className="mr-1" />{game.price || '499'}
+                        </div>
+                    </div>
 
                     {/* Lock overlay */}
                     <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center z-20 bg-black/50">
@@ -220,8 +228,8 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                         {/* Game platform badge */}
                         <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
                             <div className="text-[10px] font-medium text-blue-400 flex items-center">
-                                <FaPlaystation className="mr-1" />
-                                PS4
+                                <FaApple className='mr-1 text-lg' />
+                                Exclusive
                             </div>
                         </div>
 
@@ -251,13 +259,15 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     prefetch={true}
                     onMouseEnter={prefetchDownloadPage}
                 >
-                    <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20">
+                    <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 group">
                         {/* Ambient background elements - always visible */}
                         <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
                         <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
 
                         {/* Subtle overlay gradient for better text readability */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+
 
                         <div className="flex flex-col rounded-xl h-full overflow-hidden">
                             <figure className="flex justify-center items-center rounded-t-xl overflow-hidden h-full">
@@ -275,8 +285,8 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                             {/* Game platform badge */}
                             <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
                                 <div className="text-[10px] font-medium text-blue-400 flex items-center">
-                                    <FaPlaystation className="mr-1" />
-                                    PS4
+                                    <FaApple className="mr-1" />
+                                    Exclusive
                                 </div>
                             </div>
 
