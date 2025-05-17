@@ -335,17 +335,163 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
         }
     };
 
-    // Error state
-    if (error && !data.length) {
+    // Error state or no games available
+    if ((error && !data.length) || (!data.length && !isPageTransitioning)) {
         return (
-            <div className="container mx-auto p-2 text-center">
-                <p className="text-red-500 mb-4">{error}</p>
-                <button
-                    onClick={() => router.refresh()}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                    Retry Loading Games
-                </button>
+            <div className="container mx-auto p-2 pb-24 relative">
+                {/* Add all the decorative elements from the main render */}
+                <style jsx global>{`
+                    @keyframes gradient-x {
+                        0% { background-position: 0% 50%; }
+                        50% { background-position: 100% 50%; }
+                        100% { background-position: 0% 50%; }
+                    }
+                    @keyframes float {
+                        0% { transform: translateY(0px); }
+                        50% { transform: translateY(-10px); }
+                        100% { transform: translateY(0px); }
+                    }
+                    @keyframes pulse-glow {
+                        0% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4); }
+                        70% { box-shadow: 0 0 0 10px rgba(147, 51, 234, 0); }
+                        100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0); }
+                    }
+                    @keyframes fadeInUp {
+                        from { opacity: 0; transform: translateY(20px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    .animate-gradient-x {
+                        background-size: 200% 200%;
+                        animation: gradient-x 3s ease infinite;
+                    }
+                    .animate-float {
+                        animation: float 6s ease-in-out infinite;
+                    }
+                    .animate-pulse-glow {
+                        animation: pulse-glow 2s infinite;
+                    }
+                    .animate-fadeInUp {
+                        animation: fadeInUp 0.5s ease-out forwards;
+                    }
+                `}</style>
+
+                {/* Premium background decorative elements */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-blue-600 opacity-5 rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDelay: '3s' }}></div>
+
+                {/* Decorative particles */}
+                <div className="absolute top-20 left-20 w-2 h-2 bg-purple-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '3s' }}></div>
+                <div className="absolute top-40 right-40 w-2 h-2 bg-blue-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '4s' }}></div>
+                <div className="absolute bottom-60 left-60 w-2 h-2 bg-purple-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '5s' }}></div>
+                <div className="absolute bottom-20 right-20 w-2 h-2 bg-blue-400 opacity-30 rounded-full -z-10 animate-ping" style={{ animationDuration: '6s' }}></div>
+
+                {/* Enhanced decorative grid lines */}
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTMwIDMwaDMwVjBoLTMwdjMwek0wIDMwaDMwdjMwSDB2LTMweiIgZmlsbD0iIzJkMmQyZCIgZmlsbC1vcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] bg-center opacity-30 -z-10"></div>
+
+                {/* Premium border frame */}
+                <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-purple-500/20 rounded-tl-lg -z-10"></div>
+                <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-blue-500/20 rounded-tr-lg -z-10"></div>
+                <div className="absolute bottom-0 left-0 w-20 h-20 border-b-2 border-l-2 border-blue-500/20 rounded-bl-lg -z-10"></div>
+                <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-purple-500/20 rounded-br-lg -z-10"></div>
+
+                {/* Premium Header with enhanced styling */}
+                <div className="cover mb-16 text-center relative">
+                    {/* Background glow effects */}
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full opacity-10 blur-xl -z-10"></div>
+                    <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-purple-600/20 rounded-full blur-xl -z-10"></div>
+                    <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-blue-600/20 rounded-full blur-xl -z-10"></div>
+
+                    {/* Premium badge - responsive for small screens */}
+                    <div className="inline-block mb-4 sm:mb-6">
+                        <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow-lg flex items-center">
+                            <FaStar className="mr-1" size={10} />
+                            PREMIUM COLLECTION
+                        </div>
+                    </div>
+                    <br />
+                    {/* Main heading with glass effect - responsive for small screens */}
+                    <div className="inline-block relative mb-6 max-w-full">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-25 animate-gradient-x"></div>
+                        <div className="relative px-4 sm:px-7 py-4 bg-black/50 rounded-lg leading-none flex flex-col sm:flex-row items-center">
+                            <FaCrown className="text-amber-500 mb-2 sm:mb-0 sm:mr-3" size={24} />
+                            <div className="text-center sm:text-left">
+                                <div className="font-bold text-lg sm:text-2xl md:text-3xl lg:text-4xl">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+                                        Mac Exclusive Games{' '}
+                                        <span className="font-medium text-blue-400">0</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Description text - responsive for small screens */}
+                    <p className="text-gray-400 max-w-2xl mx-auto mb-6 text-sm sm:text-base md:text-lg px-4 sm:px-0">
+                        Exclusive premium Mac games available only to our members. Experience the best gaming titles with enhanced graphics and performance.
+                    </p>
+
+                    {/* Telegram contact button */}
+                    <div className="mb-8 flex justify-center">
+                        <a
+                            href="https://t.me/n0t_ur_type"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 animate-pulse-glow"
+                        >
+                            <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm2.8 14.4c.12 0 .234-.05.318-.134.084-.084.134-.198.134-.318 0-.12-.05-.234-.134-.318-.084-.084-.198-.134-.318-.134H9.2c-.12 0-.234.05-.318.134-.084.084-.134.198-.134.318 0 .12.05.234.134.318.084.084.198.134.318.134h5.6zm-2.8-8.4c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 4.8c-.993 0-1.8-.807-1.8-1.8s.807-1.8 1.8-1.8 1.8.807 1.8 1.8-.807 1.8-1.8 1.8z" />
+                            </svg>
+                            Buy via Telegram
+                        </a>
+                    </div>
+
+                    {/* Feature badges - responsive for small screens */}
+                    <div className="flex flex-wrap justify-center gap-3">
+                        <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-xs sm:text-sm text-gray-300 flex items-center">
+                            <FaStar className="text-amber-500 mr-1 sm:mr-2" size={14} />
+                            Premium Quality
+                        </div>
+                        <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-xs sm:text-sm text-gray-300 flex items-center">
+                            <FaApple className="text-blue-400 mr-1 sm:mr-2" size={14} />
+                            Mac Exclusive
+                        </div>
+                        <div className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-xs sm:text-sm text-gray-300 flex items-center">
+                            <FaDownload className="text-green-400 mr-1 sm:mr-2" size={14} />
+                            Easy Download
+                        </div>
+                    </div>
+
+                    {/* Decorative line */}
+                    <div className="absolute -bottom-6 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+                </div>
+
+                {/* No games available message */}
+                <div className="text-center py-16 bg-gradient-to-r from-purple-900/10 to-blue-900/10 rounded-xl border border-purple-500/20 animate-fadeInUp">
+                    <div className="inline-block p-6 rounded-full bg-gradient-to-r from-purple-900/20 to-blue-900/20 mb-6 animate-float">
+                        <FaApple className="text-purple-400" size={40} />
+                    </div>
+                    <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 mb-3">No Exclusive Games Available</h3>
+                    <p className="text-gray-400 text-lg max-w-lg mx-auto mb-4">Our exclusive Mac games collection is currently being updated.</p>
+                    <p className="text-gray-500 mt-2">Check back soon for premium exclusive content</p>
+
+                    <div className="mt-8 flex justify-center space-x-4">
+                        <div className="px-4 py-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-500/30 text-sm text-gray-300 flex items-center animate-pulse-glow">
+                            <FaStar className="text-amber-500 mr-2" size={14} />
+                            Coming Soon
+                        </div>
+                        <button
+                            onClick={() => router.refresh()}
+                            className="px-4 py-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg border border-blue-500/30 text-sm text-gray-300 flex items-center hover:bg-gradient-to-r hover:from-blue-600/30 hover:to-purple-600/30 transition-all duration-300"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }
