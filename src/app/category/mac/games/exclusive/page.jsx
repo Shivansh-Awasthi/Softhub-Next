@@ -19,16 +19,17 @@ export async function generateStaticParams() {
 }
 
 export const metadata = {
-    title: 'PS4 ISO Games - ToxicGames',
-    description: 'Download free PlayStation 4 ISO games',
+    title: 'Premium Mac Exclusive Games - ToxicGames',
+    description: 'Download premium exclusive Mac games - The ultimate collection of high-quality Mac titles',
+    keywords: 'Mac games, premium games, exclusive games, Apple, download games, high quality games',
 };
 
 // This component fetches data with a timeout to prevent long waits
-async function Ps4IsoLoader({ currentPage, itemsPerPage }) {
+async function MacExclusiveLoader({ currentPage, itemsPerPage }) {
     try {
-        // Create a promise that rejects after 5 seconds
+        // Create a promise that rejects after 15 seconds (increased from 5 seconds)
         const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Request timed out')), 5000);
+            setTimeout(() => reject(new Error('Request timed out')), 15000);
         });
 
         // Create the fetch promise
@@ -61,14 +62,14 @@ async function Ps4IsoLoader({ currentPage, itemsPerPage }) {
 }
 
 
-export default async function Ps4IsoPage({ params }) {
+export default async function MacExclusivePage({ params }) {
     // Only use params, not searchParams (which requires await)
     const currentPage = parseInt(params?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (
-        <Suspense fallback={<CategorySkeleton itemCount={16} platform="PS4" />}>
-            <Ps4IsoLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
+        <Suspense fallback={<CategorySkeleton itemCount={16} platform="Mac" />}>
+            <MacExclusiveLoader currentPage={currentPage} itemsPerPage={itemsPerPage} />
         </Suspense>
     );
 }

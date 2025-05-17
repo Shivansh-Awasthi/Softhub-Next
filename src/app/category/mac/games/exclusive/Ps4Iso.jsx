@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { FaApple } from "react-icons/fa";
+import { FaApple, FaDownload, FaLock, FaStar } from "react-icons/fa";
 import { FaRupeeSign } from "react-icons/fa";
 import { useLoading } from '@/app/context/LoadingContext';
 import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
@@ -176,48 +176,49 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
         if (!isUnlocked) {
             // Locked game - render div with lock icon
             return (
-                <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg border border-purple-600/20 opacity-90 cursor-not-allowed group">
+                <div className="relative flex flex-col rounded-[20px] h-60 overflow-hidden transition-all duration-300 ease-in-out cursor-not-allowed group bg-[#131313] hover:translate-y-[-5px]" style={{ boxShadow: '0 10px 30px -15px rgba(0, 0, 0, 0.5)' }}>
+                    {/* Glass morphism border effect */}
+                    <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600/30 via-blue-600/30 to-purple-600/30 rounded-[21px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 animate-gradient-x"></div>
+
                     {/* Ambient background elements - always visible */}
                     <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
                     <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
 
                     {/* Subtle overlay gradient for better text readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
 
                     {/* Price tag - only visible on hover for locked games */}
-                    <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-3 py-1.5 rounded-md z-30 border border-green-500/50 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <div className="absolute top-3 right-3 bg-black/70 px-3 py-1.5 rounded-full z-30 border border-green-500/30 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
                         <div className="text-sm font-bold text-green-400 flex items-center">
                             <FaRupeeSign className="mr-1" />{game.price || '499'}
                         </div>
                     </div>
 
+                    {/* Premium badge */}
+                    <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 px-3 py-1.5 rounded-full z-30 shadow-lg flex items-center scale-90 group-hover:scale-100 transition-all duration-300">
+                        <FaStar className="mr-1 text-white" size={10} />
+                        <span className="text-[10px] font-bold text-white">PREMIUM</span>
+                    </div>
+
                     {/* Lock overlay */}
-                    <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center z-20 bg-black/50">
-                        <div className="bg-black/70 p-3 rounded-full border border-purple-600/30">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="34"
-                                height="34"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="text-white"
-                            >
-                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                            </svg>
+                    <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center z-20 bg-black/40">
+                        <div className="relative group-hover:scale-110 transition-all duration-500">
+                            {/* Pulsing glow effect */}
+                            <div className="absolute inset-0 rounded-full bg-purple-600/20 blur-md"></div>
+
+                            {/* Lock icon container */}
+                            <div className="relative bg-black/70 p-5 rounded-full border border-purple-500/40 shadow-[0_0_15px_rgba(147,51,234,0.2)] group-hover:shadow-[0_0_20px_rgba(147,51,234,0.3)] transition-all duration-300">
+                                <FaLock className="text-white" size={30} />
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col rounded-xl h-full overflow-hidden">
-                        <figure className="flex justify-center items-center rounded-t-xl overflow-hidden h-full">
+                    <div className="flex flex-col h-full overflow-hidden relative z-10">
+                        <figure className="flex justify-center items-center overflow-hidden h-full">
                             <img
                                 src={game.thumbnail?.[0] || '/default-game.png'}
                                 alt={game.title || 'Game'}
-                                className="w-full h-full object-cover rounded-t-xl transition-transform duration-700 ease-in-out transform hover:scale-110"
+                                className="w-full h-full object-cover transition-transform duration-700 ease-in-out transform group-hover:scale-110 filter brightness-[0.85]"
                                 onError={(e) => {
                                     e.target.src = '/default-game.png';
                                     e.target.alt = 'Default game image';
@@ -226,25 +227,26 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                         </figure>
 
                         {/* Game platform badge */}
-                        <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                        <div className="absolute bottom-[4.5rem] left-3 bg-black/70 px-3 py-1.5 rounded-full z-20 border border-blue-500/30">
                             <div className="text-[10px] font-medium text-blue-400 flex items-center">
-                                <FaApple className='mr-1 text-lg' />
-                                Exclusive
+                                <FaApple className='mr-1' />
+                                Mac Exclusive
                             </div>
                         </div>
 
-                        <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
-                            {/* Glowing separator line */}
-                            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
-
-                            <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis">
+                        {/* Info panel with glass morphism */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-4 border-t border-white/10">
+                            <div className="text-sm font-bold text-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis">
                                 {game.title || 'Untitled Game'}
                             </div>
-                            <div className="text-xs font-normal text-gray-400 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                                </svg>
-                                {game.size || 'N/A'}
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center text-xs font-normal text-gray-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                    </svg>
+                                    {game.size || 'N/A'}
+                                </div>
+                                <div className="text-xs px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 font-medium">Locked</div>
                             </div>
                         </div>
                     </div>
@@ -259,22 +261,42 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     prefetch={true}
                     onMouseEnter={prefetchDownloadPage}
                 >
-                    <div className="relative flex flex-col rounded-xl h-52 overflow-hidden transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl border border-purple-600/20 group">
+                    <div className="relative flex flex-col rounded-[20px] h-60 overflow-hidden transition-all duration-300 ease-in-out group bg-[#131313] hover:translate-y-[-5px]" style={{ boxShadow: '0 10px 30px -15px rgba(0, 0, 0, 0.5)' }}>
+                        {/* Glass morphism border effect */}
+                        <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-blue-600/30 rounded-[21px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 animate-gradient-x"></div>
+
                         {/* Ambient background elements - always visible */}
                         <div className="absolute -top-20 -left-20 w-40 h-40 bg-purple-600 opacity-10 rounded-full blur-xl"></div>
                         <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-blue-600 opacity-10 rounded-full blur-xl"></div>
 
                         {/* Subtle overlay gradient for better text readability */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
 
+                        {/* Premium badge */}
+                        <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 px-3 py-1.5 rounded-full z-30 shadow-lg flex items-center scale-90 group-hover:scale-100 transition-all duration-300">
+                            <FaStar className="mr-1 text-white" size={10} />
+                            <span className="text-[10px] font-bold text-white">PREMIUM</span>
+                        </div>
 
+                        {/* Download button - only visible on hover */}
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100">
+                            <div className="relative">
+                                {/* Pulsing glow effect */}
+                                <div className="absolute inset-0 rounded-full bg-blue-600/20 blur-md"></div>
 
-                        <div className="flex flex-col rounded-xl h-full overflow-hidden">
-                            <figure className="flex justify-center items-center rounded-t-xl overflow-hidden h-full">
+                                {/* Download icon container */}
+                                <div className="relative bg-gradient-to-br from-blue-600 to-purple-600 p-5 rounded-full shadow-lg">
+                                    <FaDownload className="text-white" size={24} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col h-full overflow-hidden relative z-10">
+                            <figure className="flex justify-center items-center overflow-hidden h-full">
                                 <img
                                     src={game.thumbnail?.[0] || '/default-game.png'}
                                     alt={game.title || 'Game'}
-                                    className="w-full h-full object-cover rounded-t-xl transition-transform duration-700 ease-in-out transform group-hover:scale-110"
+                                    className="w-full h-full object-cover transition-transform duration-700 ease-in-out transform group-hover:scale-110 group-hover:brightness-[0.8]"
                                     onError={(e) => {
                                         e.target.src = '/default-game.png';
                                         e.target.alt = 'Default game image';
@@ -283,25 +305,26 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                             </figure>
 
                             {/* Game platform badge */}
-                            <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md z-20 border border-purple-600/20">
+                            <div className="absolute bottom-[4.5rem] left-3 bg-black/70 px-3 py-1.5 rounded-full z-20 border border-blue-500/30">
                                 <div className="text-[10px] font-medium text-blue-400 flex items-center">
                                     <FaApple className="mr-1" />
-                                    Exclusive
+                                    Mac Exclusive
                                 </div>
                             </div>
 
-                            <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
-                                {/* Glowing separator line */}
-                                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
-
-                                <div className="text-sm font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:from-blue-400 group-hover:to-purple-400 transition-colors duration-300">
+                            {/* Info panel with glass morphism */}
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-4 border-t border-white/10">
+                                <div className="text-sm font-bold text-white pb-2 overflow-hidden whitespace-nowrap text-ellipsis group-hover:text-blue-300 transition-colors duration-300">
                                     {game.title || 'Untitled Game'}
                                 </div>
-                                <div className="text-xs font-normal text-gray-400 flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-purple-400">
-                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                                    </svg>
-                                    {game.size || 'N/A'}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center text-xs font-normal text-gray-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1 text-blue-400">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                        </svg>
+                                        {game.size || 'N/A'}
+                                    </div>
+                                    <div className="text-xs px-2 py-0.5 rounded-full bg-blue-500/30 text-blue-300 font-medium">Available</div>
                                 </div>
                             </div>
                         </div>
@@ -329,6 +352,26 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
     // Main render
     return (
         <div className="container mx-auto p-2 relative">
+            {/* Add CSS for animations */}
+            <style jsx global>{`
+                @keyframes gradient-x {
+                    0% {
+                        background-position: 0% 50%;
+                    }
+                    50% {
+                        background-position: 100% 50%;
+                    }
+                    100% {
+                        background-position: 0% 50%;
+                    }
+                }
+
+                .animate-gradient-x {
+                    background-size: 200% 200%;
+                    animation: gradient-x 3s ease infinite;
+                }
+            `}</style>
+
             {/* Background decorative elements */}
             <div className="absolute top-0 right-0 w-72 h-72 bg-purple-600 opacity-5 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 opacity-5 rounded-full blur-3xl -z-10"></div>
