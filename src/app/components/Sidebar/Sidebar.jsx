@@ -153,7 +153,7 @@ const Sidebar = () => {
 
             {/* Exclusive Section */}
             <div className="space-y-1">
-              <label className="px-3 text-xs font-medium text-purple-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Exclusive Content</label>
+              <label className="px-3 text-xs font-medium text-purple-400 uppercase block tracking-wider" style={{ marginBottom: '6px' }}>Exclusive Content</label>
               <Link
                 href="/category/mac/games/exclusive"
                 className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'macExclusive' || pathname === '/category/mac/games/exclusive' || pathname.startsWith('/category/mac/games/exclusive')
@@ -173,7 +173,7 @@ const Sidebar = () => {
             </div>
             {/* Games */}
             <div className="space-y-1">
-              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Games</label>
+              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '6px' }}>Games</label>
               <Link
                 href="/category/mac/games"
                 className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'macGames' || pathname === '/category/mac/games'
@@ -236,7 +236,7 @@ const Sidebar = () => {
 
             {/* Softwares */}
             <div className="space-y-1">
-              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Softwares</label>
+              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '6px' }}>Softwares</label>
               <Link
                 href="/category/pc/softwares"
                 className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'pcSoftwares' || pathname === '/category/pc/softwares'
@@ -299,7 +299,7 @@ const Sidebar = () => {
 
             {/* PlayStation ISO's */}
             <div className="space-y-1">
-              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '10px' }}>Playstation ISO's</label>
+              <label className="px-3 text-xs font-medium text-gray-400 uppercase block tracking-wider" style={{ marginBottom: '6px' }}>Playstation ISO's</label>
               <Link
                 href="/category/ppsspp/iso"
                 className={`flex items-center px-3 py-2 transition-all duration-200 transform rounded-lg ${selected === 'ppsspp' || pathname === '/category/ppsspp/iso'
