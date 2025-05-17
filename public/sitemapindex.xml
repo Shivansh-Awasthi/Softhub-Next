@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<!--  Your external sitemap  -->
+<!--  Backend sitemap for dynamic content  -->
 <sitemap>
 <loc>https://backend.toxicgames.in/sitemap.xml</loc>
-<lastmod>2024-01-06</lastmod>
-<!--  Optional: Date when the sitemap was last modified  -->
+<lastmod>2024-10-16</lastmod>
 </sitemap>
-<!--  Another sitemap for your site  -->
+<!--  Frontend sitemap for static routes  -->
 <sitemap>
 <loc>https://toxicgames.in/sitemap.xml</loc>
-<lastmod>2024-01-04</lastmod>
+<lastmod>2024-10-16</lastmod>
 </sitemap>
 </sitemapindex>
