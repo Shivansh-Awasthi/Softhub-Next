@@ -5,6 +5,7 @@ import GlobalHeader from './components/GlobalHeader/page';
 import { LoadingProvider } from './context/LoadingContext';
 import ClientScrollProgressBar from './components/ClientScrollProgressBar';
 import UserDataSynchronizer from './components/UserDataSynchronizer';
+import SecurityRestrictions from './components/Restrict/SecurityRestrictions';
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
       >
         <ClientScrollProgressBar />
         <UserDataSynchronizer />
+        <SecurityRestrictions />
         <div className="flex min-h-screen">
           <SidebarWrapper />
           <div className="flex-1 w-full transition-all duration-300">
