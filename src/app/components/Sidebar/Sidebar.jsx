@@ -10,7 +10,7 @@ import { FaApple } from "react-icons/fa";
 
 
 const Sidebar = () => {
-  const [logo, setLogo] = useState("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.35_AM_cow9by.png");
+  const [logo, setLogo] = useState("https://i.postimg.cc/7L4jmwf7/image2.png");
   const [selected, setSelected] = useState('');
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
@@ -140,11 +140,11 @@ const Sidebar = () => {
             closeSidebar();
             showSkeleton('Home');
           }}
-          onMouseEnter={() => setLogo("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.39_AM_gzfxsu.png")}
-          onMouseLeave={() => setLogo("https://res.cloudinary.com/dkp1pshuw/image/upload/v1729024140/Screenshot_2024-10-16_at_1.54.35_AM_cow9by.png")}
+          onMouseEnter={() => setLogo("https://i.postimg.cc/FKx868L6/image1.png")}
+          onMouseLeave={() => setLogo("https://i.postimg.cc/7L4jmwf7/image2.png")}
         >
           <img className="h-11 w-11 mr-2 mt-6 rotate-[-5deg]" src={logo} alt="Logo" />
-          <img className='h-14 w-28 rotate-[-5deg]' src="https://res.cloudinary.com/dkp1pshuw/image/upload/v1729674759/ToxicGames-Logo_f13goa.png" alt="logo" />
+          <img className='h-14 w-28 rotate-[-5deg]' src="https://i.postimg.cc/0Q2F1nGy/image.png" alt="logo" />
         </Link>
 
         <div className="flex flex-col justify-between flex-1">
