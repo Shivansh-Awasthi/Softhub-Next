@@ -6,6 +6,7 @@ import { LoadingProvider } from './context/LoadingContext';
 import ClientScrollProgressBar from './components/ClientScrollProgressBar';
 import UserDataSynchronizer from './components/UserDataSynchronizer';
 import SecurityRestrictions from './components/Restrict/SecurityRestrictions';
+import SnowEffect from './components/SnowEffect';
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
         suppressHydrationWarning={true}
       >
+        <SnowEffect count={70} startAfterSidebar={true} />
         <ClientScrollProgressBar />
         <UserDataSynchronizer />
         <SecurityRestrictions />
