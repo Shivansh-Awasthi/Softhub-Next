@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     devIndicators: false,
+    experimental: {
+        turbo: false, // Explicitly disable Turbopack
+    },
     // Add headers to allow access to sitemap and robots.txt
     async headers() {
         return [
