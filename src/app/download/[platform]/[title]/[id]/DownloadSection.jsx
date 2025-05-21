@@ -14,12 +14,12 @@ const platformConfig = {
         { label: "AkiraBox" }
     ],
     PC: [
-        { label: "Torrent", custom: (<span className='text-[#55ff00] text-xs'> Note: <span className='text-red-600'> Requires Installation</span></span>) },
+        { label: "Buzzheavier", custom: (<span className='text-[#55ff00] text-xs'> Note: <span className='text-red-600'> Requires Installation</span></span>) },
         { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "DataNodes", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "GoFile", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "Pixeldrain", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "Akirabox", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) }
+        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) }
     ],
     Android: [
         { label: "APK" },
@@ -29,11 +29,11 @@ const platformConfig = {
         { label: "Other" }
     ],
     Playstation: [
-        { label: "Direct" },
-        { label: "Mirror 1" },
-        { label: "Mirror 2" },
-        { label: "Other" },
-        { label: "Backup" }
+        { label: "Buzzheavier" },
+        { label: "Buzzheavier" },
+        { label: "Buzzheavier" },
+        { label: "Buzzheavier" },
+        { label: "Buzzheavier" }
     ]
 };
 
