@@ -14,12 +14,12 @@ const platformConfig = {
         { label: "AkiraBox" }
     ],
     PC: [
-        { label: "Buzzheavier", custom: (<span className='text-[#55ff00] text-xs'> Note: <span className='text-red-600'> Requires Installation</span></span>) },
-        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
-        { label: "Buzzheavier", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) }
+        { label: "Viking File ", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "Buzzheavier ", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "FuckingFast ", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "Bzzhr.co ", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "Buzzheavier ", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) },
+        { label: "AkiraBox ", custom: (<span className='text-[#55ff00]'>(Pre-Installed)</span>) }
     ],
     Android: [
         { label: "APK" },
@@ -30,10 +30,10 @@ const platformConfig = {
     ],
     Playstation: [
         { label: "Buzzheavier" },
-        { label: "Buzzheavier" },
-        { label: "Buzzheavier" },
-        { label: "Buzzheavier" },
-        { label: "Buzzheavier" }
+        { label: "FuckingFast" },
+        { label: "Bzzhr.co" },
+        { label: "Viking File" },
+        { label: "AkiraBox" }
     ]
 };
 
