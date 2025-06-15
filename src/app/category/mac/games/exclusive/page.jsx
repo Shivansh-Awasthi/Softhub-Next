@@ -62,9 +62,9 @@ async function MacExclusiveLoader({ currentPage, itemsPerPage }) {
 }
 
 
-export default async function MacExclusivePage({ params }) {
+export default async function MacExclusivePage({ searchParams }) {
     // Only use params, not searchParams (which requires await)
-    const currentPage = parseInt(params?.page || '1', 10);
+    const currentPage = parseInt(searchParams?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (

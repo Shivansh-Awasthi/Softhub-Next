@@ -52,8 +52,8 @@ async function Ps2IsoLoader({ currentPage, itemsPerPage }) {
     }
 }
 
-export default async function Ps2IsoPage({ params }) {
-    const currentPage = parseInt(params?.page || '1', 10); // only use params
+export default async function Ps2IsoPage({ searchParams }) {
+    const currentPage = parseInt(searchParams?.page || '1', 10); // only use params
     const itemsPerPage = 48;
 
     return (

@@ -61,8 +61,8 @@ async function AndroidGamesLoader({ currentPage, itemsPerPage }) {
 }
 
 
-export default async function AndroidGamesPage({ params }) {
-    const currentPage = parseInt(params?.page || '1', 10);
+export default async function AndroidGamesPage({ searchParams }) {
+    const currentPage = parseInt(searchParams?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (

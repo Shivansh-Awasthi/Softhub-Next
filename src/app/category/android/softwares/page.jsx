@@ -60,8 +60,8 @@ async function AndroidSoftwaresLoader({ currentPage, itemsPerPage }) {
     }
 }
 
-export default async function AndroidSoftwaresPage({ params }) {
-    const currentPage = parseInt(params?.page || '1', 10);
+export default async function AndroidSoftwaresPage({ searchParams }) {
+    const currentPage = parseInt(searchParams?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (
