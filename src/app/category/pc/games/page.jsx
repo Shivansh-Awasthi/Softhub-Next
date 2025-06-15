@@ -53,8 +53,8 @@ async function PcGamesLoader({ currentPage, itemsPerPage }) {
 }
 
 
-export default async function PcGamesPage({ params }) {
-    const currentPage = parseInt(params?.page || '1', 10);
+export default async function PcGamesPage({ searchParams }) {
+    const currentPage = parseInt(searchParams?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (
