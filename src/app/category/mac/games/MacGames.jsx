@@ -286,6 +286,25 @@ export default function MacGames({ serverData, initialPage = 1 }) {
                                 </div>
                             </div>
 
+                            {/* NEW badge for games within 2 days */}
+                            {isGameNew(game.createdAt, game.updatedAt) && (
+                                <div className="absolute top-2 right-2 z-20">
+                                    <div className="relative">
+                                        {/* Glowing background */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur-sm opacity-75"></div>
+                                        {/* Badge content */}
+                                        <div className="relative bg-gradient-to-r from-green-500 to-emerald-500 text-white text-[8px] font-bold px-2 py-1 rounded-full border border-green-400/50 shadow-lg">
+                                            <div className="flex items-center">
+                                                <svg className="w-2 h-2 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                </svg>
+                                                NEW
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="flex flex-col p-3 bg-gradient-to-br from-[#1E1E1E] to-[#121212] flex-grow relative">
                                 {/* Glowing separator line */}
                                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-600/20 to-transparent"></div>
