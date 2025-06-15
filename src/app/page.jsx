@@ -76,28 +76,11 @@ async function fetchMacSoftwares() {
   }
 }
 
-// Function to fetch PC games
+// Function to fetch PC games (latest games - page 1)
 async function fetchPcGames() {
   try {
-    const initialResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=1&limit=48`,
-      {
-        headers: {
-          'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
-        },
-        next: { revalidate: 3600 }
-      }
-    );
-
-    const initialData = await initialResponse.json();
-
-    // Dynamic page logic
-    const limitPage = 48;
-    const totalPage = initialData.total;
-    const latestPage = Math.ceil(totalPage / limitPage);
-
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=${latestPage}&limit=48`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/apps/category/pc?page=1&limit=48`,
       {
         headers: {
           'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN

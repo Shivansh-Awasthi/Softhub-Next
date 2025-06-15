@@ -92,8 +92,8 @@ async function PcSoftwaresLoader({ currentPage, itemsPerPage }) {
     }
 }
 
-export default async function PcSoftwaresPage({ params }) {
-    const currentPage = parseInt(params?.page || '1', 10);
+export default async function PcSoftwaresPage({ searchParams }) {
+    const currentPage = parseInt(searchParams?.page || '1', 10);
     const itemsPerPage = 48;
 
     return (

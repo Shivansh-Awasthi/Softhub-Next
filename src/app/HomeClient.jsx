@@ -240,7 +240,7 @@ const HomeClient = ({
                 {/* Conditional rendering based on data existence */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
                     {Array.isArray(macGames) && macGames.length > 0 ? (
-                        macGames.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)).slice(0, 8).map((ele) => (
+                        macGames.slice(0, 8).map((ele) => (
                             <Link
                                 key={ele._id}
                                 href={`/download/${createSlug(ele.platform)}/${createSlug(ele.title)}/${ele._id}`}
