@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { FaApple, FaDownload, FaLock, FaStar } from "react-icons/fa";
+import { FaApple, FaDownload, FaLock, FaStar, FaCoffee } from "react-icons/fa";
 import { FaCrown } from "react-icons/fa";
 import { FaRupeeSign } from "react-icons/fa";
 import { useLoading } from '@/app/context/LoadingContext';
@@ -436,19 +436,29 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                         Exclusive premium Mac games available only to our members. Experience the best gaming titles with enhanced graphics and performance.
                     </p>
 
-                    {/* Telegram contact button */}
-                    <div className="mb-8 flex justify-center">
+                    {/* Contact buttons container */}
+                    <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                        {/* Telegram button */}
                         <a
                             href="https://t.me/n0t_ur_type"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 animate-pulse-glow"
+                            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 animate-pulse-glow"
                         >
                             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm2.8 14.4c.12 0 .234-.05.318-.134.084-.084.134-.198.134-.318 0-.12-.05-.234-.134-.318-.084-.084-.198-.134-.318-.134H9.2c-.12 0-.234.05-.318.134-.084.084-.134.198-.134.318 0 .12.05.234.134.318.084.084.198.134.318.134h5.6zm-2.8-8.4c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 4.8c-.993 0-1.8-.807-1.8-1.8s.807-1.8 1.8-1.8 1.8.807 1.8 1.8-.807 1.8-1.8 1.8z" />
                             </svg>
                             Buy via Telegram
                         </a>
+
+                        {/* Become a Member button */}
+                        <Link
+                            href="/membership"
+                            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-medium rounded-full shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-300"
+                        >
+                            <FaCoffee className="mr-2" />
+                            Become a Member
+                        </Link>
                     </div>
 
                     {/* Feature badges - responsive for small screens */}
@@ -627,19 +637,29 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     Exclusive premium Mac games available only to our members. Experience the best gaming titles with enhanced graphics and performance.
                 </p>
 
-                {/* Telegram contact button */}
-                <div className="mb-8 flex justify-center">
+                {/* Contact buttons container */}
+                <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                    {/* Telegram button */}
                     <a
                         href="https://t.me/n0t_ur_type"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 animate-pulse-glow"
+                        className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-full shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 animate-pulse-glow"
                     >
                         <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm2.8 14.4c.12 0 .234-.05.318-.134.084-.084.134-.198.134-.318 0-.12-.05-.234-.134-.318-.084-.084-.198-.134-.318-.134H9.2c-.12 0-.234.05-.318.134-.084.084-.134.198-.134.318 0 .12.05.234.134.318.084.084.198.134.318.134h5.6zm-2.8-8.4c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 4.8c-.993 0-1.8-.807-1.8-1.8s.807-1.8 1.8-1.8 1.8.807 1.8 1.8-.807 1.8-1.8 1.8z" />
                         </svg>
                         Buy via Telegram
                     </a>
+
+                    {/* Become a Member button */}
+                    <Link
+                        href="/membership"
+                        className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-medium rounded-full shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all duration-300"
+                    >
+                        <FaCoffee className="mr-2" />
+                        Become a Member
+                    </Link>
                 </div>
 
                 {/* Feature badges - responsive for small screens */}
@@ -746,8 +766,6 @@ export default function Ps4Iso({ serverData, initialPage = 1 }) {
                     <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent -z-10"></div>
                 </div>
             )}
-
-
         </div>
     );
 }
