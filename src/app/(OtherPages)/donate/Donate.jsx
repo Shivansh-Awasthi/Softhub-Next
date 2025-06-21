@@ -170,8 +170,8 @@ const Donate = () => {
                             >
                                 <div className="absolute inset-4 bg-[#0f0f1a] rounded-full flex items-center justify-center">
                                     <div className="text-center">
-                                        <div className="text-3xl font-bold text-white">100%</div>
-                                        <div className="text-gray-300 text-sm">Supports the Project</div>
+                                        <div className="text-3xl font-bold text-white">Donation%</div>
+                                        <div className="text-gray-300 text-sm">where your donation goes</div>
                                     </div>
                                 </div>
                             </div>
