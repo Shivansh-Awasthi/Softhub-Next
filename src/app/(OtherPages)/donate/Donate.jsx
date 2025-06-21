@@ -1,43 +1,77 @@
 'use client';
 
-import React, { Suspense } from 'react'
-import { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, useRef } from 'react';
 
 const Donate = () => {
-
-    const [donationGoal, setDonationGoal] = useState(1200); // ₹1,200 goal
-    const [currentAmount, setCurrentAmount] = useState(750); // Current amount ₹750
-    const [donationAmount, setDonationAmount] = useState(50);
+    const [donationGoal, setDonationGoal] = useState(1200);
+    const [currentAmount, setCurrentAmount] = useState(950);
     const [showThankYou, setShowThankYou] = useState(false);
+    const widgetRef = useRef(null);
+    const [widgetLoaded, setWidgetLoaded] = useState(false);
 
-    // Simulate loading current donation amount from backend
-    useEffect(() => {
-        // In a real app, you would fetch this from your backend
-        // fetch('/api/donations/total').then(...)
-    }, []);
 
-    const handleDonate = () => {
-        // In a real app, you would send this to your backend
-        // fetch('/api/donations', { method: 'POST', body: ... })
-        setCurrentAmount(prev => prev + donationAmount);
-        setShowThankYou(true);
-        setTimeout(() => setShowThankYou(false), 3000);
-    };
 
     const progressPercentage = Math.min((currentAmount / donationGoal) * 100, 100);
 
-    return (
+    // Donation allocation data
+    const allocationData = [
+        { percentage: 60, label: "Storage Costs", color: "#4e54c8" },
+        { percentage: 25, label: "Server Costs", color: "#00b09b" },
+        { percentage: 15, label: "Miscellaneous", color: "#ff8000" }
+    ];
 
-        <div className="max-w-4xl mx-auto px-4 py-8">
-            {/* Coming Soon Game Section */}
+    // Calculate conic gradient for pie chart
+    const conicGradient = allocationData.reduce((acc, item, index) => {
+        const start = index === 0 ? 0 :
+            allocationData.slice(0, index).reduce((sum, i) => sum + i.percentage, 0);
+        const end = start + item.percentage;
+        return `${acc} ${item.color} ${start}% ${end}%,`;
+    }, '').slice(0, -1);
+
+    return (
+        <div className="max-w-6xl mx-auto px-4 py-8 min-h-screen">
+            {/* Thank You Toast */}
+            {showThankYou && (
+                <div className="fixed top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 animate-fadeIn">
+                    Thank you for your donation!
+                </div>
+            )}
+
+            {/* Become a Member Banner */}
+            <div className="bg-gradient-to-r from-purple-700 to-indigo-800 rounded-2xl p-6 mb-12 text-center relative overflow-hidden">
+                <div className="absolute -top-20 -right-20 w-60 h-60 bg-white/10 rounded-full blur-2xl"></div>
+                <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-white/10 rounded-full blur-2xl"></div>
+
+                <div className="relative z-10">
+                    <h2 className="text-3xl font-bold text-white mb-2">Become a Premium Member!</h2>
+                    <p className="text-white/90 mb-4 max-w-2xl mx-auto">
+                        Unlock exclusive benefits, early access to new releases, and ad-free experience
+                    </p>
+                    <a
+                        href="/membership"
+                        className="inline-block bg-white text-purple-700 font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-lg"
+                    >
+                        Explore Membership Benefits
+                    </a>
+                </div>
+            </div>
+
+            {/* Project Support Section */}
             <section className="mb-12 text-center">
                 <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Support the Project</h1>
-                <div className="p-8 rounded-lg border-2 border-dashed border-gray-300 bg-[#1a1a1a] shadow-lg">
-                    <img className='mx-auto mb-8 rounded-lg shadow-md max-w-full h-auto' src="https://i.postimg.cc/8CKCtDWs/4y35ygtayile1.png" alt="Project Banner" />
-                    <div>
-                        <h2 className='text-xl font-bold text-red-500 mb-4'>For Public Release</h2>
+                <div className="p-8 rounded-2xl border-2 border-dashed border-indigo-500/30 bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] shadow-2xl">
+                    <div className="relative mb-8 rounded-2xl overflow-hidden shadow-lg">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+                        <img
+                            className="w-full h-auto"
+                            src="https://i.postimg.cc/8CKCtDWs/4y35ygtayile1.png"
+                            alt="Project Banner"
+                        />
+                        <div className="absolute bottom-4 left-4 z-20">
+                            <h2 className="text-xl font-bold text-white">For Public Release</h2>
+                        </div>
                     </div>
+
                     {/* Progress Bar */}
                     <div className="mb-8">
                         <div className="flex justify-between mb-2">
@@ -58,190 +92,227 @@ const Donate = () => {
                         </div>
                     </div>
 
-                    <p className="text-gray-300 mb-4">
+                    <p className="text-gray-300 mb-6">
                         We're working hard to bring you an amazing gaming experience.
                         Your support helps us make it even better!
                     </p>
-                    <div className="animate-pulse text-indigo-400 font-medium">You can request programs and games in the comments.</div>
+                    <div className="animate-pulse text-indigo-400 font-medium">
+                        You can request programs and games in the comments.
+                    </div>
                 </div>
             </section>
 
-            {/* Donation Section */}
+            {/* Donation Options Section */}
             <section className="mb-12">
-                <h2 className="text-3xl font-bold mb-6 text-center">Support Our Development</h2>
+                <h2 className="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                    Support Our Development
+                </h2>
 
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Buy Me a Coffee Section */}
+                    <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-8 rounded-2xl shadow-xl border border-amber-500/30 transform transition-all duration-300 hover:shadow-amber-500/10">
+                        <div className="flex items-center mb-6">
+                            <svg className="w-10 h-10 text-amber-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.19 4.155c-1.672-1.534-4.383-1.534-6.055 0l-2.129 1.949-2.153-1.949c-1.672-1.534-4.382-1.534-6.054 0-1.881 1.711-1.881 4.475 0 6.187l7.761 7.042 7.761-7.042c1.88-1.712 1.88-4.476 0-6.187zm-1.28 4.752l-6.101 5.54-6.102-5.54c-.859-.781-.859-2.047 0-2.828.859-.781 2.252-.781 3.111 0l2.991 2.703 2.991-2.703c.859-.781 2.252-.781 3.111 0 .859.781.859 2.047 0 2.828z" />
+                            </svg>
+                            <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
+                                Buy Me a Coffee
+                            </h3>
+                        </div>
 
+                        <p className="text-gray-300 mb-6">
+                            Support us with a small donation and leave a message! Your support helps us keep creating amazing content.
+                        </p>
 
-                {/* UPI Section */}
-                <div className="bg-gradient-to-br from-[#1e1e1e] to-[#262626] p-6 rounded-lg shadow-xl border border-purple-500/20 text-center mt-8 transform transition-all duration-300 hover:shadow-purple-500/10">
-                    <h3 className="text-xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">UPI Payment (Ask in Telegram)</h3>
-                    <p className="text-gray-300 mb-4 break-all">
-                        PhonePe, Paytm, Google Pay, etc.
-                    </p>
-
-                    <div className="mt-4">
-                        <div className="border border-purple-500/20 rounded-lg p-5 bg-black/30 backdrop-blur-sm">
-                            <div className="flex justify-center mb-4">
-                                <div className="bg-white border-4 border-purple-500/20 rounded-lg shadow-lg overflow-hidden">
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex-1">
+                                <div className="bg-white p-2 rounded-lg shadow-lg mb-4">
                                     <img
-                                        src="https://i.postimg.cc/zD71FFgv/Screenshot-2025-03-26-at-1-33-37-AM.png"
-                                        alt="Telegram QR Code"
-                                        className="w-40 h-40 object-cover"
+                                        src="https://i.postimg.cc/dtk8YZg7/bmc-qr.png"
+                                        alt="Buy Me a Coffee QR Code"
+                                        className="w-full h-auto"
                                     />
                                 </div>
+                                <p className="text-sm text-gray-400">Scan QR to donate</p>
                             </div>
-                            <div className="bg-black/50 p-3 rounded-lg text-sm break-all font-mono text-center text-gray-300 border border-blue-500/20">
-                                <span className="text-blue-400 font-semibold">Telegram:</span> DM in this account for UPI details
+
+                            <div className="flex-1 flex flex-col justify-center">
+                                <a
+                                    href="https://www.buymeacoffee.com/toxicgames"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block mb-4 transition-transform hover:scale-105"
+                                >
+                                    <img
+                                        src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+                                        alt="Buy Me A Coffee"
+                                        className="w-full h-auto"
+                                        style={{ height: '60px', width: '217px' }}
+                                    />
+                                </a>
+                                <p className="text-sm text-gray-400">Click button to donate</p>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Crypto Donation Options */}
-                {/* USDT Tron Section */}
-                <div className="bg-gradient-to-br from-[#1e1e1e] to-[#262626] p-6 rounded-lg shadow-xl border border-red-500/20 text-center mt-8 transform transition-all duration-300 hover:shadow-red-500/10">
-                    <h3 className="text-xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">USDT Tron (TRC20)</h3>
-                    <p className="text-gray-300 mb-4 break-all bg-black/30 p-3 rounded-lg border border-red-500/10">
-                        <span className="text-red-400 font-semibold">Address:</span> TFq2xVb7ibR7q5Mb1pkWiiCT34BmS3y2gi
-                    </p>
+                    {/* Donation Allocation Visualization */}
+                    <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-8 rounded-2xl shadow-xl border border-indigo-500/30">
+                        <h3 className="text-2xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                            How Your Donation Helps
+                        </h3>
 
-                    <div className="mt-4">
-                        <div className="border border-red-500/20 rounded-lg p-5 bg-black/30 backdrop-blur-sm">
-                            <h4 className="font-medium mb-4 text-center text-red-400">TRX (TRX-20)</h4>
-                            <div className="flex justify-center mb-4">
-                                <div className="bg-white border-4 border-red-500/20 rounded-lg shadow-lg overflow-hidden">
-                                    <img
-                                        src="https://i.postimg.cc/0yJ4QC5Q/Screenshot-2025-03-26-at-1-09-34-AM.png"
-                                        alt="USDT Tron QR Code"
-                                        className="w-40 h-40 object-cover"
-                                    />
+                        <div className="flex flex-col items-center justify-center">
+                            {/* 2D Pie Chart */}
+                            <div className="relative w-64 h-64 mb-8 rounded-full overflow-hidden shadow-lg"
+                                style={{
+                                    background: `conic-gradient(${conicGradient})`
+                                }}
+                            >
+                                <div className="absolute inset-4 bg-[#0f0f1a] rounded-full flex items-center justify-center">
+                                    <div className="text-center">
+                                        <div className="text-3xl font-bold text-white">100%</div>
+                                        <div className="text-gray-300 text-sm">Supports the Project</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="bg-black/50 p-3 rounded-lg text-sm break-all font-mono text-center text-gray-300 border border-red-500/20">
-                                <span className="text-red-400 font-semibold">Address:</span> TFq2xVb7ibR7q5Mb1pkWiiCT34BmS3y2gi
+
+                            {/* Allocation Details */}
+                            <div className="w-full space-y-4">
+                                {allocationData.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="p-4 rounded-xl border border-gray-700 bg-gray-900/50 backdrop-blur-sm transition-all duration-300 hover:bg-gray-800/50 hover:border-indigo-500"
+                                    >
+                                        <div className="flex justify-between items-center mb-2">
+                                            <h3 className="font-semibold text-white flex items-center">
+                                                <span className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: item.color }}></span>
+                                                {item.label}
+                                            </h3>
+                                            <span className="font-bold text-lg text-white px-3 py-1 rounded-full">
+                                                {item.percentage}%
+                                            </span>
+                                        </div>
+                                        <p className="text-gray-400 text-sm">
+                                            {item.label === "Storage Costs" && "Ensures we can host all game files and updates"}
+                                            {item.label === "Server Costs" && "Keeps our servers running for smooth downloads"}
+                                            {item.label === "Miscellaneous" && "Renewals, maintenance, and community support"}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
-                        </div>
-                    </div>
-                </div>
-                {/* USDT BSC Section */}
-                <div className="bg-gradient-to-br from-[#1e1e1e] to-[#262626] p-6 rounded-lg shadow-xl border border-yellow-500/20 text-center mt-8 transform transition-all duration-300 hover:shadow-yellow-500/10">
-                    <h3 className="text-xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-400">USDT BSC (BNB Smart Chain)</h3>
-                    <p className="text-gray-300 mb-4 break-all bg-black/30 p-3 rounded-lg border border-yellow-500/10">
-                        <span className="text-yellow-400 font-semibold">Address:</span> 0x291dce3bd01fceec0665b9d6b9734946e335954b
-                    </p>
-
-                    <div className="mt-4">
-                        <div className="border border-yellow-500/20 rounded-lg p-5 bg-black/30 backdrop-blur-sm">
-                            <h4 className="font-medium mb-4 text-center text-yellow-400">BSC (BEP20)</h4>
-                            <div className="flex justify-center mb-4">
-                                <div className="bg-white border-4 border-yellow-500/20 rounded-lg shadow-lg overflow-hidden">
-                                    <img
-                                        src="https://i.postimg.cc/wMChbLCf/Screenshot-2025-03-26-at-1-20-22-AM.png"
-                                        alt="USDT BSC QR Code"
-                                        className="w-40 h-40 object-cover"
-                                    />
-                                </div>
-                            </div>
-                            <div className="bg-black/50 p-3 rounded-lg text-sm break-all font-mono text-center text-gray-300 border border-yellow-500/20">
-                                <span className="text-yellow-400 font-semibold">Address:</span> 0x291dce3bd01fceec0665b9d6b9734946e335954b
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Other Cryptocurrencies Section */}
-                <div className="bg-gradient-to-br from-[#1e1e1e] to-[#262626] p-6 rounded-lg shadow-xl border border-blue-500/20 text-center mt-8 transform transition-all duration-300 hover:shadow-blue-500/10">
-                    <h2 className="text-2xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Other Cryptocurrencies</h2>
-
-                    {/* Bitcoin */}
-                    <div className="mb-8 p-4 bg-black/30 rounded-lg border border-orange-500/20">
-                        <h3 className="text-xl font-semibold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-                            <span className="inline-flex items-center">
-                                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.548v-.002zm-6.35-4.613c.24-1.59-.974-2.45-2.64-3.03l.54-2.153-1.315-.33-.525 2.107c-.345-.087-.705-.167-1.064-.25l.526-2.127-1.32-.33-.54 2.165c-.285-.067-.565-.132-.84-.2l-1.815-.45-.35 1.407s.975.225.955.236c.535.136.63.486.615.766l-1.477 5.92c-.075.166-.24.406-.614.314.015.02-.96-.24-.96-.24l-.66 1.51 1.71.426.93.242-.54 2.19 1.32.327.54-2.17c.36.1.705.19 1.05.273l-.51 2.154 1.32.33.545-2.19c2.24.427 3.93.257 4.64-1.774.57-1.637-.03-2.58-1.217-3.196.854-.193 1.5-.76 1.68-1.93h.01zm-3.01 4.22c-.404 1.64-3.157.75-4.05.53l.72-2.9c.896.23 3.757.67 3.33 2.37zm.41-4.24c-.37 1.49-2.662.735-3.405.55l.654-2.64c.744.18 3.137.524 2.75 2.084v.006z" fill="#F7931A" />
-                                </svg>
-                                BTC (Bitcoin)
-                            </span>
-                        </h3>
-                        <div className="bg-black/50 p-3 rounded-lg text-sm break-all font-mono text-center text-gray-300 border border-orange-500/20">
-                            <span className="text-orange-400 font-semibold">Address:</span> 1DLfx6a4CU7G9Abj9fedxpdY21srPPstbX
-                        </div>
-                    </div>
-
-                    {/* Ethereum */}
-                    <div className="mb-8 p-4 bg-black/30 rounded-lg border border-indigo-500/20">
-                        <h3 className="text-xl font-semibold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
-                            <span className="inline-flex items-center">
-                                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z" fill="#6B7FD7" />
-                                </svg>
-                                ETH (Ethereum)
-                            </span>
-                        </h3>
-                        <div className="bg-black/50 p-3 rounded-lg text-sm break-all font-mono text-center text-gray-300 border border-indigo-500/20">
-                            <span className="text-indigo-400 font-semibold">Address:</span> 0x291dce3bd01fceec0665b9d6b9734946e335954b
-                        </div>
-                    </div>
-
-                    {/* Pi Network */}
-                    <div className="p-4 bg-black/30 rounded-lg border border-purple-500/20">
-                        <h3 className="text-xl font-semibold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-                            <span className="inline-flex items-center">
-                                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="12" fill="#6B4CE6" />
-                                    <path d="M9 8.5h6M9 12h6M9 15.5h6" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                </svg>
-                                PI (Pi Network)
-                            </span>
-                        </h3>
-                        <div className="bg-black/50 p-3 rounded-lg text-sm break-all font-mono text-center text-gray-300 border border-purple-500/20">
-                            <span className="text-purple-400 font-semibold">Address:</span> MDFNWH6ZFJVHJDLBMNOUT35X4EEKQVJAO3ZDL4NL7VQJLC4PJOQFWAAAAAASEZWSRDSZI
                         </div>
                     </div>
                 </div>
             </section>
 
 
+            {/* Payment Methods Section */}
+            <section className="mb-12">
+                <h2 className="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                    Other Donation Options
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* UPI Card */}
+                    <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-6 rounded-2xl shadow-xl border border-purple-500/20 text-center transform transition-all duration-300 hover:-translate-y-1">
+                        <h3 className="text-xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">UPI Payment</h3>
+                        <p className="text-gray-300 mb-4">
+                            PhonePe, Paytm, Google Pay, etc.
+                        </p>
+
+                        <div className="mt-4">
+                            <div className="border border-purple-500/20 rounded-xl p-5 bg-black/30 backdrop-blur-sm">
+                                <div className="flex justify-center mb-4">
+                                    <div className="bg-white border-4 border-purple-500/20 rounded-xl shadow-lg overflow-hidden">
+                                        <img
+                                            src="https://i.postimg.cc/zD71FFgv/Screenshot-2025-03-26-at-1-33-37-AM.png"
+                                            alt="Telegram QR Code"
+                                            className="w-40 h-40 object-cover"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="bg-black/50 p-3 rounded-lg text-sm font-mono text-center text-gray-300 border border-blue-500/20">
+                                    <span className="text-blue-400 font-semibold">Telegram:</span> DM for UPI details
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Crypto Card */}
+                    <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-6 rounded-2xl shadow-xl border border-indigo-500/20 text-center transform transition-all duration-300 hover:-translate-y-1">
+                        <h3 className="text-xl font-semibold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Crypto Donations</h3>
+                        <p className="text-gray-300 mb-4">
+                            Support us with cryptocurrency
+                        </p>
+
+                        <div className="mt-4">
+                            <div className="border border-indigo-500/20 rounded-xl p-5 bg-black/30 backdrop-blur-sm">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="bg-gray-900/50 p-4 rounded-lg border border-red-500/20">
+                                        <h4 className="font-medium text-red-400 mb-2">USDT (TRC20)</h4>
+                                        <div className="text-xs break-all font-mono text-gray-300">
+                                            TFq2xVb7ibR7q5Mb1pkWiiCT34BmS3y2gi
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-900/50 p-4 rounded-lg border border-yellow-500/20">
+                                        <h4 className="font-medium text-yellow-400 mb-2">USDT (BSC)</h4>
+                                        <div className="text-xs break-all font-mono text-gray-300">
+                                            0x291dce3bd01fceec0665b9d6b9734946e335954b
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-900/50 p-4 rounded-lg border border-orange-500/20">
+                                        <h4 className="font-medium text-orange-400 mb-2">BTC</h4>
+                                        <div className="text-xs break-all font-mono text-gray-300">
+                                            1DLfx6a4CU7G9Abj9fedxpdY21srPPstbX
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-900/50 p-4 rounded-lg border border-purple-500/20">
+                                        <h4 className="font-medium text-purple-400 mb-2">ETH</h4>
+                                        <div className="text-xs break-all font-mono text-gray-300">
+                                            0x291dce3bd01fceec0665b9d6b9734946e335954b
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* Coming Soon Section */}
-            <div>
-                <section className="mb-12 text-center">
-                    <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">Coming Soon...</h1>
-                    <div className="p-8 rounded-lg border-2 border-dashed border-red-500/30 bg-[#1a1a1a] shadow-lg relative overflow-hidden">
-                        {/* Background glow effects */}
-                        <div className="absolute -top-20 -left-20 w-40 h-40 bg-red-600 opacity-10 rounded-full blur-xl"></div>
-                        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-orange-600 opacity-10 rounded-full blur-xl"></div>
+            <section className="mb-12 text-center">
+                <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">Coming Soon...</h1>
+                <div className="p-8 rounded-2xl border-2 border-dashed border-red-500/30 bg-gradient-to-br from-[#1a1a1a] to-[#2a0f0f] shadow-lg relative overflow-hidden">
+                    <div className="absolute -top-20 -left-20 w-40 h-40 bg-red-600/20 rounded-full blur-xl"></div>
+                    <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-orange-600/20 rounded-full blur-xl"></div>
 
-                        {/* Game banner with enhanced styling */}
-                        <div className="relative mb-8 rounded-lg overflow-hidden shadow-2xl border border-red-500/20">
-                            <img
-                                className='w-full h-auto'
-                                src="https://i.postimg.cc/WzF6znR8/God-of-war-ragnarok-banner-black-background-2-817x320.jpg"
-                                alt="God of War Ragnarok"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                        </div>
-
-                        <div className="mb-6">
-                            <h2 className='text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400 mb-3'>Upcoming Game</h2>
-                        </div>
-
-                        <div className="animate-pulse text-red-400 font-medium p-3 bg-black/30 rounded-lg border border-red-500/20">
-                            After the completion of Red Dead Redemption 2, then the other games will be posted.
-                        </div>
-
-                        {/* Coming soon badge */}
-                        <div className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1.5 rounded-full shadow-lg flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span className="text-xs font-bold text-white">COMING SOON</span>
-                        </div>
+                    <div className="relative mb-8 rounded-2xl overflow-hidden shadow-2xl border border-red-500/20">
+                        <img
+                            className="w-full h-auto"
+                            src="https://i.postimg.cc/WzF6znR8/God-of-war-ragnarok-banner-black-background-2-817x320.jpg"
+                            alt="God of War Ragnarok"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                     </div>
-                </section>
-            </div>
-        </div>
-    )
-}
 
-export default Donate
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400 mb-3">Ragnarok is Coming</h2>
+                    </div>
+
+                    <div className="animate-pulse text-red-400 font-medium p-3 bg-black/30 rounded-lg border border-red-500/20">
+                        After the completion of Red Dead Redemption 2, then the other games will be posted.
+                    </div>
+
+                    <div className="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-orange-500 px-4 py-2 rounded-full shadow-lg flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-sm font-bold text-white">COMING SOON</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default Donate;
