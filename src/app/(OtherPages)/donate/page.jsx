@@ -26,6 +26,13 @@ export default function DonatePage() {
     return `${acc} ${item.color} ${start}% ${end}%,`;
   }, '').slice(0, -1);
 
+  // Handle Ko-fi donation button click
+  const handleKofiClick = () => {
+    window.open('https://ko-fi.com/toxicgames', '_blank');
+    setShowThankYou(true);
+    setTimeout(() => setShowThankYou(false), 5000);
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 min-h-screen">
       {/* Thank You Toast */}
@@ -55,7 +62,7 @@ export default function DonatePage() {
       </div>
 
       {/* Project Support Section */}
-      <section className="mb-12 text-center">
+      <section className="mb-16 text-center">
         <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Support the Project</h1>
         <div className="p-8 rounded-2xl border-2 border-dashed border-indigo-500/30 bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] shadow-2xl">
           <div className="relative mb-8 rounded-2xl overflow-hidden shadow-lg">
@@ -102,53 +109,82 @@ export default function DonatePage() {
 
       {/* Donation Options Section */}
       <section className="mb-12">
-        <h2 className="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+        <h2 className="text-3xl font-bold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
           Support Our Development
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Buy Me a Coffee Section */}
-          <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-8 rounded-2xl shadow-xl border border-amber-500/30 transform transition-all duration-300 hover:shadow-amber-500/10">
-            <div className="flex items-center mb-6">
-              <svg className="w-10 h-10 text-amber-500 mr-3" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.19 4.155c-1.672-1.534-4.383-1.534-6.055 0l-2.129 1.949-2.153-1.949c-1.672-1.534-4.382-1.534-6.054 0-1.881 1.711-1.881 4.475 0 6.187l7.761 7.042 7.761-7.042c1.88-1.712 1.88-4.476 0-6.187zm-1.28 4.752l-6.101 5.54-6.102-5.54c-.859-.781-.859-2.047 0-2.828.859-.781 2.252-.781 3.111 0l2.991 2.703 2.991-2.703c.859-.781 2.252-.781 3.111 0 .859.781.859 2.047 0 2.828z" />
-              </svg>
-              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">
-                Buy Me a Coffee
+        <div className=" gap-8">
+          {/* Ko-fi Section - Replaces Buy Me a Coffee */}
+          <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-8 rounded-2xl shadow-xl border border-blue-500/30 transform transition-all duration-300 hover:shadow-blue-500/10 mb-10">
+            <div className="flex items-center mb-4">
+              <div className="bg-blue-500 w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.19 4.155c-1.672-1.534-4.383-1.534-6.055 0l-2.129 1.949-2.153-1.949c-1.672-1.534-4.382-1.534-6.054 0-1.881 1.711-1.881 4.475 0 6.187l7.761 7.042 7.761-7.042c1.88-1.712 1.88-4.476 0-6.187zm-1.28 4.752l-6.101 5.54-6.102-5.54c-.859-.781-.859-2.047 0-2.828.859-.781 2.252-.781 3.111 0l2.991 2.703 2.991-2.703c.859-.781 2.252-.781 3.111 0 .859.781.859 2.047 0 2.828z" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                Support with Ko-fi
               </h3>
             </div>
 
-            <p className="text-gray-300 mb-6">
-              Support us with a small donation and leave a message! Your support helps us keep creating amazing content.
+            <p className="text-gray-300 mb-4 text-center">
+              Quick one-time donations
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <div className="bg-white p-2 rounded-lg shadow-lg mb-4">
-                  <img
-                    src="https://i.postimg.cc/dtk8YZg7/bmc-qr.png"
-                    alt="Buy Me a Coffee QR Code"
-                    className="w-full h-auto"
-                  />
+            {/* Donation Tiers */}
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div
+                className="bg-gradient-to-br from-blue-700/30 to-blue-900/30 p-4 rounded-xl border border-blue-500/20 cursor-pointer transition-all hover:border-blue-400 hover:scale-105"
+                onClick={handleKofiClick}
+              >
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-400 mb-1">$2</div>
+                  <div className="text-xs text-gray-400">Popula</div>
                 </div>
-                <p className="text-sm text-gray-400">Scan QR to donate</p>
               </div>
+              <div
+                className="bg-gradient-to-br from-blue-700/30 to-blue-900/30 p-4 rounded-xl border border-blue-500/20 cursor-pointer transition-all hover:border-blue-400 hover:scale-105"
+                onClick={handleKofiClick}
+              >
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-400 mb-1">$10</div>
+                  <div className="text-xs text-gray-400">Two Coffees</div>
+                </div>
+              </div>
+              <div
+                className="bg-gradient-to-br from-blue-700/30 to-blue-900/30 p-4 rounded-xl border border-blue-500/20 cursor-pointer transition-all hover:border-blue-400 hover:scale-105"
+                onClick={handleKofiClick}
+              >
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-400 mb-1">$25</div>
+                  <div className="text-xs text-gray-400">Coffee Bundle</div>
+                </div>
+              </div>
+            </div>
 
-              <div className="flex-1 flex flex-col justify-center">
-                <a
-                  href="https://www.buymeacoffee.com/toxicgames"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block mb-4 transition-transform hover:scale-105"
-                >
-                  <img
-                    src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
-                    alt="Buy Me A Coffee"
-                    className="w-full h-auto"
-                    style={{ height: '60px', width: '217px' }}
-                  />
-                </a>
-                <p className="text-sm text-gray-400">Click button to donate</p>
+            {/* Ko-fi Button */}
+            <div
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 rounded-xl text-center font-bold cursor-pointer transform transition-all hover:scale-105 shadow-lg"
+              onClick={handleKofiClick}
+            >
+              <div className="flex items-center justify-center">
+                <span className="text-white mr-2">Buy us a coffee</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="flex flex-wrap justify-center mt-4 gap-3">
+              <div className="text-xs bg-blue-900/30 px-3 py-1 rounded-full text-blue-300 border border-blue-500/20">
+                Quick & Easy
+              </div>
+              <div className="text-xs bg-blue-900/30 px-3 py-1 rounded-full text-blue-300 border border-blue-500/20">
+                Multiple Payment Options
+              </div>
+              <div className="text-xs bg-blue-900/30 px-3 py-1 rounded-full text-blue-300 border border-blue-500/20">
+                Leave a Message
               </div>
             </div>
           </div>

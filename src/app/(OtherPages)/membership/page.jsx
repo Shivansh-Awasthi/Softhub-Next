@@ -92,7 +92,7 @@ export default function CoffeePage() {
                                 ))}
                             </ul>
                             <a
-                                href="https://buymeacoffee.com/toxicgames"
+                                href="https://ko-fi.com/toxicgames"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-amber-600 to-amber-700 text-white font-medium rounded-lg hover:from-amber-700 hover:to-amber-800 transition-all"
@@ -141,7 +141,7 @@ export default function CoffeePage() {
                                 ))}
                             </ul>
                             <a
-                                href="https://buymeacoffee.com/toxicgames"
+                                href="https://ko-fi.com/toxicgames"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
