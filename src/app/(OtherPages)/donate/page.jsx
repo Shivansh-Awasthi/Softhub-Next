@@ -82,9 +82,9 @@ export default function DonatePage() {
   }, []);
 
   // Circular progress component
-  const CircularProgress = ({ percentage, title, current, goal, color }) => (
+  const CircularProgress = ({ percentage, title, current, goal, color, size = 20 }) => (
     <div className="flex flex-col items-center">
-      <div className="relative w-20 h-20">
+      <div className={`relative w-${size} h-${size}`}>
         <svg className="w-full h-full" viewBox="0 0 100 100">
           {/* Background circle */}
           <circle
@@ -110,12 +110,12 @@ export default function DonatePage() {
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-sm font-bold text-red-400">${current}</span>
+          <span className="text-3xl font-bold text-red-400">${current}</span>
         </div>
       </div>
-      <div className="mt-2 text-center">
-        <div className="text-xs text-blue-400 font-medium">{title}</div>
-        <div className="text-xs text-gray-400">{Math.round(percentage)}% of ${goal}</div>
+      <div className="mt-3 text-center">
+        <div className="text-sm text-blue-400 font-medium">{title}</div>
+        <div className="text-sm text-gray-400">{Math.round(percentage)}% of ${goal}</div>
       </div>
     </div>
   );
@@ -189,7 +189,7 @@ export default function DonatePage() {
             Your support helps us make it even better!
           </p>
           <div className="animate-pulse text-indigo-400 font-medium">
-            You can request programs and games in the comments.
+            You can request programs and games in the request section.
           </div>
         </div>
       </section>
@@ -203,110 +203,58 @@ export default function DonatePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Ko-fi Section - Replaces Buy Me a Coffee */}
           <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-8 rounded-2xl shadow-xl border border-blue-500/30 transform transition-all duration-300 hover:shadow-blue-500/10">
-            <div className="flex items-center mb-4">
-              <div className="bg-blue-500 w-10 h-10 rounded-lg flex items-center justify-center mr-3">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.19 4.155c-1.672-1.534-4.383-1.534-6.055 0l-2.129 1.949-2.153-1.949c-1.672-1.534-4.382-1.534-6.054 0-1.881 1.711-1.881 4.475 0 6.187l7.761 7.042 7.761-7.042c1.88-1.712 1.88-4.476 0-6.187zm-1.28 4.752l-6.101 5.54-6.102-5.54c-.859-.781-.859-2.047 0-2.828.859-.781 2.252-.781 3.111 0l2.991 2.703 2.991-2.703c.859-.781 2.252-.781 3.111 0 .859.781.859 2.047 0 2.828z" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-                Support with Ko-fi
-              </h3>
-            </div>
+            {/* ... existing content ... */}
 
-            <p className="text-gray-300 mb-4 text-center">
-              Quick one-time donations
-            </p>
-
-            {/* Donation Tiers */}
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div
-                className="bg-gradient-to-br from-blue-700/30 to-blue-900/30 p-4 rounded-xl border border-blue-500/20 cursor-pointer transition-all hover:border-blue-400 hover:scale-105"
-                onClick={handleKofiClick}
-              >
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400 mb-1">$2</div>
-                  <div className="text-xs text-gray-400">Popula</div>
-                </div>
-              </div>
-              <div
-                className="bg-gradient-to-br from-blue-700/30 to-blue-900/30 p-4 rounded-xl border border-blue-500/20 cursor-pointer transition-all hover:border-blue-400 hover:scale-105"
-                onClick={handleKofiClick}
-              >
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400 mb-1">$10</div>
-                  <div className="text-xs text-gray-400">Two Coffees</div>
-                </div>
-              </div>
-              <div
-                className="bg-gradient-to-br from-blue-700/30 to-blue-900/30 p-4 rounded-xl border border-blue-500/20 cursor-pointer transition-all hover:border-blue-400 hover:scale-105"
-                onClick={handleKofiClick}
-              >
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400 mb-1">$25</div>
-                  <div className="text-xs text-gray-400">Coffee Bundle</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Ko-fi Button */}
-            <div
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 rounded-xl text-center font-bold cursor-pointer transform transition-all hover:scale-105 shadow-lg"
-              onClick={handleKofiClick}
-            >
-              <div className="flex items-center justify-center">
-                <span className="text-white mr-2">Buy us a coffee</span>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Funding Goals Section */}
-            <div className="mt-8">
-              <h4 className="text-lg font-semibold text-center mb-4 text-blue-300">
+            {/* Funding Goals Section - UPDATED */}
+            <div className="mt-2">
+              <h4 className="text-3xl font-semibold text-center mb-6 text-blue-300">
                 Monthly Funding Progress
               </h4>
-              <p className="text-gray-400 text-sm text-center mb-6">
+              <p className="text-gray-400 text-md text-center mb-8">
                 Support our ongoing battle against the industry. Every contribution gets us closer to our goal.
               </p>
 
-              <div className="flex justify-around">
-                {/* Monthly Goal */}
-                <CircularProgress
-                  percentage={monthlyPercentage}
-                  title="Monthly"
-                  current={fundingData.monthly}
-                  goal={goals.monthly}
-                  color="#6366F1"
-                />
+              {/* Goals Container - UPDATED */}
+              <div className="flex flex-col items-center">
+                <div className="flex flex-wrap justify-center gap-14 mb-8">
+                  {/* Monthly Goal - UPDATED */}
+                  <CircularProgress
+                    percentage={monthlyPercentage}
+                    title="Monthly"
+                    current={fundingData.monthly}
+                    goal={goals.monthly}
+                    color="#6366F1"
+                    size={48} // Increased size
+                  />
 
-                {/* Macbook Goal */}
-                <CircularProgress
-                  percentage={macbookPercentage}
-                  title="New Mac: M4"
-                  current={fundingData.macbook}
-                  goal={goals.macbook}
-                  color="#10B981"
-                />
-              </div>
+                  {/* Macbook Goal - UPDATED */}
+                  <CircularProgress
+                    percentage={macbookPercentage}
+                    title="New Mac: M4"
+                    current={fundingData.macbook}
+                    goal={goals.macbook}
+                    color="#10B981"
+                    size={48} // Increased size
+                  />
+                </div>
 
-              <div className="mt-6 bg-blue-900/30 p-4 rounded-xl border border-blue-500/20">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-300">${fundingData.monthly}</div>
-                  <div className="text-sm text-gray-300 mt-1">
-                    {Math.round(monthlyPercentage)}% of ${goals.monthly}
-                  </div>
-                  <div className="text-sm text-gray-400 mt-2">
-                    {daysRemaining} days remaining
-                  </div>
-                  <div className="text-sm text-blue-400 font-medium mt-1">
-                    ${dailyNeeded}/day needed to reach goal
+                <div className="w-full max-w-md bg-blue-900/30 p-5 rounded-xl border border-blue-500/20">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-300">${fundingData.monthly}</div>
+                    <div className="text-base text-gray-300 mt-2">
+                      {Math.round(monthlyPercentage)}% of ${goals.monthly}
+                    </div>
+                    <div className="text-sm text-gray-400 mt-2">
+                      {daysRemaining} days remaining
+                    </div>
+                    <div className="text-base text-blue-400 font-medium mt-2">
+                      ${dailyNeeded}/day needed to reach goal
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 text-xs text-gray-500 text-center">
+              <div className="mt-4 text-base text-gray-500 text-center">
                 New Macbook: So we can test and add more AAA free games for you
               </div>
             </div>
@@ -340,7 +288,7 @@ export default function DonatePage() {
               >
                 <div className="absolute inset-4 bg-[#0f0f1a] rounded-full flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-white">Cost%</div>
+                    <div className="text-3xl font-bold text-white"> Cost %</div>
                     <div className="text-gray-300 text-sm">where your donation goes</div>
                   </div>
                 </div>
