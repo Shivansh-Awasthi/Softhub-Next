@@ -1,15 +1,33 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function DonatePage() {
-  const [donationGoal, setDonationGoal] = useState(1200);
-  const [currentAmount, setCurrentAmount] = useState(950);
-  const [showThankYou, setShowThankYou] = useState(false);
-  const widgetRef = useRef(null);
-  const [widgetLoaded, setWidgetLoaded] = useState(false);
+  const [fundingData, setFundingData] = useState({
+    rdr2: 950,
+    macbook: 0,
+    monthly: 0,
+    total: 0
+  });
 
-  const progressPercentage = Math.min((currentAmount / donationGoal) * 100, 100);
+  const [goals] = useState({
+    rdr2: 1200,
+    macbook: 2000,
+    monthly: 100
+  });
+
+  const [daysRemaining, setDaysRemaining] = useState(7);
+  const [showThankYou, setShowThankYou] = useState(false);
+
+  // Calculate percentages
+  const rdr2Percentage = Math.min((fundingData.rdr2 / goals.rdr2) * 100, 100);
+  const macbookPercentage = Math.min((fundingData.macbook / goals.macbook) * 100, 100);
+  const monthlyPercentage = Math.min((fundingData.monthly / goals.monthly) * 100, 100);
+
+  // Calculate daily amount needed
+  const dailyNeeded = daysRemaining > 0
+    ? ((goals.monthly - fundingData.monthly) / daysRemaining).toFixed(2)
+    : 0;
 
   // Donation allocation data
   const allocationData = [
@@ -32,6 +50,75 @@ export default function DonatePage() {
     setShowThankYou(true);
     setTimeout(() => setShowThankYou(false), 5000);
   };
+
+  // Fetch data from Sheety API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://api.sheety.co/93ba89c95aaf4b9825dab4755b23175d/toxicgamesGoal/sheet1');
+        const data = await response.json();
+
+        if (data.sheet1 && data.sheet1.length > 0) {
+          const sheetData = data.sheet1[0];
+          setFundingData({
+            rdr2: sheetData.rdr2 || 0,
+            macbook: sheetData.macbook || 0,
+            monthly: sheetData.monthly || 0,
+            total: sheetData.total || 0
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching data from Sheety:', error);
+      }
+    };
+
+    fetchData();
+
+    // Calculate days remaining in the month
+    const today = new Date();
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const daysLeft = lastDay.getDate() - today.getDate();
+    setDaysRemaining(daysLeft);
+  }, []);
+
+  // Circular progress component
+  const CircularProgress = ({ percentage, title, current, goal, color }) => (
+    <div className="flex flex-col items-center">
+      <div className="relative w-20 h-20">
+        <svg className="w-full h-full" viewBox="0 0 100 100">
+          {/* Background circle */}
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke="#2D3748"
+            strokeWidth="10"
+          />
+          {/* Progress circle */}
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+            stroke={color}
+            strokeWidth="10"
+            strokeLinecap="round"
+            strokeDasharray={`${2 * Math.PI * 45}`}
+            strokeDashoffset={`${2 * Math.PI * 45 * (1 - percentage / 100)}`}
+            transform="rotate(-90 50 50)"
+          />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-sm font-bold text-red-400">${current}</span>
+        </div>
+      </div>
+      <div className="mt-2 text-center">
+        <div className="text-xs text-blue-400 font-medium">{title}</div>
+        <div className="text-xs text-gray-400">{Math.round(percentage)}% of ${goal}</div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 min-h-screen">
@@ -62,7 +149,7 @@ export default function DonatePage() {
       </div>
 
       {/* Project Support Section */}
-      <section className="mb-16 text-center">
+      <section className="mb-12 text-center">
         <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Support the Project</h1>
         <div className="p-8 rounded-2xl border-2 border-dashed border-indigo-500/30 bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] shadow-2xl">
           <div className="relative mb-8 rounded-2xl overflow-hidden shadow-lg">
@@ -80,17 +167,17 @@ export default function DonatePage() {
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between mb-2">
-              <span className="font-medium text-white">Raised: <span className="text-green-400">₹{currentAmount.toLocaleString()}</span></span>
-              <span className="font-medium text-white">Goal: <span className="text-blue-400">₹{donationGoal.toLocaleString()}</span></span>
+              <span className="font-medium text-white">Raised: <span className="text-green-400">₹{fundingData.rdr2.toLocaleString()}</span></span>
+              <span className="font-medium text-white">Goal: <span className="text-blue-400">₹{goals.rdr2.toLocaleString()}</span></span>
             </div>
             <div className="w-full bg-gray-800 rounded-full h-5 p-0.5">
               <div
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 h-4 rounded-full transition-all duration-500 relative"
-                style={{ width: `${progressPercentage}%` }}
+                style={{ width: `${rdr2Percentage}%` }}
               >
-                {progressPercentage > 10 && (
+                {rdr2Percentage > 10 && (
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">
-                    {Math.round(progressPercentage)}%
+                    {Math.round(rdr2Percentage)}%
                   </span>
                 )}
               </div>
@@ -109,13 +196,13 @@ export default function DonatePage() {
 
       {/* Donation Options Section */}
       <section className="mb-12">
-        <h2 className="text-3xl font-bold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+        <h2 className="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
           Support Our Development
         </h2>
 
-        <div className=" gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Ko-fi Section - Replaces Buy Me a Coffee */}
-          <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-8 rounded-2xl shadow-xl border border-blue-500/30 transform transition-all duration-300 hover:shadow-blue-500/10 mb-10">
+          <div className="bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] p-8 rounded-2xl shadow-xl border border-blue-500/30 transform transition-all duration-300 hover:shadow-blue-500/10">
             <div className="flex items-center mb-4">
               <div className="bg-blue-500 w-10 h-10 rounded-lg flex items-center justify-center mr-3">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -175,8 +262,57 @@ export default function DonatePage() {
               </div>
             </div>
 
+            {/* Funding Goals Section */}
+            <div className="mt-8">
+              <h4 className="text-lg font-semibold text-center mb-4 text-blue-300">
+                Monthly Funding Progress
+              </h4>
+              <p className="text-gray-400 text-sm text-center mb-6">
+                Support our ongoing battle against the industry. Every contribution gets us closer to our goal.
+              </p>
+
+              <div className="flex justify-around">
+                {/* Monthly Goal */}
+                <CircularProgress
+                  percentage={monthlyPercentage}
+                  title="Monthly"
+                  current={fundingData.monthly}
+                  goal={goals.monthly}
+                  color="#6366F1"
+                />
+
+                {/* Macbook Goal */}
+                <CircularProgress
+                  percentage={macbookPercentage}
+                  title="New Mac: M4"
+                  current={fundingData.macbook}
+                  goal={goals.macbook}
+                  color="#10B981"
+                />
+              </div>
+
+              <div className="mt-6 bg-blue-900/30 p-4 rounded-xl border border-blue-500/20">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-300">${fundingData.monthly}</div>
+                  <div className="text-sm text-gray-300 mt-1">
+                    {Math.round(monthlyPercentage)}% of ${goals.monthly}
+                  </div>
+                  <div className="text-sm text-gray-400 mt-2">
+                    {daysRemaining} days remaining
+                  </div>
+                  <div className="text-sm text-blue-400 font-medium mt-1">
+                    ${dailyNeeded}/day needed to reach goal
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 text-xs text-gray-500 text-center">
+                New Macbook: So we can test and add more AAA free games for you
+              </div>
+            </div>
+
             {/* Features */}
-            <div className="flex flex-wrap justify-center mt-4 gap-3">
+            <div className="flex flex-wrap justify-center mt-6 gap-3">
               <div className="text-xs bg-blue-900/30 px-3 py-1 rounded-full text-blue-300 border border-blue-500/20">
                 Quick & Easy
               </div>
@@ -204,7 +340,7 @@ export default function DonatePage() {
               >
                 <div className="absolute inset-4 bg-[#0f0f1a] rounded-full flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-white">Donation%</div>
+                    <div className="text-3xl font-bold text-white">Cost%</div>
                     <div className="text-gray-300 text-sm">where your donation goes</div>
                   </div>
                 </div>
