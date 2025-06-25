@@ -20,7 +20,7 @@ export async function fetchUserData() {
 
     // Make the API request from the server
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://toxicgames.in';
-    const response = await axios.get(`${apiUrl}/api/user`, {
+    const response = await axios.get(`${apiUrl}/api/user/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN
