@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { jwtDecode } from 'jwt-decode';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useLoading } from '@/app/context/LoadingContext';
 import EnhancedPagination from '@/app/components/Pagination/EnhancedPagination';
@@ -59,6 +60,7 @@ export default function MacGames({ serverData, initialPage = 1 }) {
     const [error, setError] = useState(serverData?.error || null);
     const [purchasedGames, setPurchasedGames] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [userData, setUserData] = useState(null);
 
     // Update state when props or URL changes
     useEffect(() => {
@@ -84,12 +86,19 @@ export default function MacGames({ serverData, initialPage = 1 }) {
     // Load user data from localStorage on client side
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            // Get purchased games from localStorage
-            const storedGames = localStorage.getItem("gData");
-            setPurchasedGames(storedGames ? JSON.parse(storedGames) : []);
-
-            // Check if user is admin
-            setIsAdmin(localStorage.getItem("role") === 'ADMIN');
+            // Read JWT token from localStorage (or cookie if you have that setup)
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const decoded = jwtDecode(token);
+                    setUserData(decoded);
+                } catch (err) {
+                    console.error('Failed to decode JWT token:', err);
+                    setUserData(null);
+                }
+            } else {
+                setUserData(null);
+            }
         }
     }, []);
 
@@ -143,7 +152,9 @@ export default function MacGames({ serverData, initialPage = 1 }) {
 
     // Game card component with prefetching
     const GameCard = ({ game = {} }) => {
-        const isPurchased = purchasedGames.includes(game._id);
+        const isAdmin = userData?.role === 'ADMIN';
+        const purchasedGamesFromToken = userData?.purchasedGames || [];
+        const isPurchased = purchasedGamesFromToken.includes(game._id);
         const isUnlocked = isAdmin || !game.isPaid || isPurchased;
 
         // Always create a valid download URL

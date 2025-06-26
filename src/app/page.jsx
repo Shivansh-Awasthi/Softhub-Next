@@ -1,4 +1,3 @@
-
 import { Suspense } from 'react';
 import HomeClient from './HomeClient';
 import HomeSkeleton from './components/HomeSkeleton';
