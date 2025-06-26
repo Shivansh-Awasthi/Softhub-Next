@@ -1,4 +1,5 @@
 'use client';
+import { jwtDecode } from 'jwt-decode';
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
@@ -32,13 +33,23 @@ const LoginForm = () => {
 
             if (result.success) {
                 // Store user data in localStorage for client-side access
-                if (typeof window !== 'undefined' && result.userData) {
+
+                if (typeof window !== 'undefined' && result.userData.token) {
                     localStorage.setItem('token', result.userData.token);
-                    localStorage.setItem('name', result.userData.name);
-                    localStorage.setItem('role', result.userData.role);
-                    localStorage.setItem('userId', result.userData.userId);
-                    localStorage.setItem('gData', JSON.stringify(result.userData.purchasedGames));
+
+                    const decoded = jwtDecode(result.userData.token);
+
+                    const user = {
+                        id: decoded.userId,
+                        email: decoded.email,
+                        role: decoded.role,
+                        avatar: decoded.avatar,
+                        purchasedGames: decoded.purchasedGames
+                    };
                 }
+
+
+
 
                 // Reset form fields
                 setEmail('');

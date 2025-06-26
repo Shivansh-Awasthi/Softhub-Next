@@ -34,29 +34,7 @@ export async function loginUser(formData) {
         cookieStore.set('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 60 * 60 * 24 * 7, // 1 week
-            path: '/',
-        });
-
-        // Set cookies for client-side access
-        cookieStore.set('name', name, {
-            maxAge: 60 * 60 * 24 * 7, // 1 week
-            path: '/',
-        });
-
-        cookieStore.set('role', role, {
-            maxAge: 60 * 60 * 24 * 7, // 1 week
-            path: '/',
-        });
-
-        cookieStore.set('userId', userId, {
-            maxAge: 60 * 60 * 24 * 7, // 1 week
-            path: '/',
-        });
-
-        // For purchased games, we need to stringify the array
-        cookieStore.set('gData', JSON.stringify(purchasedGames), {
-            maxAge: 60 * 60 * 24 * 7, // 1 week
+            maxAge: 60 * 60 * 10 * 365 * 24, // 1 week
             path: '/',
         });
 
