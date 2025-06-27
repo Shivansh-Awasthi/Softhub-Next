@@ -33,8 +33,8 @@ export default function RootLayout({ children }) {
       >
         <SnowEffect count={70} startAfterSidebar={true} />
         <ClientScrollProgressBar />
-        <UserDataSynchronizer />
-        <SecurityRestrictions />
+        {/* <UserDataSynchronizer /> */}
+        {/* <SecurityRestrictions /> */}
         <div className="flex min-h-screen">
           <SidebarWrapper />
           <div className="flex-1 w-full transition-all duration-300">
