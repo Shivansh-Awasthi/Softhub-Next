@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import SingleApp from '@/app/download/[platform]/[title]/[id]/SingleApp';
 import LoadingSkeleton from './LoadingSkeleton';
+import { cookies } from 'next/headers';
 
 // Set a short revalidation time to keep data fresh but allow caching
 export const revalidate = 300; // 5 minutes
@@ -37,30 +38,48 @@ export async function generateMetadata({ params }) {
     }
 }
 
+
 async function fetchAppData(id) {
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/apps/get/${id}`,
-            {
-                headers: {
-                    'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN,
-                },
-                // Use short cache time instead of no-store
-                next: { revalidate: 300 }
-            }
-        );
+    const token = cookies().get('token')?.value; // JWT from cookies
+    const headers = {
+        'X-Auth-Token': process.env.NEXT_PUBLIC_API_TOKEN,
+    };
 
-        if (!res.ok) {
-            throw new Error(`API error: ${res.status}`);
-        }
-
-        const data = await res.json();
-        return data.app || {};
-    } catch (error) {
-        console.error('Error fetching app data:', error);
-        return {};
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
     }
+
+    // Try fetching from protected route first
+    const protectedRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/apps/get/${id}/protected`,
+        {
+            headers,
+            cache: 'no-store' // make sure this is fresh
+        }
+    );
+
+    if (protectedRes.ok) {
+        const protectedData = await protectedRes.json();
+        return protectedData.app || {};
+    }
+
+    // Fallback to public route
+    const publicRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/apps/get/${id}`,
+        {
+            headers,
+            next: { revalidate: 300 }
+        }
+    );
+
+    if (!publicRes.ok) {
+        throw new Error(`Failed to fetch app data: ${publicRes.status}`);
+    }
+
+    const publicData = await publicRes.json();
+    return publicData.app || {};
 }
+
 
 // This component fetches data and renders the SingleApp
 async function AppDataFetcher({ id }) {

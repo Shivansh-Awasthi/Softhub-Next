@@ -5,6 +5,8 @@ import GiscusComments from './GiscusComments';
 import GameAnnouncement from './GameAnnouncement';
 import DownloadSection from './DownloadSection';
 import DescriptionTabs from './DescriptionTabs';
+import { jwtDecode } from 'jwt-decode';
+
 
 const SingleApp = ({ appData }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,6 +14,8 @@ const SingleApp = ({ appData }) => {
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
     const [error, setError] = useState(null); // State to handle errors
     const [hasAccess, setHasAccess] = useState(null); // Start with null instead of true
+    const [userInfo, setUserInfo] = useState(null);
+
 
     // Check if user has access to the app
     const checkAccess = (appData, purchasedGames, isAdmin) => {
@@ -28,25 +32,29 @@ const SingleApp = ({ appData }) => {
 
     // Load user data from localStorage on client side
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+
+        if (token) {
             try {
-                // Get purchased games from localStorage
-                const storedGames = localStorage.getItem("gData");
-                const purchasedGames = storedGames ? JSON.parse(storedGames) : [];
+                const decoded = jwtDecode(token);
+                const userRole = decoded?.role?.toUpperCase() || 'USER';
+                const purchasedGames = decoded?.purchasedGames || [];
 
-                // Check if user is admin
-                const isAdmin = localStorage.getItem("role") === 'ADMIN';
+                const isAdmin = userRole === 'ADMIN';
+                const hasPurchased = purchasedGames.map(String).includes(String(appData._id));
 
-                // Check access
-                if (data) {
-                    checkAccess(data, purchasedGames, isAdmin);
-                }
-            } catch (error) {
-                console.error("Error loading user data:", error);
-                setError("Failed to load user data. Please refresh the page.");
+                setHasAccess(isAdmin || !appData.isPaid || hasPurchased);
+
+            } catch (err) {
+                console.error('Invalid token:', err);
+                setHasAccess(false); // Treat as guest
             }
+        } else {
+            setHasAccess(false); // No token = guest
         }
-    }, [data]);
+    }, [appData]);
+
+
 
     // Slide handling functions
     const nextSlide = () => {
@@ -123,13 +131,15 @@ const SingleApp = ({ appData }) => {
     }
 
     // If the app is paid and the user doesn't have access, show "You don't have access"
-    if (data.isPaid && hasAccess === false) {
+    if (!hasAccess) {
         return (
             <div className="flex justify-center items-center h-[40rem] ">
                 <h1 className="text-2xl text-red-500">You don't have access to this app</h1>
             </div>
         );
     }
+
+
 
     return (
         <div style={{ position: 'relative' }}>
