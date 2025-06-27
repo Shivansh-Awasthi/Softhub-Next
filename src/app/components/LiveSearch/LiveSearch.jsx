@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { searchApps } from '@/app/actions/searchActions';
 import { createSlug, getPlatformColorClass } from '@/app/utils/formatUtils';
 import LiveSearchSkeleton from './LiveSearchSkeleton';
+import { jwtDecode } from 'jwt-decode';
 
 const LiveSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,18 +26,29 @@ const LiveSearch = () => {
   });
 
   // Load user data from localStorage on client side
+
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedGames = localStorage.getItem("gData");
-      const purchasedGames = storedGames ? JSON.parse(storedGames) : [];
-      const isAdmin = localStorage.getItem("role") === 'ADMIN';
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          const purchasedGames = decoded?.purchasedGames || [];
+          const isAdmin = decoded?.role === 'ADMIN';
 
-      setUserData({
-        purchasedGames,
-        isAdmin
-      });
+          setUserData({
+            purchasedGames,
+            isAdmin
+          });
+        } catch (err) {
+          console.error("Failed to decode token:", err);
+        }
+      }
     }
   }, []);
+
+
 
   // Handle search input change with debounce
   useEffect(() => {
@@ -141,6 +153,7 @@ const LiveSearch = () => {
                   const isPurchased = userData.purchasedGames.includes(app._id);
                   const isUnlocked = userData.isAdmin || !app.isPaid || isPurchased;
                   const isLocked = !isUnlocked;
+
 
                   return (
                     <li
