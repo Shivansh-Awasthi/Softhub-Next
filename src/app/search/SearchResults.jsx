@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { CiLock } from 'react-icons/ci'; // Lock Icon
 import SearchSkeleton from './SearchSkeleton';
+import { jwtDecode } from 'jwt-decode';
 
 // Function to format dates consistently between server and client
 const formatDate = (dateString) => {
@@ -50,19 +51,6 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
         isAdmin: false
     });
 
-    // Load user data from localStorage on client side
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const storedGames = localStorage.getItem("gData");
-            const purchasedGames = storedGames ? JSON.parse(storedGames) : [];
-            const isAdmin = localStorage.getItem("role") === 'ADMIN';
-
-            setUserData({
-                purchasedGames,
-                isAdmin
-            });
-        }
-    }, []);
 
     const handleData = async () => {
         // Skip fetching if we're on the initial page (server has already fetched the data)
@@ -109,23 +97,25 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
 
     // Update URL when page changes
     useEffect(() => {
-        if (typeof window !== 'undefined' && query) {
-            try {
-                // Create a new URLSearchParams object
-                const params = new URLSearchParams();
-                params.set('query', query);
-                params.set('page', currentPage.toString());
-                params.set('t', searchTimestamp.toString());
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const decoded = jwtDecode(token);
+                    const purchasedGames = decoded?.purchasedGames || [];
+                    const isAdmin = decoded?.role === 'ADMIN';
 
-                // Update URL without full navigation
-                router.replace(`/search?${params.toString()}`, { scroll: false });
-            } catch (error) {
-                console.error("Error updating URL:", error);
-                // Fallback to simpler URL update if there's an error
-                router.replace(`/search?query=${encodeURIComponent(query)}&page=${currentPage}&t=${searchTimestamp}`, { scroll: false });
+                    setUserData({
+                        purchasedGames,
+                        isAdmin
+                    });
+                } catch (err) {
+                    console.error("Failed to decode token:", err);
+                }
             }
         }
-    }, [currentPage, query, router, searchTimestamp]);
+    }, []);
+
 
     // Reset currentPage to 1 and update timestamp whenever the query changes
     useEffect(() => {
@@ -221,6 +211,8 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                                 // Check if the game is paid and whether the user has purchased it
                                 const isPurchased = userData.purchasedGames.includes(ele._id);
                                 const isUnlocked = userData.isAdmin || !ele.isPaid || isPurchased;
+                                console.log(isUnlocked);
+
                                 const isLocked = !isUnlocked;
 
                                 return (
