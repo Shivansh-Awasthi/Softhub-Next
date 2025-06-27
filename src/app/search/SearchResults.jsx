@@ -211,8 +211,6 @@ const SearchResults = ({ initialData = { apps: [], total: 0 }, initialQuery = ''
                                 // Check if the game is paid and whether the user has purchased it
                                 const isPurchased = userData.purchasedGames.includes(ele._id);
                                 const isUnlocked = userData.isAdmin || !ele.isPaid || isPurchased;
-                                console.log(isUnlocked);
-
                                 const isLocked = !isUnlocked;
 
                                 return (
